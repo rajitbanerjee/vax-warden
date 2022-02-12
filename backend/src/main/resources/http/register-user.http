@@ -1,0 +1,13 @@
+POST http://localhost:8080/user/register
+Content-Type: application/json
+
+{
+  "first_name": "John",
+  "last_name": "Doe",
+  "date_of_birth": "2001-02-15",
+  "ppsn": "1234567A",
+  "address": "UCD, Dublin 4, Co. Dublin, Ireland",
+  "email": "john.doe@ucd.ie",
+  "nationality": "Ireland",
+  "password": "password"
+}
