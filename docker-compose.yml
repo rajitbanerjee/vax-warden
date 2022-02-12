@@ -3,7 +3,7 @@ services:
   ## Comment out `db` service if you're on Windows (not using WSL2) (no tmpfs support)
   ## See backend/src/main/resources/application.yml for details
   db:
-    image: mysql/mysql-server:latest
+    image: mariadb:latest
     container_name: db
     restart: always
     ports:
