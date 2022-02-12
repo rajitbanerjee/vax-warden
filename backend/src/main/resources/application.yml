@@ -2,9 +2,6 @@ server:
   port: ${SERVER_PORT}
 
 spring:
-  # autoconfigure:
-  #   exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-
   application:
     name: backend
 
@@ -18,14 +15,6 @@ spring:
 
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    # driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: spring
-
-    ## Option 1: Run mysql-server in docker (uncomment db service in docker-compose.yml)
-    ## REQUIRED: tmpfs support (available on linux/mac/wsl2)
     url: jdbc:mariadb://db:3306/hse?createDatabaseIfNotExist=true
-     
-    ## Option 2: Run 'mysql -u root' locally
-    ## REQUIRED: ALTER USER 'root'@'localhost' IDENTIFIED BY 'spring';
-    # url: jdbc:mysql://host.docker.internal:3306/hse?createDatabaseIfNotExist=true

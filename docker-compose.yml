@@ -1,7 +1,5 @@
 version: "3"
 services:
-  ## Comment out `db` service if you're on Windows (not using WSL2) (no tmpfs support)
-  ## See backend/src/main/resources/application.yml for details
   db:
     image: mariadb:latest
     container_name: db
@@ -11,6 +9,8 @@ services:
     environment:
       MYSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: spring
+    # NOTE: comment out tmpfs if you're on Windows (without WSL2) (no tmpfs support)
+    # Also increase sleep time in backend/Dockerfile
     tmpfs:
       - /var/lib/mysql
 
