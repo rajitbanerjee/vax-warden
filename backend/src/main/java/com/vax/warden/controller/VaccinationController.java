@@ -1,7 +1,7 @@
 package com.vax.warden.controller;
 
-import com.vax.warden.model.User;
-import com.vax.warden.service.UserService;
+import com.vax.warden.model.Vaccination;
+import com.vax.warden.service.VaccinationService;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,26 +16,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/vaccination")
+public class VaccinationController {
+    private final VaccinationService vaccinationService;
 
-    private final UserService userService;
-
-    @PostMapping("/register")
+    @PostMapping("/book")
     @ResponseStatus(HttpStatus.CREATED)
-    public User register(@Valid @RequestBody User user) {
-        return userService.save(user);
+    public Vaccination bookFirstDose(@Valid @RequestBody Vaccination vaccination) {
+        return vaccinationService.bookFirstDose(vaccination);
     }
 
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
-    public List<User> list() {
-        return userService.findAll();
+    public List<Vaccination> list() {
+        return vaccinationService.findAll();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public User getUserById(@PathVariable long id) {
-        return userService.getUserById(id);
+    public Vaccination getVaccinationById(@PathVariable long id) {
+        return vaccinationService.getVaccinationById(id);
     }
 }

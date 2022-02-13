@@ -1,0 +1,8 @@
+POST http://localhost:8080/vaccination/book
+Content-Type: application/json
+
+{
+    "user_id": 1,
+    "centre": "UCD",
+    "first_appointment": "2022-03-03T09:30Z"
+}
