@@ -36,16 +36,16 @@ public class User implements Serializable {
 
     @NotBlank
     @Size(min = 2, max = 64)
-    private String first_name;
+    private String firstName;
 
     @NotBlank
     @Size(min = 2, max = 64)
-    private String last_name;
+    private String lastName;
 
     @NotNull
     @ValidAge
     @Temporal(TemporalType.DATE)
-    private Date date_of_birth;
+    private Date dateOfBirth;
 
     @NotBlank
     @Pattern(regexp = "^(\\d{7})([A-Z]{1,2})$")
@@ -63,7 +63,7 @@ public class User implements Serializable {
 
     @NotBlank
     @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$")
-    private String phone_no;
+    private String phoneNo;
 
     @NotBlank
     @Size(min = 2, max = 32)

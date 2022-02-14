@@ -27,10 +27,9 @@ public class Post {
 
     @CreationTimestamp private Date timestamp;
 
-    // TODO nit: convert to camelCase https://tknk.io/wuip
-    private Long reply_id;
+    private Long replyId;
 
-    @NotNull private Long user_id;
+    @NotNull private Long userId;
 
     @NotBlank
     @Lob
