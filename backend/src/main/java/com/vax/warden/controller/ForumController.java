@@ -24,20 +24,20 @@ public class ForumController {
     @PostMapping("/post")
     @ResponseStatus(HttpStatus.CREATED)
     public Post post(@Valid @RequestBody Post post) {
-      return forumRepository.save(post);
+        return forumRepository.save(post);
     }
 
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
     public List<Post> list() {
-      return forumRepository.findAll();
+        return forumRepository.findAll();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Post getPostById(@PathVariable long id) {
-      return forumRepository
-              .findById(id)
-              .orElseThrow(() -> new ResourceNotFoundException("No post found with id = " + id));
+        return forumRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No post found with id = " + id));
     }
 }
