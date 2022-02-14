@@ -5,16 +5,17 @@ COVID-19 vaccine registration system using Java, Spring Boot and React.js, devel
 ## Requirements
 
 - Docker
-- JDK 11 and Apache Maven
+- JDK 11
 
 ## Getting Started
 
-- Running with `docker-compose`. <br/>
-  The `--clean` flag is optional (for a `mvn clean install`).
+- Running with `docker-compose`. The `--clean` flag is optional (for a `mvn clean install`).
+
   ```bash
   ./run-services.sh [--clean]
   ```
-<!-- - Navigate to http://localhost:8080. -->
+
+- For local testing of the backend API, run HTTP requests under `src/main/resources/http/`.
 
 ## Authors
 

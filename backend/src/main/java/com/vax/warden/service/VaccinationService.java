@@ -4,12 +4,9 @@ import com.vax.warden.exception.ResourceNotFoundException;
 import com.vax.warden.model.Vaccination;
 import com.vax.warden.repository.UserRepository;
 import com.vax.warden.repository.VaccinationRepository;
-
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +15,7 @@ public class VaccinationService {
     private final VaccinationRepository vaccinationRepository;
 
     public Vaccination bookFirstDose(Vaccination vaccination) {
-        Long userId = vaccination.getUser_id();
+        Long userId = vaccination.getUserId();
         String error1 = "No user found with id = " + userId;
         userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException(error1));
 

@@ -24,25 +24,22 @@ public class Vaccination implements Serializable {
     private static final long serialVersionUID = 28382774L;
 
     // TODO? switch to foreign key
-    @Id private Long user_id;
-
+    @Id private Long userId;
     @NotBlank @NonNull private String centre;
 
     @NotNull
     @NonNull
     @Column(unique = true)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date first_appointment;
+    private Date firstAppointment;
 
     /* properties set/updated by admin/automatically later */
 
     @Column(unique = true)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date second_appointment;
+    private Date secondAppointment;
 
-    private VaccineType first_vaccine_type;
-
-    private VaccineType second_vaccine_type;
-
-    private Integer doses_received = 0;
+    private VaccineType firstVaccineType;
+    private VaccineType secondVaccineType;
+    private Integer dosesReceived = 0;
 }
