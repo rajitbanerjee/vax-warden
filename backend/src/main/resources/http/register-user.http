@@ -8,6 +8,7 @@ Content-Type: application/json
   "ppsn": "1234567AB",
   "address": "UCD, Dublin 4, Co. Dublin, Ireland",
   "email": "jane.doe@ucd.ie",
+  "phone_no": "0874795969",
   "nationality": "Ireland",
   "password": "password"
 }
