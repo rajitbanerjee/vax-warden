@@ -4,23 +4,25 @@ import com.vax.warden.model.LoginCredentials;
 import com.vax.warden.model.User;
 import com.vax.warden.security.JWTUtil;
 import com.vax.warden.service.UserService;
-import java.util.Collections;
-import java.util.Map;
-import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.Collections;
+import java.util.Map;
+
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthController {
-    @Autowired private UserService userService;
-    @Autowired private JWTUtil jwtUtil;
-    @Autowired private AuthenticationManager authManager;
-    @Autowired private PasswordEncoder passwordEncoder;
+    private final UserService userService;
+    private final JWTUtil jwtUtil;
+    private final AuthenticationManager authManager;
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
