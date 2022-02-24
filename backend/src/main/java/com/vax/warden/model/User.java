@@ -64,8 +64,7 @@ public class User implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @Transient
-    private String jwtToken;
+    @Transient private String jwtToken;
 
     @Enumerated(EnumType.STRING)
     private UserRole userRole = UserRole.ROLE_USER;

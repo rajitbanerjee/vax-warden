@@ -6,17 +6,17 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import java.util.Date;
 
 @Component
 public class JWTUtil {
     @Value("${jwt_secret}")
     private String secret;
 
-    public String generateToken(String email) throws IllegalArgumentException, JWTCreationException {
+    public String generateToken(String email)
+            throws IllegalArgumentException, JWTCreationException {
         return JWT.create()
                 .withSubject("User")
                 .withClaim("email", email)
@@ -26,10 +26,11 @@ public class JWTUtil {
     }
 
     public String validateTokenAndRetrieveEmail(String token) throws JWTVerificationException {
-        JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret))
-                .withSubject("User")
-                .withIssuer("Vax Warden")
-                .build();
+        JWTVerifier verifier =
+                JWT.require(Algorithm.HMAC256(secret))
+                        .withSubject("User")
+                        .withIssuer("Vax Warden")
+                        .build();
         DecodedJWT jwt = verifier.verify(token);
         return jwt.getClaim("email").asString();
     }
