@@ -4,8 +4,6 @@ import com.vax.warden.model.LoginCredentials;
 import com.vax.warden.model.User;
 import com.vax.warden.security.JWTUtil;
 import com.vax.warden.service.UserService;
-import java.util.Collections;
-import java.util.Map;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,11 +33,14 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Map<String, Object> loginHandler(@RequestBody LoginCredentials body) {
+    @ResponseStatus(HttpStatus.OK)
+    public User login(@RequestBody LoginCredentials body) {
         UsernamePasswordAuthenticationToken authInputToken =
                 new UsernamePasswordAuthenticationToken(body.getEmail(), body.getPassword());
         authManager.authenticate(authInputToken);
         String token = jwtUtil.generateToken(body.getEmail());
-        return Collections.singletonMap("jwtToken", token);
+        User user = userService.getUserByEmail(body.getEmail());
+        user.setJwtToken(token);
+        return user;
     }
 }

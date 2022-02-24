@@ -20,7 +20,7 @@ public class UserDetailsService
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> userRes = userRepository.findByEmail(email);
         if (userRes.isEmpty()) {
-            throw new UsernameNotFoundException("Could not findUser with email = " + email);
+            throw new UsernameNotFoundException("Could not find user with email = " + email);
         }
         User user = userRes.get();
         return new org.springframework.security.core.userdetails.User(
