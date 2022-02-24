@@ -27,24 +27,24 @@ public class User implements Serializable {
     private Long id;
 
     @NotBlank
-    @Size(min = 2, max = 64)
+    @Size(min = 2, max = 64, message = "Must be between 2 to 64 characters!")
     private String firstName;
 
     @NotBlank
-    @Size(min = 2, max = 64)
+    @Size(min = 2, max = 64, message = "Must be between 2 to 64 characters!")
     private String lastName;
 
     @NotNull
-    @ValidAge
+    @ValidAge(message = "User must be over 18!")
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
 
     @NotBlank
-    @Pattern(regexp = "^(\\d{7})([A-Z]{1,2})$")
+    @Pattern(regexp = "^(\\d{7})([A-Z]{1,2})$", message = "Invalid PPSN!")
     private String ppsn;
 
     @NotBlank
-    @Size(min = 2, max = 500)
+    @Size(min = 2, max = 256, message = "Must be between 2 and 256 characters!")
     private String address;
 
     // TODO? switch to uniqueness checking with custom javax.validation
@@ -54,11 +54,11 @@ public class User implements Serializable {
     private String email;
 
     @NotBlank
-    @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$")
+    @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$", message = "Invalid phone number!")
     private String phoneNo;
 
     @NotBlank
-    @Size(min = 2, max = 32)
+    @Size(min = 2, max = 32, message = "Must be between 2 and 32 characters!")
     private String nationality;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
