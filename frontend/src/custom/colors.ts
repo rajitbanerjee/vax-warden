@@ -1,7 +1,7 @@
 const colors = {
-  accent: "#b8bb26",
-  bg: "black",
-  fg: "#bdae93",
+  accent: "#008080",
+  bg: "white",
+  fg: "black",
 };
 
 export default colors;
