@@ -4,16 +4,15 @@ import com.vax.warden.model.LoginCredentials;
 import com.vax.warden.model.User;
 import com.vax.warden.security.JWTUtil;
 import com.vax.warden.service.UserService;
+import java.util.Collections;
+import java.util.Map;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.Collections;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
