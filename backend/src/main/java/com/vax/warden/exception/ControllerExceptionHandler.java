@@ -1,6 +1,7 @@
 package com.vax.warden.exception;
 
 import java.util.Date;
+import javax.naming.AuthenticationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -19,6 +20,18 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorMessage illegalArgumentException(IllegalArgumentException ex, WebRequest request) {
+        return standardErrorMessage(ex, HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    public ErrorMessage authenticationException(AuthenticationException ex, WebRequest request) {
+        return standardErrorMessage(ex, HttpStatus.UNAUTHORIZED, request);
+    }
+
+    @ExceptionHandler(SecurityException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorMessage securityException(SecurityException ex, WebRequest request) {
         return standardErrorMessage(ex, HttpStatus.BAD_REQUEST, request);
     }
 

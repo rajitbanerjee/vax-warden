@@ -40,6 +40,6 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(body.getEmail(), body.getPassword());
         authManager.authenticate(authInputToken);
         String token = jwtUtil.generateToken(body.getEmail());
-        return Collections.singletonMap("jwt-token", token);
+        return Collections.singletonMap("jwtToken", token);
     }
 }
