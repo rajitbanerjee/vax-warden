@@ -1,35 +1,35 @@
 version: "3"
 services:
-  # db:
-  #   image: mariadb:latest
-  #   container_name: db
-  #   restart: always
-  #   ports:
-  #     - "3306:3306"
-  #   environment:
-  #     MYSQL_ROOT_HOST: "%"
-  #     MYSQL_ROOT_PASSWORD: spring
-  #   # NOTE: comment out tmpfs if you're on Windows (without WSL2) (no tmpfs support)
-  #   # Also increase sleep time in backend/Dockerfile
-  #   tmpfs:
-  #     - /var/lib/mysql
-
-  # backend:
-  #   build: backend
-  #   restart: always
-  #   ports:
-  #     - "8080:8080"
-  #   depends_on:
-  #     - db
-
-  frontend:
-    build:
-      context: frontend
-      args:
-        - BACKEND_HOST=localhost
-        - BACKEND_PORT=8080
-    container_name: frontend
+  db:
+    image: mariadb:latest
+    container_name: db
+    restart: always
     ports:
-      - "80:80"
-    # depends_on:
-    #   - backend
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: spring
+    # NOTE: comment out tmpfs if you're on Windows (without WSL2) (no tmpfs support)
+    # Also increase sleep time in backend/Dockerfile
+    tmpfs:
+      - /var/lib/mysql
+
+  backend:
+    build: backend
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  # frontend:
+  #   build:
+  #     context: frontend
+  #     args:
+  #       - BACKEND_HOST=localhost
+  #       - BACKEND_PORT=8080
+  #   container_name: frontend
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - backend

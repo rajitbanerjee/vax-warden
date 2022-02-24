@@ -1,23 +1,25 @@
-import { Text, VStack } from "@chakra-ui/react";
-import Footer from "components/Footer";
-import NavBar from "components/NavBar";
+import { VStack } from "@chakra-ui/react";
+import { Footer, NavBar } from "components";
+import { AuthProvider } from "hooks/useAuth";
+import { Forum, Home, MyAccount, Registration, Statistics } from "pages";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 export const App: React.FC = (): JSX.Element => {
   return (
     <BrowserRouter>
-      <VStack minH="100vh">
-        <NavBar />
-        <Routes>
-          <Route path="/" element={<LoginContainer />} />
-          <Route path="/home" element={<DefaultContainer />} />
-        </Routes>
-        <Footer />
-      </VStack>
+      <AuthProvider>
+        <VStack minH="100vh">
+          <NavBar />
+          <Routes>
+            <Route path="/" element={<Registration />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/statistics" element={<Statistics />} />
+            <Route path="/forum" element={<Forum />} />
+            <Route path="/myaccount" element={<MyAccount />} />
+          </Routes>
+          <Footer />
+        </VStack>
+      </AuthProvider>
     </BrowserRouter>
   );
 };
-
-// TODO will not need these later, with auth context modifying navbar
-const DefaultContainer: React.FC = (): JSX.Element => <Text>Hello, Home!</Text>;
-const LoginContainer = () => <Text>Hello, Login!</Text>;

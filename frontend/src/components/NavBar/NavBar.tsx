@@ -1,7 +1,6 @@
-import React from "react";
 import { MenuLinks } from "./MenuLinks";
 import { NavBarContainer } from "./NavBarContainer";
-import Logo from "components/Logo";
+import { Logo } from "components";
 import colors from "custom/colors";
 
 export const NavBar: React.FC = (props): JSX.Element => {

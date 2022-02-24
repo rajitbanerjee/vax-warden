@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
-import App from ".";
+import { App } from "./App";
 
 test("renders without crashing", () => {
   render(<App />);
-  const linkElement = screen.getByText(/VaxWarden/i);
+  const linkElement = screen.getByText(/Vax/i);
   expect(linkElement).toBeInTheDocument();
 });
