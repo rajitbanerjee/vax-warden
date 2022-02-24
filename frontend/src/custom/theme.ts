@@ -21,7 +21,6 @@ const theme = extendTheme({
         textDecoation: null,
         _hover: {
           color: colors.accent,
-          fontWeight: "bold",
         },
       },
     },
