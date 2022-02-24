@@ -21,12 +21,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/register")
-    @ResponseStatus(HttpStatus.CREATED)
-    public User register(@Valid @RequestBody User user) {
-        return userService.save(user);
-    }
-
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
     public List<User> list() {
