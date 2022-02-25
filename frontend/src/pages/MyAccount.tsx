@@ -30,7 +30,7 @@ export const MyAccount: React.FC = (): JSX.Element => {
             .map(([k, v]) => (
               <Tr>
                 <Td>{formatKey[k]}</Td>
-                <Td>{v}</Td>
+                <Td>{k.includes("date") ? new Date(v).toUTCString().split("00:")[0] : v}</Td>
               </Tr>
             ))}
         </Tbody>

@@ -3,7 +3,7 @@ import { Footer, NavBar } from "components";
 import useAuth, { AuthProvider } from "hooks/useAuth";
 import { Forum, Home, Login, Logout, MyAccount, Registration, Statistics } from "pages";
 import { ErrorBoundary } from "react-error-boundary";
-import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 
 export const App: React.FC = (): JSX.Element => {
   return (
@@ -15,6 +15,7 @@ export const App: React.FC = (): JSX.Element => {
             <Routes>
               <Route path="/" element={<Registration />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/logout" element={<Logout />} />
               <Route path="/statistics" element={<Statistics />} />
               <Route
                 path="/home"
@@ -40,14 +41,6 @@ export const App: React.FC = (): JSX.Element => {
                   </RequireAuth>
                 }
               />
-              <Route
-                path="/logout"
-                element={
-                  <RequireAuth>
-                    <Logout />
-                  </RequireAuth>
-                }
-              />
             </Routes>
             <Footer />
           </VStack>
@@ -69,9 +62,7 @@ function ErrorFallback({ error, resetErrorBoundary }: any) {
 
 function RequireAuth({ children }: { children: JSX.Element }) {
   const { isAuthenticated } = useAuth();
-  const location = useLocation();
-  if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
+  const navigate = useNavigate();
+  if (!isAuthenticated) navigate("/login");
   return children;
 }
