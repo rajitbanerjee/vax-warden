@@ -27,11 +27,11 @@ public class User implements Serializable {
     private Long id;
 
     @NotBlank
-    @Size(min = 2, max = 64, message = "Must be between 2 to 64 characters!")
+    @Size(min = 2, max = 64, message = "Must be between 2 and 64 characters!")
     private String firstName;
 
     @NotBlank
-    @Size(min = 2, max = 64, message = "Must be between 2 to 64 characters!")
+    @Size(min = 2, max = 64, message = "Must be between 2 and 64 characters!")
     private String lastName;
 
     @NotNull
