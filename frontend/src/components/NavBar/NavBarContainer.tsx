@@ -10,7 +10,7 @@ export const NavBarContainer: React.FC = ({ children, ...props }): JSX.Element =
       wrap="wrap"
       width="100%"
       marginBottom={8}
-      padding={8}
+      padding="2rem"
       bg={["primary.500", "primary.500", "transparent", "transparent"]}
       color={[colors.fg, colors.fg, "primary.700", "primary.700"]}
       {...props}

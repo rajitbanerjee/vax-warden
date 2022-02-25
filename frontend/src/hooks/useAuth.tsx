@@ -7,6 +7,8 @@ import type { Response } from "redaxios";
 export interface AuthContextType {
   currentUser: User;
   jwtToken: string;
+  isAuthenticated: boolean;
+  isAdmin: boolean;
   loading: boolean;
   error?: Response<any>;
   register: (user: User) => void;
@@ -17,18 +19,40 @@ export interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export const AuthProvider: React.FC = ({ children }): JSX.Element => {
-  const [currentUser, setCurrentUser] = useState<User>();
-  const [jwtToken, setJwtToken] = useState<string>();
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const [error, setError] = useState<Response<any> | null>();
+  const [currentUser, setCurrentUser] = useState<User | undefined>(getLocalStorage("currentUser", undefined));
+  const [jwtToken, setJwtToken] = useState<string | undefined>(getLocalStorage("jwtToken", undefined));
+  const [isAuthenticated, setIsAutheticated] = useState<boolean>(getLocalStorage("isAuthenticated", false));
+  const [isAdmin, setIsAdmin] = useState<boolean>(getLocalStorage("isAdmin", false));
+
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Response<any> | null>();
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (error) setError(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname]);
+    setLocalStorage("currentUser", currentUser);
+    setLocalStorage("jwtToken", jwtToken);
+    setLocalStorage("isAuthenticated", isAuthenticated);
+    setLocalStorage("isAdmin", isAdmin);
+    setError(null);
+  }, [currentUser, jwtToken, isAuthenticated, isAdmin, location.pathname]);
+
+  function setLocalStorage(key: string, value: any) {
+    try {
+      window.localStorage.setItem(key, JSON.stringify(value));
+    } catch (e) {
+      // https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API
+    }
+  }
+
+  function getLocalStorage(key: string, initialValue: any) {
+    try {
+      const value = window.localStorage.getItem(key);
+      return value !== null ? JSON.parse(value) : initialValue;
+    } catch (e) {
+      return initialValue;
+    }
+  }
 
   const register = (user: User) => {
     setLoading(true);
@@ -37,6 +61,7 @@ export const AuthProvider: React.FC = ({ children }): JSX.Element => {
       .then((newUser) => {
         setCurrentUser(newUser);
         setJwtToken(newUser.jwtToken);
+        setIsAutheticated(true);
         setIsAdmin(newUser.userRole === UserRole.ROLE_ADMIN);
         navigate("/home");
       })
@@ -51,6 +76,7 @@ export const AuthProvider: React.FC = ({ children }): JSX.Element => {
       .then((newUser) => {
         setCurrentUser(newUser);
         setJwtToken(newUser.jwtToken);
+        setIsAutheticated(true);
         setIsAdmin(newUser.userRole === UserRole.ROLE_ADMIN);
         navigate("/home");
       })
@@ -61,8 +87,8 @@ export const AuthProvider: React.FC = ({ children }): JSX.Element => {
   const logout = () => {
     setCurrentUser(undefined);
     setJwtToken(undefined);
+    setIsAutheticated(false);
     setIsAdmin(false);
-    navigate("/login");
   };
 
   // Make the provider update only when it should
@@ -70,6 +96,7 @@ export const AuthProvider: React.FC = ({ children }): JSX.Element => {
     () => ({
       currentUser,
       jwtToken,
+      isAuthenticated,
       isAdmin,
       loading,
       error,

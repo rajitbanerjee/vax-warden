@@ -1,12 +1,13 @@
-import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Heading, Input, Text } from "@chakra-ui/react";
 import { User } from "client/types";
-import colors from "custom/colors";
 import useAuth from "hooks/useAuth";
 import { FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 
 // TODO Improve validation error message display!!!
 export const Registration: React.FC = (): JSX.Element => {
   const { register, loading, error } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -33,54 +34,61 @@ export const Registration: React.FC = (): JSX.Element => {
         </Box>
         <Box my={4} textAlign="left">
           <form onSubmit={handleSubmit}>
-            <FormControl isRequired>
+            <FormControl isRequired isInvalid={error !== null}>
               <FormLabel>First Name</FormLabel>
               <Input name="firstName" placeholder="Jane" size="md" />
-              {error && <Text color={colors.error}>{JSON.stringify(error.data)}</Text>}
             </FormControl>
 
-            <FormControl isRequired marginTop={6}>
+            <FormControl isRequired marginTop={6} isInvalid={error !== null}>
               <FormLabel>Last Name</FormLabel>
               <Input name="lastName" placeholder="Doe" size="md" />
             </FormControl>
 
-            <FormControl isRequired marginTop={6}>
+            <FormControl isRequired marginTop={6} isInvalid={error !== null}>
               <FormLabel>Date of Birth</FormLabel>
               <Input name="dateOfBirth" type="date" max={getMaxDateOfBirth()} size="md" />
             </FormControl>
 
-            <FormControl isRequired marginTop={6}>
+            <FormControl isRequired marginTop={6} isInvalid={error !== null}>
               <FormLabel>PPS Number</FormLabel>
               <Input name="ppsn" placeholder="1234567AB" size="md" />
             </FormControl>
 
-            <FormControl isRequired marginTop={6}>
+            <FormControl isRequired marginTop={6} isInvalid={error !== null}>
               <FormLabel>Address</FormLabel>
               <Input name="address" placeholder="UCD, Dublin 4, Co. Dublin, Ireland" size="md" />
             </FormControl>
 
-            <FormControl isRequired marginTop={6}>
+            <FormControl isRequired marginTop={6} isInvalid={error !== null}>
               <FormLabel>Phone Number</FormLabel>
               <Input name="phoneNo" type="tel" size="md" />
             </FormControl>
 
-            <FormControl isRequired marginTop={6}>
+            <FormControl isRequired marginTop={6} isInvalid={error !== null}>
               <FormLabel>Nationality</FormLabel>
               <Input name="nationality" placeholder="Ireland" size="md" />
             </FormControl>
 
-            <FormControl isRequired marginTop={6}>
+            <FormControl isRequired marginTop={6} isInvalid={error !== null}>
               <FormLabel>Email</FormLabel>
               <Input name="email" type="email" placeholder="jane.doe@ucd.ie" size="md" />
             </FormControl>
 
-            <FormControl isRequired marginTop={6}>
+            <FormControl isRequired marginTop={6} isInvalid={error !== null}>
               <FormLabel>Password</FormLabel>
               <Input name="password" type="password" placeholder="*******" size="md" />
+              {error && <FormErrorMessage>Please provide valid input!</FormErrorMessage>}
             </FormControl>
 
             <Button colorScheme="teal" type="submit" width="full" mt={4} disabled={loading}>
               Submit
+            </Button>
+
+            <Text align="center" mt={20}>
+              Existing user?
+            </Text>
+            <Button variant="outline" width="full" mt={2} disabled={loading} onClick={() => navigate("/login")}>
+              Log In
             </Button>
           </form>
         </Box>
