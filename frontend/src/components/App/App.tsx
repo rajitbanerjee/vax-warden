@@ -1,9 +1,9 @@
 import { VStack } from "@chakra-ui/react";
 import { Footer, NavBar } from "components";
-import { AuthProvider } from "hooks/useAuth";
+import useAuth, { AuthProvider } from "hooks/useAuth";
 import { Forum, Home, Login, Logout, MyAccount, Registration, Statistics } from "pages";
 import { ErrorBoundary } from "react-error-boundary";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 export const App: React.FC = (): JSX.Element => {
   return (
@@ -14,12 +14,40 @@ export const App: React.FC = (): JSX.Element => {
             <NavBar />
             <Routes>
               <Route path="/" element={<Registration />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/statistics" element={<Statistics />} />
-              <Route path="/forum" element={<Forum />} />
-              <Route path="/myaccount" element={<MyAccount />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/logout" element={<Logout />} />
+              <Route path="/statistics" element={<Statistics />} />
+              <Route
+                path="/home"
+                element={
+                  <RequireAuth>
+                    <Home />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/forum"
+                element={
+                  <RequireAuth>
+                    <Forum />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/myaccount"
+                element={
+                  <RequireAuth>
+                    <MyAccount />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/logout"
+                element={
+                  <RequireAuth>
+                    <Logout />
+                  </RequireAuth>
+                }
+              />
             </Routes>
             <Footer />
           </VStack>
@@ -37,4 +65,13 @@ function ErrorFallback({ error, resetErrorBoundary }: any) {
       <button onClick={resetErrorBoundary}>Try again!</button>
     </div>
   );
+}
+
+function RequireAuth({ children }: { children: JSX.Element }) {
+  const { isAuthenticated } = useAuth();
+  const location = useLocation();
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+  return children;
 }

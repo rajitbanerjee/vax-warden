@@ -3,6 +3,6 @@ import { App } from "./App";
 
 test("renders without crashing", () => {
   render(<App />);
-  const linkElement = screen.getByText(/Vax/i);
+  const linkElement = screen.getByText(/COMP47660/i);
   expect(linkElement).toBeInTheDocument();
 });
