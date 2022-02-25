@@ -3,7 +3,6 @@ import { MenuItem } from "./MenuItem";
 import useAuth from "hooks/useAuth";
 import { useLocation } from "react-router-dom";
 
-// TODO implement link routes, authN handling, etc.
 export const MenuLinks: React.FC = (): JSX.Element => {
   const { isAdmin, isAuthenticated } = useAuth();
   const location = useLocation();
