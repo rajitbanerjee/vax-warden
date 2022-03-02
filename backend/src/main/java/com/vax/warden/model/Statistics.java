@@ -71,17 +71,17 @@ public class Statistics {
 
     private void incrementDosesReceived(int dosesReceived) {
         this.dosesReceived.putIfAbsent(dosesReceived, 0);
-        this.dosesReceived.put(dosesReceived, this.dosesReceived.get(dosesReceived));
+        this.dosesReceived.put(dosesReceived, this.dosesReceived.get(dosesReceived) + 1);
     }
 
     private void incrementNationality(String nationality) {
         this.nationality.putIfAbsent(nationality, 0);
-        this.nationality.put(nationality, this.nationality.get(nationality));
+        this.nationality.put(nationality, this.nationality.get(nationality) + 1);
     }
 
     private void incrementGender(Gender gender) {
         this.gender.putIfAbsent(gender, 0);
-        this.gender.put(gender, this.gender.get(gender));
+        this.gender.put(gender, this.gender.get(gender) + 1);
     }
 
     public Statistics tallyVaccination(Vaccination vaccination, User user) {
