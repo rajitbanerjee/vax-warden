@@ -61,6 +61,8 @@ public class User implements Serializable {
     @Size(min = 2, max = 32)
     private String nationality;
 
+    @NotNull private Gender gender;
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 

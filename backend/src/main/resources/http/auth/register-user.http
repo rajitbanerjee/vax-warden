@@ -10,5 +10,6 @@ Content-Type: application/json
   "email": "jane.doe@ucd.ie",
   "phoneNo": "0874795969",
   "nationality": "Ireland",
+  "gender": "FEMALE",
   "password": "password"
 }
