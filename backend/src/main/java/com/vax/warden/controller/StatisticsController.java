@@ -24,6 +24,7 @@ public class StatisticsController {
         return statisticsService.aggregateAll();
     }
 
+    //TODO: restrict access so user can only see their vaccination results
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Statistics getStatisticsById(@PathVariable long id) {
