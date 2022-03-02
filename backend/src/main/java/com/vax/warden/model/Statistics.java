@@ -14,6 +14,8 @@ public class Statistics {
     private Map<VaccineType, Integer> firstVaccineType;
     private Map<VaccineType, Integer> secondVaccineType;
     private Map<Integer, Integer> dosesReceived;
+    private Map<String, Integer> nationality;
+    private Map<Integer, Integer> gender;
 
     public Statistics() {
         this.centre = new HashMap<String, Integer>();
@@ -22,6 +24,8 @@ public class Statistics {
         this.firstVaccineType = new HashMap<VaccineType, Integer>();
         this.secondVaccineType = new HashMap<VaccineType, Integer>();
         this.dosesReceived = new HashMap<Integer, Integer>();
+        this.nationality = new HashMap<String, Integer>();
+        this.gender = new HashMap<Integer, Integer>();
     }
 
     private void incrementCentre(String centre) {
@@ -68,6 +72,16 @@ public class Statistics {
     private void incrementDosesReceived(int dosesReceived) {
         this.dosesReceived.putIfAbsent(dosesReceived, 0);
         this.dosesReceived.put(dosesReceived, this.dosesReceived.get(dosesReceived));
+    }
+
+    private void incrementNationality(String nationality) {
+        this.nationality.putIfAbsent(nationality, 0);
+        this.nationality.put(nationality, this.nationality.get(nationality));
+    }
+
+    private void incrementGender(int gender) {
+        this.gender.putIfAbsent(gender, 0);
+        this.gender.put(gender, this.gender.get(gender));
     }
 
     public Statistics tallyVaccination(Vaccination vaccination) {
