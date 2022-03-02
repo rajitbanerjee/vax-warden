@@ -16,14 +16,12 @@ public class StatisticsService {
     private final UserRepository userRepository;
     private final VaccinationRepository vaccinationRepository;
 
-
     private User getUserFromVaccination(Vaccination vaccination) {
         Long id = vaccination.getUserId();
         String error1 = "No user found with id = " + id;
         return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(error1));
-        
+    }
 
-  }
     public Statistics aggregateAll() {
         List<Vaccination> vaccinations = vaccinationRepository.findAll();
         Statistics statistics = new Statistics();
@@ -41,17 +39,6 @@ public class StatisticsService {
                         .findById(id)
                         .orElseThrow(() -> new ResourceNotFoundException(errorMessage));
         User user = getUserFromVaccination(vaccination);
-        return new Statistics().tallyVaccination(vaccination, user);
-    }
-
-    public Statistics getStatisticsByUserId(Long id) {
-        String error1 = "No user found with id = " + id;
-        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(error1));
-        String error2 = "User doesn't has a vaccination record with id = " + id;
-        Vaccination vaccination =
-                vaccinationRepository
-                        .findById(id)
-                        .orElseThrow(() -> new IllegalArgumentException(error2));
         return new Statistics().tallyVaccination(vaccination, user);
     }
 }

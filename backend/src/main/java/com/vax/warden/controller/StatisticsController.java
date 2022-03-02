@@ -24,15 +24,9 @@ public class StatisticsController {
         return statisticsService.aggregateAll();
     }
 
-    @GetMapping("/vaccination/{id}")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Statistics getStatisticsById(@PathVariable long id) {
         return statisticsService.getStatisticsById(id);
-    }
-
-    @GetMapping("/user/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Statistics getStatisticsByUserId(@PathVariable long id) {
-        return statisticsService.getStatisticsByUserId(id);
     }
 }
