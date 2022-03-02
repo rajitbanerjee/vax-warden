@@ -13,7 +13,7 @@ public class Statistics {
     private Map<Date, Integer> secondAppointment;
     private Map<VaccineType, Integer> firstVaccineType;
     private Map<VaccineType, Integer> secondVaccineType;
-    private Map<Integer, Integer> dosesRecieved;
+    private Map<Integer, Integer> dosesReceived;
 
     public Statistics() {
         this.centre = new HashMap<String, Integer>();
@@ -21,7 +21,7 @@ public class Statistics {
         this.secondAppointment = new HashMap<Date, Integer>();
         this.firstVaccineType = new HashMap<VaccineType, Integer>();
         this.secondVaccineType = new HashMap<VaccineType, Integer>();
-        this.dosesRecieved = new HashMap<Integer, Integer>();
+        this.dosesReceived = new HashMap<Integer, Integer>();
     }
 
     private void incrementCentre(String centre) {
@@ -65,9 +65,9 @@ public class Statistics {
                 secondVaccineType, this.secondVaccineType.get(secondVaccineType) + 1);
     }
 
-    private void incrementDosesRecieved(int dosesRecieved) {
-        this.dosesRecieved.putIfAbsent(dosesRecieved, 0);
-        this.dosesRecieved.put(dosesRecieved, this.dosesRecieved.get(dosesRecieved));
+    private void incrementDosesReceived(int dosesReceived) {
+        this.dosesReceived.putIfAbsent(dosesReceived, 0);
+        this.dosesReceived.put(dosesReceived, this.dosesReceived.get(dosesReceived));
     }
 
     public Statistics tallyVaccination(Vaccination vaccination) {
@@ -76,7 +76,7 @@ public class Statistics {
         incrementSecondAppointment(vaccination.getSecondAppointment());
         incrementFirstVaccineType(vaccination.getFirstVaccineType());
         incrementSecondVaccineType(vaccination.getSecondVaccineType());
-        incrementDosesRecieved(vaccination.getDosesReceived());
+        incrementDosesReceived(vaccination.getDosesReceived());
         return this;
     }
 }
