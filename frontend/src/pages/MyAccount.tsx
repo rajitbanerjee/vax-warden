@@ -10,6 +10,13 @@ const formatKey: { [k: string]: any } = {
   email: "Email",
   phoneNo: "Phone No.",
   nationality: "Nationality",
+  gender: "Gender",
+};
+
+const formatValue = (k: string, v: any): string => {
+  if (k.includes("date")) return new Date(v).toUTCString().split("00:")[0];
+  if (k === "gender") return v[0].toUpperCase() + v.substring(1).toLowerCase();
+  return v;
 };
 
 const keysToHide = ["id", "jwtToken", "userRole"];
@@ -30,7 +37,7 @@ export const MyAccount: React.FC = (): JSX.Element => {
             .map(([k, v]) => (
               <Tr>
                 <Td>{formatKey[k]}</Td>
-                <Td>{k.includes("date") ? new Date(v).toUTCString().split("00:")[0] : v}</Td>
+                <Td>{formatValue(k, v)}</Td>
               </Tr>
             ))}
         </Tbody>

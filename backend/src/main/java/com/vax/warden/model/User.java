@@ -61,7 +61,7 @@ public class User implements Serializable {
     @Size(min = 2, max = 32, message = "Must be between 2 and 32 characters!")
     private String nationality;
 
-    @NotNull 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Gender gender;
 

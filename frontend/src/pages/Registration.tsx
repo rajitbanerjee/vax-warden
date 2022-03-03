@@ -1,5 +1,16 @@
-import { Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Heading, Input, Text } from "@chakra-ui/react";
-import { User } from "client/types";
+import {
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Heading,
+  Input,
+  Select,
+  Text,
+} from "@chakra-ui/react";
+import { Gender, User } from "client/types";
 import useAuth from "hooks/useAuth";
 import { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +32,7 @@ export const Registration: React.FC = (): JSX.Element => {
       email: formData.get("email") as string,
       phoneNo: formData.get("phoneNo") as string,
       nationality: formData.get("nationality") as string,
+      gender: formData.get("gender") as unknown as Gender,
       password: formData.get("password") as string,
     };
     register(user);
@@ -67,6 +79,15 @@ export const Registration: React.FC = (): JSX.Element => {
             <FormControl isRequired marginTop={6} isInvalid={error !== null}>
               <FormLabel>Nationality</FormLabel>
               <Input name="nationality" placeholder="Ireland" size="md" />
+            </FormControl>
+
+            <FormControl isRequired marginTop={6}>
+              <FormLabel>Gender</FormLabel>
+              <Select name="gender" size="md">
+                <option value="FEMALE">Female</option>
+                <option value="MALE">Male</option>
+                <option value="OTHER">Other</option>
+              </Select>
             </FormControl>
 
             <FormControl isRequired marginTop={6} isInvalid={error !== null}>
