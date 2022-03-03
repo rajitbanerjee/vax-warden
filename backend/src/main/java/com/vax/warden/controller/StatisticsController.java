@@ -20,7 +20,7 @@ public class StatisticsController {
     @ResponseStatus(HttpStatus.OK)
     public Statistics getStatistics() {
         Statistics statistics = statisticsService.aggregateAll();
-        System.out.println(statistics);
+        
         return statisticsService.aggregateAll();
     }
 
