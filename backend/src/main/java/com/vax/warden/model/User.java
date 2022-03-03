@@ -61,7 +61,9 @@ public class User implements Serializable {
     @Size(min = 2, max = 32, message = "Must be between 2 and 32 characters!")
     private String nationality;
 
-    @NotNull private Gender gender;
+    @NotNull 
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
