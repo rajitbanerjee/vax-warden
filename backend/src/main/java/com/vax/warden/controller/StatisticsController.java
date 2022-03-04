@@ -19,7 +19,7 @@ public class StatisticsController {
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
     public Statistics getStatistics() {
-        Statistics statistics = statisticsService.aggregateAll();
+        
 
         return statisticsService.aggregateAll();
     }
