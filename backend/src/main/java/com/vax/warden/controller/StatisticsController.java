@@ -19,12 +19,12 @@ public class StatisticsController {
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
     public Statistics getStatistics() {
-        Statistics statistics = statisticsService.aggregateAll();
         
+
         return statisticsService.aggregateAll();
     }
 
-    //TODO: restrict access so user can only see their vaccination results
+    // TODO: restrict access so user can only see their vaccination results
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Statistics getStatisticsById(@PathVariable long id) {

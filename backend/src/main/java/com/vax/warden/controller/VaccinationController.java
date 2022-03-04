@@ -37,4 +37,11 @@ public class VaccinationController {
     public Vaccination getVaccinationById(@PathVariable long id) {
         return vaccinationService.getVaccinationById(id);
     }
+
+    // TODO: limit this to current users ID
+    @GetMapping("/cancel/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void cancelBooking(@PathVariable Long id) {
+        vaccinationService.cancelBooking(id);
+    }
 }
