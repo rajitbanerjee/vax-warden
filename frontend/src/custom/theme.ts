@@ -18,7 +18,7 @@ const theme = extendTheme({
       },
 
       a: {
-        textDecoation: null,
+        textDecoration: null,
         _hover: {
           color: colors.accent,
         },
