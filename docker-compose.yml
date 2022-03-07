@@ -21,3 +21,15 @@ services:
       - "8080:8080"
     depends_on:
       - db
+
+  # frontend:
+  #   build:
+  #     context: frontend
+  #     args:
+  #       - BACKEND_HOST=localhost
+  #       - BACKEND_PORT=8080
+  #   container_name: frontend
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - backend

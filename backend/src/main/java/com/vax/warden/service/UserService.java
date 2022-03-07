@@ -27,6 +27,13 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException(errorMessage));
     }
 
+    public User getUserByEmail(String email) {
+        String errorMessage = "No user found with email = " + email;
+        return userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException(errorMessage));
+    }
+
     public boolean isEmailInUse(String email) {
         return userRepository.findByEmail(email).isPresent();
     }

@@ -5,7 +5,7 @@ COVID-19 vaccine registration system using Java, Spring Boot and React.js, devel
 ## Requirements
 
 - Docker
-- JDK 11
+- JDK >= 11
 
 ## Getting Started
 
