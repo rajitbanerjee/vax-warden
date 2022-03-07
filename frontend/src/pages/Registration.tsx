@@ -73,7 +73,7 @@ export const Registration: React.FC = (): JSX.Element => {
 
             <FormControl isRequired marginTop={6} isInvalid={error !== null}>
               <FormLabel>Phone Number</FormLabel>
-              <Input name="phoneNo" type="tel" size="md" />
+              <Input name="phoneNo" placeholder="0899123456" type="tel" size="md" />
             </FormControl>
 
             <FormControl isRequired marginTop={6} isInvalid={error !== null}>
