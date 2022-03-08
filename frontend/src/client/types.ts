@@ -30,3 +30,18 @@ export interface LoginCredentials {
   email: string;
   password: string;
 }
+
+export enum VaccinationType {
+  PFIZER_BIONTECH,
+  MODERNA,
+}
+
+export interface Vaccination {
+  userId: number;
+  centre: string;
+  firstAppointment: Date;
+  secondAppointment: Date;
+  firstVaccinationType: VaccinationType;
+  secondVaccinationType: VaccinationType;
+  dosesRecieved: number;
+}
