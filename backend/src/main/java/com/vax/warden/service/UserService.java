@@ -20,18 +20,15 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getUserById(Long id) {
-        String errorMessage = "No user found with id = " + id;
-        return userRepository
-                .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(errorMessage));
-    }
-
-    public User getUserByEmail(String email) {
+    public User findByEmail(String email) {
         String errorMessage = "No user found with email = " + email;
         return userRepository
                 .findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException(errorMessage));
+    }
+
+    public Long findIdByEmail(String email) {
+        return findByEmail(email).getId();
     }
 
     public boolean isEmailInUse(String email) {
