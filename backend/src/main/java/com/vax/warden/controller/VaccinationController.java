@@ -2,14 +2,13 @@ package com.vax.warden.controller;
 
 import com.vax.warden.model.Vaccination;
 import com.vax.warden.service.VaccinationService;
-import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,26 +21,21 @@ public class VaccinationController {
 
     @PostMapping("/book")
     @ResponseStatus(HttpStatus.CREATED)
-    public Vaccination bookFirstDose(@Valid @RequestBody Vaccination vaccination) {
-        return vaccinationService.bookFirstDose(vaccination);
+    public Vaccination bookFirstDose(
+            @Valid @RequestBody Vaccination vaccination,
+            @RequestHeader("Authorization") String auth) {
+        return vaccinationService.bookFirstDose(vaccination, auth);
     }
 
-    @GetMapping("/list")
+    @GetMapping("/user")
     @ResponseStatus(HttpStatus.OK)
-    public List<Vaccination> list() {
-        return vaccinationService.findAll();
+    public Vaccination getUserVaccination(@RequestHeader("Authorization") String auth) {
+        return vaccinationService.getUserVaccination(auth);
     }
 
-    @GetMapping("/{id}")
+    @PostMapping("/cancel")
     @ResponseStatus(HttpStatus.OK)
-    public Vaccination getVaccinationById(@PathVariable long id) {
-        return vaccinationService.getVaccinationById(id);
-    }
-
-    // TODO: limit this to current users ID
-    @GetMapping("/cancel/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void cancelBooking(@PathVariable Long id) {
-        vaccinationService.cancelBooking(id);
+    public void cancelBooking(@RequestHeader("Authorization") String auth) {
+        vaccinationService.cancelBooking(auth);
     }
 }
