@@ -7,7 +7,6 @@ import lombok.Data;
 
 @Data
 public class Statistics {
-
     private Map<String, Integer> centre;
     private Map<Date, Integer> firstAppointment;
     private Map<Date, Integer> secondAppointment;
