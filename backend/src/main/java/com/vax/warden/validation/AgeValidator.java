@@ -8,7 +8,6 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 public class AgeValidator implements ConstraintValidator<ValidAge, Date> {
-
     @Override
     public void initialize(ValidAge age) {}
 

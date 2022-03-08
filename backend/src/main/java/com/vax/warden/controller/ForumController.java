@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/forum")
 public class ForumController {
-
     private final ForumService forumService;
 
     @PostMapping("/post")

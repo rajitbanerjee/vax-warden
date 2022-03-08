@@ -39,7 +39,7 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(body.getEmail(), body.getPassword());
         authManager.authenticate(authInputToken);
         String token = jwtUtil.generateToken(body.getEmail());
-        User user = userService.getUserByEmail(body.getEmail());
+        User user = userService.findByEmail(body.getEmail());
         user.setJwtToken(token);
         return user;
     }

@@ -1,9 +1,8 @@
 package com.vax.warden.security;
 
 import com.vax.warden.model.User;
-import com.vax.warden.repository.UserRepository;
+import com.vax.warden.service.UserService;
 import java.util.Collections;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,15 +13,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserDetailsService
         implements org.springframework.security.core.userdetails.UserDetailsService {
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<User> userRes = userRepository.findByEmail(email);
-        if (userRes.isEmpty()) {
-            throw new UsernameNotFoundException("Could not find user with email = " + email);
-        }
-        User user = userRes.get();
+        User user = userService.findByEmail(email);
         return new org.springframework.security.core.userdetails.User(
                 email,
                 user.getPassword(),
