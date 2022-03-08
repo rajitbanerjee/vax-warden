@@ -8,6 +8,5 @@ export const getForUser = async (jwtToken: string): Promise<Statistics> => {
   const response = await redaxios.get(`${STATISTICS_ENDPOINT}/user`, {
     headers: { Authorization: `Bearer ${jwtToken}` },
   });
-  console.log(response);
   return response.data;
 };
