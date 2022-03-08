@@ -1,4 +1,5 @@
 import { Heading, Table, TableCaption, Tbody, Td, Tr, VStack } from "@chakra-ui/react";
+import { formatDate } from "client/util";
 import useAuth from "hooks/useAuth";
 
 const formatKey: { [k: string]: any } = {
@@ -14,7 +15,7 @@ const formatKey: { [k: string]: any } = {
 };
 
 const formatValue = (k: string, v: any): string => {
-  if (k.includes("date")) return new Date(v).toUTCString().split("00:")[0];
+  if (k.includes("date")) return formatDate(v);
   if (k === "gender") return v[0].toUpperCase() + v.substring(1).toLowerCase();
   return v;
 };
