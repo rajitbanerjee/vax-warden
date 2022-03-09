@@ -51,15 +51,16 @@ export enum VaccineType {
 }
 
 export interface Vaccination {
-  userId: number;
+  id?: number;
   centre: string;
   firstAppointment: Date;
-  secondAppointment: Date;
-  firstVaccineType: VaccineType;
-  secondVaccineType: VaccineType;
-  dosesRecieved: number;
+  secondAppointment?: Date;
+  firstVaccineType?: VaccineType;
+  secondVaccineType?: VaccineType;
+  dosesRecieved?: number;
 }
 
+// Statistics
 export interface Stats {
   centre: { [key: string]: number };
   firstAppointment?: { [key: string]: number };

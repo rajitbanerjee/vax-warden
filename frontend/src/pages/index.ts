@@ -1,4 +1,5 @@
 export { Booking } from "./Booking";
+export { Cancellation } from "./Cancellation";
 export { Forum } from "./Forum";
 export { Home } from "./Home";
 export { Login } from "./Login";

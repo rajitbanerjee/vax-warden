@@ -27,6 +27,7 @@ public class VaccinationController {
         return vaccinationService.bookFirstDose(vaccination, email);
     }
 
+    // TODO required at all?
     @GetMapping("/user")
     @ResponseStatus(HttpStatus.OK)
     public Vaccination getUserVaccination(Authentication authentication) {
