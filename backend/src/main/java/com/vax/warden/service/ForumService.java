@@ -16,8 +16,7 @@ public class ForumService {
 
     public Post save(Post post, String email) {
         User user = userService.findByEmail(email);
-        post.setLastName(user.getLastName());
-        post.setFirstName(user.getFirstName());
+        post.setPoster(user);
         return forumRepository.save(post);
     }
 

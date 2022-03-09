@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,7 @@ public class Post {
 
     private Long replyId;
 
-    @JsonIgnore private String firstName;
+    @JsonIgnore @ManyToOne private User poster;
 
     @JsonIgnore private String lastName;
 
@@ -41,11 +42,11 @@ public class Post {
 
     @JsonProperty("firstName")
     public String getFirstName() {
-        return firstName;
+        return poster.getFirstName();
     }
 
     @JsonProperty("lastName")
     public String getLastName() {
-        return lastName;
+        return poster.getLastName();
     }
 }
