@@ -1,13 +1,9 @@
 package com.vax.warden.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
@@ -23,19 +19,23 @@ import lombok.RequiredArgsConstructor;
 public class Vaccination implements Serializable {
     private static final long serialVersionUID = 28382774L;
 
-    // TODO? switch to foreign key
-    @Id private Long userId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @OneToOne(mappedBy = "vaccination")
+    @JsonIgnore
+    private User user;
+
     @NotBlank @NonNull private String centre;
 
     @NotNull
-    @NonNull
-    @Column(unique = true)
+    @Column
     @Temporal(TemporalType.TIMESTAMP)
     private Date firstAppointment;
 
     /* properties set/updated by admin/automatically later */
 
-    @Column(unique = true)
     @Temporal(TemporalType.TIMESTAMP)
     private Date secondAppointment;
 

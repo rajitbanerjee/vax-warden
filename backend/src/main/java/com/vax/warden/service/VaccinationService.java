@@ -1,49 +1,52 @@
 package com.vax.warden.service;
 
 import com.vax.warden.exception.ResourceNotFoundException;
+import com.vax.warden.model.User;
 import com.vax.warden.model.Vaccination;
 import com.vax.warden.repository.VaccinationRepository;
-import com.vax.warden.security.AuthUtil;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class VaccinationService {
     private final VaccinationRepository vaccinationRepository;
-    private final AuthUtil authUtil;
 
-    public Vaccination bookFirstDose(Vaccination vaccination, String auth) {
-        Long userId = authUtil.getIdFromHeader(auth);
-        vaccination.setUserId(userId);
-        String error = "User already has a vaccination record with id = " + userId;
-        if (vaccinationRepository.findById(userId).isPresent()) {
-            throw new IllegalArgumentException(error);
+    private final UserService userService;
+
+    @Transactional
+    public Vaccination bookFirstDose(Vaccination vaccination, String email) {
+        User user = userService.findByEmail(email);
+        if (user.getVaccination() != null) {
+            throw new IllegalArgumentException("User already has a vaccination record");
         }
+        return save(vaccination, user);
+    }
+
+    @Transactional(readOnly = true)
+    public Vaccination getUserVaccination(String email) {
+        User user = userService.findByEmail(email);
+        if (user.getVaccination() == null) {
+            throw new ResourceNotFoundException("User does not have a vaccination record");
+        }
+        return user.getVaccination();
+    }
+
+    public Vaccination updateFirstBooking(Vaccination vaccination, Date date) {
+        vaccination.setFirstAppointment(date);
         return save(vaccination);
     }
 
-    public Vaccination getUserVaccination(String auth) {
-        String errorMessage = "No record found for current user";
-        Long id = authUtil.getIdFromHeader(auth);
-        return vaccinationRepository
-                .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(errorMessage));
-    }
-
-    public void updateFirstBooking(Vaccination vaccination, Date date) {
-        vaccination.setFirstAppointment(date);
-        save(vaccination);
-    }
-
-    public void updateSecondBooking(Vaccination vaccination, Date date) {
+    public Vaccination updateSecondBooking(Vaccination vaccination, Date date) {
         vaccination.setSecondAppointment(date);
-        save(vaccination);
+        return save(vaccination);
     }
 
-    public void cancelBooking(String auth) {
-        Vaccination vaccination = getUserVaccination(auth);
+    @Transactional
+    public void cancelBooking(String email) {
+        Vaccination vaccination = getUserVaccination(email);
         if (vaccination.getSecondAppointment() != null) {
             updateSecondBooking(vaccination, null);
         } else {
@@ -55,7 +58,16 @@ public class VaccinationService {
         return vaccinationRepository.save(vaccination);
     }
 
+    private Vaccination save(Vaccination vaccination, User user) {
+        vaccinationRepository.save(vaccination);
+        user.setVaccination(vaccination);
+        userService.save(user);
+        return vaccinationRepository.save(vaccination);
+    }
+
     private void delete(Vaccination vaccination) {
+        vaccination.getUser().setVaccination(null);
         vaccinationRepository.delete(vaccination);
+        userService.save(vaccination.getUser());
     }
 }
