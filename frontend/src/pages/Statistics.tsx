@@ -27,6 +27,11 @@ const nationality = (stats: Stats | undefined): (any[] | VerticalBarSeriesPoint)
   return createPoints(stats.nationality);
 };
 
+const doses = (stats: Stats | undefined): (any[] | VerticalBarSeriesPoint)[] => {
+  if (!stats) return [];
+  return createPoints(stats.dosesReceived);
+};
+
 export const Statistics: React.FC = (): JSX.Element => {
   const [stats, setStats] = useState<Stats | undefined>(undefined);
 
@@ -76,6 +81,19 @@ export const Statistics: React.FC = (): JSX.Element => {
             <XAxis />
             <YAxis />
             <VerticalBarSeries data={nationality(stats)} barWidth={0.8} />
+          </XYPlot>
+        </VStack>
+      </HStack>
+
+      <HStack spacing={5} pb="200px">
+        <VStack spacing={5} pb="200px">
+          <Heading size="md" textAlign="center">
+            Total Doses Received
+          </Heading>
+          <XYPlot width={chartWidth} height={chartHeight} yDomain={chartDomain} xType="ordinal">
+            <XAxis />
+            <YAxis />
+            <VerticalBarSeries data={doses(stats)} barWidth={0.8} />
           </XYPlot>
         </VStack>
       </HStack>
