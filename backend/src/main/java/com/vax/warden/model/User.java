@@ -44,7 +44,7 @@ public class User implements Serializable {
     @NotBlank
     @Pattern(
             regexp = "^(\\d{7})([A-Z]{1,2})$",
-            message = "PPS No.: Invalid! Must be 7 digits followed by 1-2 letters.")
+            message = "PPS No.: Must be 7 digits followed by 1-2 letters.")
     private String ppsn;
 
     @NotBlank
@@ -58,7 +58,7 @@ public class User implements Serializable {
     @NotBlank
     @Pattern(
             regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$",
-            message = "Phone No.: Invalid! Must be 10 digits long.")
+            message = "Phone No.: Must be 10 digits long.")
     private String phoneNo;
 
     @NotBlank
