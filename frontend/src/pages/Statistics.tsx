@@ -32,6 +32,16 @@ const doses = (stats: Stats | undefined): (any[] | VerticalBarSeriesPoint)[] => 
   return createPoints(stats.dosesReceived);
 };
 
+const firstVaccinationType = (stats: Stats | undefined): (any[] | VerticalBarSeriesPoint)[] => {
+  if (!stats) return [];
+  return createPoints(stats.firstVaccineType);
+};
+
+const secondVaccinationType = (stats: Stats | undefined): (any[] | VerticalBarSeriesPoint)[] => {
+  if (!stats) return [];
+  return createPoints(stats.secondVaccineType);
+};
+
 export const Statistics: React.FC = (): JSX.Element => {
   const [stats, setStats] = useState<Stats | undefined>(undefined);
 
@@ -49,7 +59,6 @@ export const Statistics: React.FC = (): JSX.Element => {
 
   return (
     <VStack spacing={5} pb="200px">
-      <Text>{JSON.stringify(stats)}</Text>
       <HStack spacing={5} pb="200px">
         <VStack spacing={5} pb="200px">
           <Heading size="md" textAlign="center">
@@ -88,12 +97,34 @@ export const Statistics: React.FC = (): JSX.Element => {
       <HStack spacing={5} pb="200px">
         <VStack spacing={5} pb="200px">
           <Heading size="md" textAlign="center">
+            First Vaccination types
+          </Heading>
+          <XYPlot width={chartWidth} height={chartHeight} yDomain={chartDomain} xType="ordinal">
+            <XAxis />
+            <YAxis />
+            <VerticalBarSeries data={firstVaccinationType(stats)} barWidth={0.8} />
+          </XYPlot>
+        </VStack>
+
+        <VStack spacing={5} pb="200px">
+          <Heading size="md" textAlign="center">
             Total Doses Received
           </Heading>
           <XYPlot width={chartWidth} height={chartHeight} yDomain={chartDomain} xType="ordinal">
             <XAxis />
             <YAxis />
             <VerticalBarSeries data={doses(stats)} barWidth={0.8} />
+          </XYPlot>
+        </VStack>
+
+        <VStack spacing={5} pb="200px">
+          <Heading size="md" textAlign="center">
+            Second Vaccination types
+          </Heading>
+          <XYPlot width={chartWidth} height={chartHeight} yDomain={chartDomain} xType="ordinal">
+            <XAxis />
+            <YAxis />
+            <VerticalBarSeries data={secondVaccinationType(stats)} barWidth={0.8} />
           </XYPlot>
         </VStack>
       </HStack>
