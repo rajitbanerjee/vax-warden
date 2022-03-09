@@ -62,11 +62,13 @@ export interface Vaccination {
 
 export interface Stats {
   centre: { [key: string]: number };
-  firstAppointment: { [key: string]: number };
-  secondAppointment: { [key: string]: number };
+  firstAppointment?: { [key: string]: number };
+  secondAppointment?: { [key: string]: number };
   firstVaccineType: { [key: string]: number };
   secondVaccineType: { [key: string]: number };
   dosesReceived: { [key: number]: number };
   nationality: { [key: string]: number };
   gender: { [key: string]: number };
 }
+
+export type ChartData = { x: string; y: number }[];

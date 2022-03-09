@@ -1,45 +1,32 @@
-import { Text, VStack, Heading, HStack } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import * as statistics from "client/statistics";
+import { ChartData, Stats } from "client/types";
+import { BarChart } from "components";
 import { useEffect, useState } from "react";
-import { Stats } from "client/types";
-import { XYPlot, VerticalBarSeries, XAxis, YAxis, VerticalBarSeriesPoint } from "react-vis";
 
-const createPoints = (dict: { [key: string]: number }): (any[] | VerticalBarSeriesPoint)[] => {
-  let points: any[] | VerticalBarSeriesPoint = [];
-  Object.entries(dict).forEach(([key, value]) => {
-    points.push({ x: key, y: value });
+const statsKeys: { [key in keyof Stats]: string } = {
+  centre: "Vaccination bookings by centre",
+  gender: "Vaccination bookings by gender",
+  nationality: "Vaccination bookings by nationality",
+  firstVaccineType: "First doses administered",
+  secondVaccineType: "Second doses administered",
+  dosesReceived: "Users by doses received",
+};
+
+const createPointsFromStats = (key: keyof Stats, stats?: Stats): ChartData => {
+  if (!stats || !stats[key]) return [];
+  const statsValue = stats[key];
+  if (!statsValue) return [];
+  return Object.entries(statsValue).map(([k, v]) => ({ x: k, y: v }));
+};
+
+const makeBarCharts = (stats?: Stats): JSX.Element[] => {
+  const colors = ["teal", "green"];
+  return Object.entries(statsKeys).map(([k, v], i) => {
+    const data = createPointsFromStats(k as keyof Stats, stats);
+    // Only make chart if data exists
+    return data.length > 0 ? <BarChart heading={v} data={data} color={colors[i % 2]} /> : <></>;
   });
-  return points;
-};
-
-const centre = (stats: Stats | undefined): (any[] | VerticalBarSeriesPoint)[] => {
-  if (!stats) return [];
-  return createPoints(stats.centre);
-};
-
-const gender = (stats: Stats | undefined): (any[] | VerticalBarSeriesPoint)[] => {
-  if (!stats) return [];
-  return createPoints(stats.gender);
-};
-
-const nationality = (stats: Stats | undefined): (any[] | VerticalBarSeriesPoint)[] => {
-  if (!stats) return [];
-  return createPoints(stats.nationality);
-};
-
-const doses = (stats: Stats | undefined): (any[] | VerticalBarSeriesPoint)[] => {
-  if (!stats) return [];
-  return createPoints(stats.dosesReceived);
-};
-
-const firstVaccinationType = (stats: Stats | undefined): (any[] | VerticalBarSeriesPoint)[] => {
-  if (!stats) return [];
-  return createPoints(stats.firstVaccineType);
-};
-
-const secondVaccinationType = (stats: Stats | undefined): (any[] | VerticalBarSeriesPoint)[] => {
-  if (!stats) return [];
-  return createPoints(stats.secondVaccineType);
 };
 
 export const Statistics: React.FC = (): JSX.Element => {
@@ -53,81 +40,17 @@ export const Statistics: React.FC = (): JSX.Element => {
     fetchData();
   }, []);
 
-  const chartWidth = 600;
-  const chartHeight = 300;
-  const chartDomain = [0, 10];
-
   return (
-    <VStack spacing={0} pb="200px">
-      <HStack spacing={5} pb="200px">
-        <VStack spacing={5} pb="200px">
-          <Heading size="md" textAlign="center">
-            Vaccination bookings by Centre
-          </Heading>
-          <XYPlot width={chartWidth} height={chartHeight} yDomain={chartDomain} xType="ordinal">
-            <XAxis />
-            <YAxis />
-            <VerticalBarSeries data={centre(stats)} barWidth={0.8} />
-          </XYPlot>
-        </VStack>
-
-        <VStack spacing={5} pb="200px">
-          <Heading size="md" textAlign="center">
-            Vaccination bookings by Gender
-          </Heading>
-          <XYPlot width={chartWidth} height={chartHeight} yDomain={chartDomain} xType="ordinal" color={"green"}>
-            <XAxis />
-            <YAxis />
-            <VerticalBarSeries data={gender(stats)} barWidth={0.8} />
-          </XYPlot>
-        </VStack>
-
-        <VStack spacing={5} pb="200px">
-          <Heading size="md" textAlign="center">
-            Vaccination bookings by Nationality
-          </Heading>
-          <XYPlot width={chartWidth} height={chartHeight} yDomain={chartDomain} xType="ordinal">
-            <XAxis />
-            <YAxis />
-            <VerticalBarSeries data={nationality(stats)} barWidth={0.8} />
-          </XYPlot>
-        </VStack>
-      </HStack>
-
-      <HStack spacing={5} pb="200px">
-        <VStack spacing={5} pb="200px">
-          <Heading size="md" textAlign="center">
-            First Vaccination types
-          </Heading>
-          <XYPlot width={chartWidth} height={chartHeight} yDomain={chartDomain} xType="ordinal">
-            <XAxis />
-            <YAxis />
-            <VerticalBarSeries data={firstVaccinationType(stats)} barWidth={0.8} />
-          </XYPlot>
-        </VStack>
-
-        <VStack spacing={5} pb="200px">
-          <Heading size="md" textAlign="center">
-            Total Doses Received
-          </Heading>
-          <XYPlot width={chartWidth} height={chartHeight} yDomain={chartDomain} xType="ordinal" color={"green"}>
-            <XAxis />
-            <YAxis />
-            <VerticalBarSeries data={doses(stats)} barWidth={0.8} />
-          </XYPlot>
-        </VStack>
-
-        <VStack spacing={5} pb="200px">
-          <Heading size="md" textAlign="center">
-            Second Vaccination types
-          </Heading>
-          <XYPlot width={chartWidth} height={chartHeight} yDomain={chartDomain} xType="ordinal">
-            <XAxis />
-            <YAxis />
-            <VerticalBarSeries data={secondVaccinationType(stats)} barWidth={0.8} />
-          </XYPlot>
-        </VStack>
-      </HStack>
-    </VStack>
+    <Flex
+      justify="center"
+      direction="row"
+      wrap="wrap"
+      gap="3rem"
+      paddingLeft="10rem"
+      paddingRight="10rem"
+      paddingBottom="5rem"
+    >
+      {makeBarCharts(stats)}
+    </Flex>
   );
 };
