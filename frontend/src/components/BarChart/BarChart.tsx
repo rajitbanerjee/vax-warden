@@ -1,6 +1,6 @@
 import { Heading, VStack } from "@chakra-ui/react";
 import { ChartData } from "client/types";
-import useWindowDimensions from "hooks/useWindowDimentions";
+import useWindowDimensions from "hooks/useWindowDimensions";
 import { VerticalBarSeries, XAxis, XYPlot, YAxis } from "react-vis";
 
 interface BarChartProps {
