@@ -2,6 +2,7 @@ package com.vax.warden.service;
 
 import com.vax.warden.exception.ResourceNotFoundException;
 import com.vax.warden.model.Post;
+import com.vax.warden.model.User;
 import com.vax.warden.repository.ForumRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +12,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ForumService {
     private final ForumRepository forumRepository;
+    private final UserService userService;
 
-    public Post save(Post post) {
+    public Post save(Post post, String email) {
+        User user = userService.findByEmail(email);
+        post.setLastName(user.getLastName());
+        post.setFirstName(user.getFirstName());
         return forumRepository.save(post);
     }
 
