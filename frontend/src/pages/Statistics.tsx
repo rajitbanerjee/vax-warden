@@ -4,13 +4,17 @@ import { useEffect, useState } from "react";
 import { Stats } from "client/types";
 import { XYPlot, VerticalBarSeries, XAxis, YAxis, LabelSeries, VerticalBarSeriesPoint } from "react-vis";
 
-const centre = (stats: Stats | undefined): (any[] | VerticalBarSeriesPoint)[] => {
-  if (!stats) return [];
+const createPoints = (dict: { [key: string]: number }): (any[] | VerticalBarSeriesPoint)[] => {
   let points: any[] | VerticalBarSeriesPoint = [];
-  Object.entries(stats.centre).forEach(([key, value]) => {
+  Object.entries(dict).forEach(([key, value]) => {
     points.push({ x: key, y: value });
   });
   return points;
+};
+
+const centre = (stats: Stats | undefined): (any[] | VerticalBarSeriesPoint)[] => {
+  if (!stats) return [];
+  return createPoints(stats.centre);
 };
 
 export const Statistics: React.FC = (): JSX.Element => {
