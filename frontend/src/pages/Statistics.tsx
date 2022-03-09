@@ -2,7 +2,7 @@ import { Text, VStack, Heading, HStack } from "@chakra-ui/react";
 import * as statistics from "client/statistics";
 import { useEffect, useState } from "react";
 import { Stats } from "client/types";
-import { XYPlot, VerticalBarSeries, XAxis, YAxis, LabelSeries, VerticalBarSeriesPoint } from "react-vis";
+import { XYPlot, VerticalBarSeries, XAxis, YAxis, VerticalBarSeriesPoint } from "react-vis";
 
 const createPoints = (dict: { [key: string]: number }): (any[] | VerticalBarSeriesPoint)[] => {
   let points: any[] | VerticalBarSeriesPoint = [];
@@ -54,11 +54,11 @@ export const Statistics: React.FC = (): JSX.Element => {
   }, []);
 
   const chartWidth = 600;
-  const chartHeight = 200;
+  const chartHeight = 300;
   const chartDomain = [0, 10];
 
   return (
-    <VStack spacing={5} pb="200px">
+    <VStack spacing={0} pb="200px">
       <HStack spacing={5} pb="200px">
         <VStack spacing={5} pb="200px">
           <Heading size="md" textAlign="center">
@@ -75,7 +75,7 @@ export const Statistics: React.FC = (): JSX.Element => {
           <Heading size="md" textAlign="center">
             Vaccination bookings by Gender
           </Heading>
-          <XYPlot width={chartWidth} height={chartHeight} yDomain={chartDomain} xType="ordinal">
+          <XYPlot width={chartWidth} height={chartHeight} yDomain={chartDomain} xType="ordinal" color={"green"}>
             <XAxis />
             <YAxis />
             <VerticalBarSeries data={gender(stats)} barWidth={0.8} />
@@ -110,7 +110,7 @@ export const Statistics: React.FC = (): JSX.Element => {
           <Heading size="md" textAlign="center">
             Total Doses Received
           </Heading>
-          <XYPlot width={chartWidth} height={chartHeight} yDomain={chartDomain} xType="ordinal">
+          <XYPlot width={chartWidth} height={chartHeight} yDomain={chartDomain} xType="ordinal" color={"green"}>
             <XAxis />
             <YAxis />
             <VerticalBarSeries data={doses(stats)} barWidth={0.8} />
