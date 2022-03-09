@@ -1,4 +1,4 @@
-import { Text, VStack, Heading } from "@chakra-ui/react";
+import { Text, VStack, Heading, HStack } from "@chakra-ui/react";
 import * as statistics from "client/statistics";
 import { useEffect, useState } from "react";
 import { Stats } from "client/types";
@@ -15,6 +15,11 @@ const createPoints = (dict: { [key: string]: number }): (any[] | VerticalBarSeri
 const centre = (stats: Stats | undefined): (any[] | VerticalBarSeriesPoint)[] => {
   if (!stats) return [];
   return createPoints(stats.centre);
+};
+
+const gender = (stats: Stats | undefined): (any[] | VerticalBarSeriesPoint)[] => {
+  if (!stats) return [];
+  return createPoints(stats.gender);
 };
 
 export const Statistics: React.FC = (): JSX.Element => {
@@ -35,14 +40,29 @@ export const Statistics: React.FC = (): JSX.Element => {
   return (
     <VStack spacing={5} pb="200px">
       <Text>{JSON.stringify(stats)}</Text>
-      <Heading size="md" textAlign="center">
-        Vaccination bookings by Centre
-      </Heading>
-      <XYPlot width={chartWidth} height={chartHeight} yDomain={chartDomain} xType="ordinal">
-        <XAxis />
-        <YAxis />
-        <VerticalBarSeries data={centre(stats)} barWidth={0.8} />
-      </XYPlot>
+      <HStack spacing={5} pb="200px">
+        <VStack spacing={5} pb="200px">
+          <Heading size="md" textAlign="center">
+            Vaccination bookings by Centre
+          </Heading>
+          <XYPlot width={chartWidth} height={chartHeight} yDomain={chartDomain} xType="ordinal">
+            <XAxis />
+            <YAxis />
+            <VerticalBarSeries data={centre(stats)} barWidth={0.8} />
+          </XYPlot>
+        </VStack>
+
+        <VStack spacing={5} pb="200px">
+          <Heading size="md" textAlign="center">
+            Vaccination bookings by Gender
+          </Heading>
+          <XYPlot width={chartWidth} height={chartHeight} yDomain={chartDomain} xType="ordinal">
+            <XAxis />
+            <YAxis />
+            <VerticalBarSeries data={gender(stats)} barWidth={0.8} />
+          </XYPlot>
+        </VStack>
+      </HStack>
     </VStack>
   );
 };
