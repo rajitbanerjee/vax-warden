@@ -20,10 +20,15 @@ import type { Response } from "redaxios";
 export const Registration: React.FC = (): JSX.Element => {
   const { register, loading, error, logout } = useAuth();
   const [errorMap, setErrorMap] = useState<{ [key: string]: string }>({});
+  const [isLoggedOut, setLoggedOut] = useState<boolean>(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    logout(); // Run once tonvalidate any pre-existing local storage credentials
+    // Log out only once before new registration
+    if (!isLoggedOut) {
+      logout();
+      setLoggedOut(true);
+    }
     setErrorMap(mapUserDetailsErrors(error));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
