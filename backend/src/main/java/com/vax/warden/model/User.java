@@ -37,7 +37,7 @@ public class User implements Serializable {
     private String lastName;
 
     @NotNull
-    @ValidAge(message = "Date of Birth: User must be over 18!")
+    @ValidAge(message = "[Date of Birth: User must be over 18!]")
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
 
@@ -52,7 +52,7 @@ public class User implements Serializable {
     private String address;
 
     @Email
-    @ValidEmail(message = "Email: User already exists!")
+    @ValidEmail(message = "[Email: User already exists!]")
     private String email;
 
     @NotBlank

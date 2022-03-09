@@ -13,21 +13,20 @@ import {
 import { Gender, User, UserDetailsKeys } from "client/types";
 import useAuth from "hooks/useAuth";
 import { formatUserDetailsKey } from "pages/MyAccount";
-import { FormEvent, useEffect } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Response } from "redaxios";
 
 export const Registration: React.FC = (): JSX.Element => {
   const { register, loading, error, logout } = useAuth();
+  const [errorMap, setErrorMap] = useState<{ [key: string]: string }>({});
   const navigate = useNavigate();
-  const errorMap = mapUserDetailsErrors(error);
 
   useEffect(() => {
-    // Invalidate any pre-existing local storage credentials
-    // Run only once by providing empty deps [] to useEffect()
-    logout();
+    logout(); // Run once tonvalidate any pre-existing local storage credentials
+    setErrorMap(mapUserDetailsErrors(error));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [error]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
