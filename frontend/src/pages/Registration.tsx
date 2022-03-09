@@ -135,14 +135,9 @@ export const Registration: React.FC = (): JSX.Element => {
 
 const mapUserDetailsErrors = (error?: Response<any>): { [key: string]: string } => {
   if (!error) return {};
-  const errorMessage: string = error.data.message;
-  const errorList: string[] = errorMessage
-    .substring(1, errorMessage.length - 1)
-    .split(",")
-    .map((e) => e.trim());
+  const errorMessages: string[] = error.data.messages;
   const errorMap: { [key: string]: string } = {};
-
-  errorList.forEach((e) => {
+  errorMessages.forEach((e) => {
     const [k, v] = e.split(":");
     errorMap[k.trim()] = v.trim();
   });
