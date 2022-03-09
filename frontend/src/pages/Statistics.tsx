@@ -22,6 +22,11 @@ const gender = (stats: Stats | undefined): (any[] | VerticalBarSeriesPoint)[] =>
   return createPoints(stats.gender);
 };
 
+const nationality = (stats: Stats | undefined): (any[] | VerticalBarSeriesPoint)[] => {
+  if (!stats) return [];
+  return createPoints(stats.nationality);
+};
+
 export const Statistics: React.FC = (): JSX.Element => {
   const [stats, setStats] = useState<Stats | undefined>(undefined);
 
@@ -33,7 +38,7 @@ export const Statistics: React.FC = (): JSX.Element => {
     fetchData();
   }, []);
 
-  const chartWidth = 900;
+  const chartWidth = 600;
   const chartHeight = 200;
   const chartDomain = [0, 10];
 
@@ -60,6 +65,17 @@ export const Statistics: React.FC = (): JSX.Element => {
             <XAxis />
             <YAxis />
             <VerticalBarSeries data={gender(stats)} barWidth={0.8} />
+          </XYPlot>
+        </VStack>
+
+        <VStack spacing={5} pb="200px">
+          <Heading size="md" textAlign="center">
+            Vaccination bookings by Nationality
+          </Heading>
+          <XYPlot width={chartWidth} height={chartHeight} yDomain={chartDomain} xType="ordinal">
+            <XAxis />
+            <YAxis />
+            <VerticalBarSeries data={nationality(stats)} barWidth={0.8} />
           </XYPlot>
         </VStack>
       </HStack>
