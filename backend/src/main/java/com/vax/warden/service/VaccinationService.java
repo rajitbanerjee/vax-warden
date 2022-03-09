@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class VaccinationService {
     private final VaccinationRepository vaccinationRepository;
-
     private final UserService userService;
 
     @Transactional

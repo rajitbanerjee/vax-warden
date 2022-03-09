@@ -51,7 +51,6 @@ public class User implements Serializable {
 
     @Email(message = "Invalid Email.")
     @ValidEmail
-    @Column(unique = true)
     private String email;
 
     @NotBlank

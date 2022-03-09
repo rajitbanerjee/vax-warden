@@ -9,7 +9,7 @@ import javax.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {EmailValidator.class})
 public @interface ValidEmail {
-    String message() default "User already exist";
+    String message() default "User already exists";
 
     Class<?>[] groups() default {};
 

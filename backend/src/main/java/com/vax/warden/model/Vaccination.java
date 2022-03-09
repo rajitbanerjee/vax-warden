@@ -30,7 +30,7 @@ public class Vaccination implements Serializable {
     @NotBlank @NonNull private String centre;
 
     @NotNull
-    @Column
+    @NonNull
     @Temporal(TemporalType.TIMESTAMP)
     private Date firstAppointment;
 
