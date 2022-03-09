@@ -47,8 +47,7 @@ export interface Vaccination {
   dosesRecieved: number;
 }
 
-// Statistics
-export interface Statistics {
+export interface Stats {
   centre: { [key: string]: number };
   firstAppointment: { [key: string]: number };
   secondAppointment: { [key: string]: number };

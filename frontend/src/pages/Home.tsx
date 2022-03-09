@@ -1,13 +1,13 @@
 import { Heading, List, ListIcon, ListItem, Text, VStack } from "@chakra-ui/react";
 import * as statistics from "client/statistics";
-import { Statistics } from "client/types";
+import { Stats } from "client/types";
 import { formatDate } from "client/util";
 import useAuth from "hooks/useAuth";
 import { useEffect, useState } from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { MdCheckCircle } from "react-icons/md";
 
-const doseString = (stats: Statistics | undefined): string => {
+const doseString = (stats: Stats | undefined): string => {
   let doses = 0;
   if (stats) {
     if (stats.dosesReceived[2]) {
@@ -40,7 +40,7 @@ const formatEntry = (k: string, v: any): string => {
   return `${formatKey[k]} ${formatValue(k, value)}.`;
 };
 
-const entries = (stats: Statistics | undefined): [string, any][] => {
+const entries = (stats: Stats | undefined): [string, any][] => {
   if (!stats) return [];
   return Object.entries(stats);
 };
@@ -49,7 +49,7 @@ const keysToHide = ["dosesReceived", "nationality", "gender"];
 
 export const Home: React.FC = (): JSX.Element => {
   const { currentUser, jwtToken } = useAuth();
-  const [stats, setStats] = useState<Statistics | undefined>(undefined);
+  const [stats, setStats] = useState<Stats | undefined>(undefined);
 
   const fetchData = (token: string) => {
     statistics.getForUser(token).then((newStats) => setStats(newStats));
