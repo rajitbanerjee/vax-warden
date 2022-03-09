@@ -12,13 +12,20 @@ import {
 } from "@chakra-ui/react";
 import { Gender, User } from "client/types";
 import useAuth from "hooks/useAuth";
-import { FormEvent } from "react";
+import { FormEvent, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 // TODO Improve validation error message display!!!
 export const Registration: React.FC = (): JSX.Element => {
-  const { register, loading, error } = useAuth();
+  const { register, loading, error, logout } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Invalidate any pre-existing local storage credentials
+    // Run only once by providing empty deps [] to useEffect()
+    logout();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
