@@ -1,8 +1,9 @@
 import { Heading, Table, TableCaption, Tbody, Td, Tr, VStack } from "@chakra-ui/react";
+import { UserDetailsKeys } from "client/types";
 import { formatDate } from "client/util";
 import useAuth from "hooks/useAuth";
 
-const formatKey: { [k: string]: any } = {
+export const formatUserDetailsKey: UserDetailsKeys = {
   firstName: "First Name",
   lastName: "Last Name",
   dateOfBirth: "Date of Birth",
@@ -12,9 +13,10 @@ const formatKey: { [k: string]: any } = {
   phoneNo: "Phone No.",
   nationality: "Nationality",
   gender: "Gender",
+  password: "Password", // Not used in MyAccount, but instead in Login
 };
 
-const formatValue = (k: string, v: any): string => {
+const formatUserDetailsValue = (k: string, v: any): string => {
   if (k.includes("date")) return formatDate(v);
   if (k === "gender") return v[0].toUpperCase() + v.substring(1).toLowerCase();
   return v;
@@ -37,8 +39,8 @@ export const MyAccount: React.FC = (): JSX.Element => {
             .filter(([k, _]) => !keysToHide.includes(k))
             .map(([k, v]) => (
               <Tr>
-                <Td>{formatKey[k]}</Td>
-                <Td>{formatValue(k, v)}</Td>
+                <Td>{formatUserDetailsKey[k as keyof UserDetailsKeys]}</Td>
+                <Td>{formatUserDetailsValue(k, v)}</Td>
               </Tr>
             ))}
         </Tbody>
