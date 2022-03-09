@@ -71,3 +71,11 @@ export interface Statistics {
   nationality: { [key: string]: number };
   gender: { [key: string]: number };
 }
+
+export interface Post {
+  id: number;
+  replyId?: number;
+  userId: number;
+  timestamp: Date;
+  content: string;
+}
