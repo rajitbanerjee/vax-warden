@@ -29,36 +29,40 @@ public class User implements Serializable {
     private Long id;
 
     @NotBlank
-    @Size(min = 2, max = 64, message = "Must be between 2 and 64 characters!")
+    @Size(min = 2, max = 64, message = "First Name: Must be between 2 and 64 characters!")
     private String firstName;
 
     @NotBlank
-    @Size(min = 2, max = 64, message = "Must be between 2 and 64 characters!")
+    @Size(min = 2, max = 64, message = "Last Name: Must be between 2 and 64 characters!")
     private String lastName;
 
     @NotNull
-    @ValidAge(message = "User must be over 18!")
+    @ValidAge(message = "Date of Birth: User must be over 18!")
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
 
     @NotBlank
-    @Pattern(regexp = "^(\\d{7})([A-Z]{1,2})$", message = "Invalid PPSN!")
+    @Pattern(
+            regexp = "^(\\d{7})([A-Z]{1,2})$",
+            message = "PPS No.: Invalid! Must be 7 digits followed by 1-2 letters.")
     private String ppsn;
 
     @NotBlank
-    @Size(min = 2, max = 256, message = "Must be between 2 and 256 characters!")
+    @Size(min = 2, max = 256, message = "Address: Must be between 2 and 256 characters!")
     private String address;
 
-    @Email(message = "Invalid Email.")
-    @ValidEmail
+    @Email
+    @ValidEmail(message = "Email: User already exists!")
     private String email;
 
     @NotBlank
-    @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$", message = "Invalid phone number!")
+    @Pattern(
+            regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$",
+            message = "Phone No.: Invalid! Must be 10 digits long.")
     private String phoneNo;
 
     @NotBlank
-    @Size(min = 2, max = 32, message = "Must be between 2 and 32 characters!")
+    @Size(min = 2, max = 32, message = "Nationality: Must be between 2 and 32 characters!")
     private String nationality;
 
     @NotNull

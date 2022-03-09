@@ -2,8 +2,8 @@ import { Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Heading, I
 import { LoginCredentials } from "client/types";
 import useAuth from "hooks/useAuth";
 import { FormEvent } from "react";
+import { formatUserDetailsKey } from "pages/MyAccount";
 
-// TODO Improve validation error message display!!!
 export const Login: React.FC = (): JSX.Element => {
   const { login, loading, error } = useAuth();
 
@@ -26,12 +26,12 @@ export const Login: React.FC = (): JSX.Element => {
         <Box my={4} textAlign="left">
           <form onSubmit={handleSubmit}>
             <FormControl isRequired isInvalid={error !== null}>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>{formatUserDetailsKey.email}</FormLabel>
               <Input name="email" type="email" placeholder="jane.doe@ucd.ie" size="md" />
             </FormControl>
 
             <FormControl isRequired marginTop={6} isInvalid={error !== null}>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>{formatUserDetailsKey.password}</FormLabel>
               <Input name="password" type="password" placeholder="*******" size="md" />
               {error && <FormErrorMessage>Incorrect email or password.</FormErrorMessage>}
             </FormControl>
