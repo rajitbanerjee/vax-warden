@@ -31,6 +31,19 @@ export interface LoginCredentials {
   password: string;
 }
 
+export interface UserDetailsKeys {
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  ppsn: string;
+  address: string;
+  email: string;
+  phoneNo: string;
+  nationality: string;
+  gender: string;
+  password: string;
+}
+
 // Vaccination
 export enum VaccineType {
   PFIZER_BIONTECH,

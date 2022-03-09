@@ -3,6 +3,7 @@ import * as statistics from "client/statistics";
 import { Stats } from "client/types";
 import { formatDate } from "client/util";
 import useAuth from "hooks/useAuth";
+import { formatUserDetailsKey } from "pages/MyAccount";
 import { useEffect, useState } from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { MdCheckCircle } from "react-icons/md";
@@ -19,7 +20,7 @@ const doseString = (stats: Stats | undefined): string => {
   return `Doses Received: ${doses}`;
 };
 
-const formatKey: { [k: string]: any } = {
+const formatUserStatsKey: { [k: string]: any } = {
   centre: "Registered for vaccination at",
   firstAppointment: "First appointment scheduled for",
   secondAppointment: "Second appointment scheduled for",
@@ -28,24 +29,24 @@ const formatKey: { [k: string]: any } = {
 };
 
 const noBookingIndicator = "TBD";
+const keysToHide = ["dosesReceived", "nationality", "gender"];
 
-const formatEntry = (k: string, v: any): string => {
-  const formatValue = (k: string, v: any): string => {
+const formatUserStatsEntry = (k: string, v: any): string => {
+  const formatUserStatsValue = (k: string, v: any): string => {
     if (k.includes("Appointment") && v !== noBookingIndicator) return formatDate(v).split(":00")[0];
     return v;
   };
 
   let value = Object.keys(v)[0];
   if (typeof value !== "string") value = noBookingIndicator;
-  return `${formatKey[k]} ${formatValue(k, value)}.`;
+  return `${formatUserStatsKey[k]} ${formatUserStatsValue(k, value)}.`;
 };
 
-const entries = (stats: Stats | undefined): [string, any][] => {
+
+const userStatsEntries = (stats: Stats | undefined): [string, any][] => {
   if (!stats) return [];
   return Object.entries(stats);
 };
-
-const keysToHide = ["dosesReceived", "nationality", "gender"];
 
 export const Home: React.FC = (): JSX.Element => {
   const { currentUser, jwtToken } = useAuth();
@@ -64,13 +65,15 @@ export const Home: React.FC = (): JSX.Element => {
       <Heading size="md" textAlign="center">
         {currentUser.firstName} {currentUser.lastName}
       </Heading>
-      <Text>Date of Birth: {formatDate(currentUser.dateOfBirth)}</Text>
+      <Text>
+        {formatUserDetailsKey.dateOfBirth}: {formatDate(currentUser.dateOfBirth)}
+      </Text>
       <Text style={{ fontWeight: "bold" }}>{doseString(stats)}</Text>
       <List>
-        {entries(stats)
+        {userStatsEntries(stats)
           .filter(([k, _]) => !keysToHide.includes(k))
           .map(([k, v]) => {
-            const entry = formatEntry(k, v);
+            const entry = formatUserStatsEntry(k, v);
             const isDone = !entry.includes(noBookingIndicator);
             return (
               <ListItem>
