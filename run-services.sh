@@ -8,6 +8,8 @@ else
     ./mvnw install
 fi
 
-docker-compose down --remove-orphans
-docker-compose build --no-cache
-docker-compose up
+if [[ $? -eq 0 ]]; then
+  docker-compose down --remove-orphans
+  docker-compose build --no-cache
+  docker-compose up
+fi
