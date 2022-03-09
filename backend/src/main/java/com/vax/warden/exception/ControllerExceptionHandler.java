@@ -1,8 +1,12 @@
 package com.vax.warden.exception;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -13,42 +17,57 @@ import org.springframework.web.context.request.WebRequest;
 public class ControllerExceptionHandler {
     // 400
     @ExceptionHandler({
-        MethodArgumentNotValidException.class,
         IllegalArgumentException.class,
-        SecurityException.class
+        SecurityException.class,
     })
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorMessage error400(Exception ex, WebRequest request) {
-        return standardErrorMessage(ex, HttpStatus.BAD_REQUEST, request);
+        return standardErrorMessage(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
+    }
+
+    // 400: validation errors
+    @ExceptionHandler({
+        MethodArgumentNotValidException.class,
+    })
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorMessage error400Validation(MethodArgumentNotValidException ex, WebRequest request) {
+        List<ObjectError> errors = ex.getAllErrors();
+        if (errors.size() == 1) {
+            return standardErrorMessage(
+                    HttpStatus.BAD_REQUEST, errors.get(0).getDefaultMessage(), request);
+        }
+        String errorMessage =
+                errors.stream()
+                        .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                        .collect(Collectors.toList())
+                        .toString();
+        return standardErrorMessage(HttpStatus.BAD_REQUEST, errorMessage, request);
     }
 
     // 401
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
     public ErrorMessage error401(Exception ex, WebRequest request) {
-        return standardErrorMessage(ex, HttpStatus.UNAUTHORIZED, request);
+        return standardErrorMessage(HttpStatus.UNAUTHORIZED, ex.getMessage(), request);
     }
 
     // 404
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public ErrorMessage error404(Exception ex, WebRequest request) {
-        return standardErrorMessage(ex, HttpStatus.NOT_FOUND, request);
+        return standardErrorMessage(HttpStatus.NOT_FOUND, ex.getMessage(), request);
     }
 
     // 500: Every other exception
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorMessage error500(Exception ex, WebRequest request) {
-        return standardErrorMessage(ex, HttpStatus.INTERNAL_SERVER_ERROR, request);
+        return standardErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), request);
     }
 
-    private ErrorMessage standardErrorMessage(Exception ex, HttpStatus status, WebRequest request) {
+    private ErrorMessage standardErrorMessage(
+            HttpStatus status, String message, WebRequest request) {
         return new ErrorMessage(
-                status.value(),
-                status.name(),
-                new Date(),
-                ex.getMessage(),
-                request.getDescription(false));
+                status.value(), status.name(), new Date(), message, request.getDescription(false));
     }
 }

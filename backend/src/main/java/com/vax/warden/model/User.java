@@ -1,7 +1,9 @@
 package com.vax.warden.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vax.warden.validation.ValidAge;
+import com.vax.warden.validation.ValidEmail;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
@@ -47,10 +49,8 @@ public class User implements Serializable {
     @Size(min = 2, max = 256, message = "Must be between 2 and 256 characters!")
     private String address;
 
-    // TODO? switch to uniqueness checking with custom javax.validation
-    @NotBlank
-    @Email
-    @Column(unique = true)
+    @Email(message = "Invalid Email.")
+    @ValidEmail
     private String email;
 
     @NotBlank
@@ -72,4 +72,8 @@ public class User implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private UserRole userRole = UserRole.ROLE_USER;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Vaccination vaccination;
 }

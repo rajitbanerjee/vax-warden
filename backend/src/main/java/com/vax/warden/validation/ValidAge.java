@@ -13,7 +13,6 @@ import javax.validation.Payload;
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidAge {
-
     String message() default "User must be over 18";
 
     Class<?>[] groups() default {};
