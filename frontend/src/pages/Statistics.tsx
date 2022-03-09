@@ -1,16 +1,17 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import * as statistics from "client/statistics";
 import { ChartData, Stats } from "client/types";
 import { BarChart } from "components";
 import { useEffect, useState } from "react";
 
 const statsKeys: { [key in keyof Stats]: string } = {
-  centre: "Vaccination bookings by centre",
-  gender: "Vaccination bookings by gender",
-  nationality: "Vaccination bookings by nationality",
-  firstVaccineType: "First doses administered",
-  secondVaccineType: "Second doses administered",
-  dosesReceived: "Users by doses received",
+  centre: "Vaccination Bookings by Centre",
+  gender: "Vaccinations by Gender",
+  nationality: "Vaccinations by Nationality",
+  ageGroup: "Vaccinations by Age Group",
+  firstVaccineType: "First Doses Administered",
+  secondVaccineType: "Second Doses Administered",
+  dosesReceived: "Users by Doses Received",
 };
 
 const createPointsFromStats = (key: keyof Stats, stats?: Stats): ChartData => {
@@ -20,13 +21,20 @@ const createPointsFromStats = (key: keyof Stats, stats?: Stats): ChartData => {
   return Object.entries(statsValue).map(([k, v]) => ({ x: k, y: v }));
 };
 
-const makeBarCharts = (stats?: Stats): JSX.Element[] => {
+const makeBarCharts = (stats?: Stats): JSX.Element[] | JSX.Element => {
   const colors = ["teal", "green"];
-  return Object.entries(statsKeys).map(([k, v], i) => {
+  let isEmpty = true;
+  const charts = Object.entries(statsKeys).map(([k, v], i) => {
     const data = createPointsFromStats(k as keyof Stats, stats);
     // Only make chart if data exists
-    return data.length > 0 ? <BarChart heading={v} data={data} color={colors[i % 2]} /> : <></>;
+    if (data.length > 0) {
+      isEmpty = false;
+      return <BarChart heading={v} data={data} color={colors[i % 2]} />;
+    }
+    return <></>;
   });
+  if (isEmpty) return <Text>Nothing to show!</Text>;
+  return charts;
 };
 
 export const Statistics: React.FC = (): JSX.Element => {

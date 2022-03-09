@@ -69,6 +69,7 @@ export interface Stats {
   dosesReceived: { [key: number]: number };
   nationality: { [key: string]: number };
   gender: { [key: string]: number };
+  ageGroup: { [key: string]: number };
 }
 
 export type ChartData = { x: string; y: number }[];
