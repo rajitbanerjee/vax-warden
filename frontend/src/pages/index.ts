@@ -1,3 +1,4 @@
+export { AdminHome } from "./AdminHome";
 export { Booking } from "./Booking";
 export { Cancellation } from "./Cancellation";
 export { Forum } from "./Forum";

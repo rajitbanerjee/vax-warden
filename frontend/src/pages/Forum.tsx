@@ -84,8 +84,8 @@ export const Forum: React.FC = (): JSX.Element => {
         Forum
       </Heading>
       {posts &&
-        getOrganisedPosts(posts).map(({ post, replies }) => (
-          <VStack spacing={2} mb={2}>
+        getOrganisedPosts(posts).map(({ post, replies }, i) => (
+          <VStack spacing={2} mb={2} key={i.toString()}>
             <ForumPost
               name={`${post.firstName} ${post.lastName}`}
               date={new Date(post.timestamp)}
@@ -93,8 +93,9 @@ export const Forum: React.FC = (): JSX.Element => {
               isReply={false}
               width={width / 3}
             />
-            {replies.map((reply) => (
+            {replies.map((reply, j) => (
               <ForumPost
+                key={j.toString()}
                 name={`${reply.firstName} ${reply.lastName}`}
                 date={new Date(reply.timestamp)}
                 content={reply.content}
