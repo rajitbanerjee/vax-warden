@@ -2,7 +2,7 @@ import { Flex, Text } from "@chakra-ui/react";
 import * as statistics from "client/statistics";
 import { ChartData, Stats } from "client/types";
 import { BarChart } from "components";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const statsKeys: { [key in keyof Stats]: string } = {
   centre: "Vaccination Bookings by Centre",
@@ -29,9 +29,9 @@ const makeBarCharts = (stats?: Stats): JSX.Element[] | JSX.Element => {
     // Only make chart if data exists
     if (data.length > 0) {
       isEmpty = false;
-      return <BarChart heading={v} data={data} color={colors[i % 2]} />;
+      return <BarChart key={i.toString()} heading={v} data={data} color={colors[i % 2]} />;
     }
-    return <></>;
+    return <React.Fragment key={i}></React.Fragment>;
   });
   if (isEmpty) return <Text>Nothing to show!</Text>;
   return charts;

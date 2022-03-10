@@ -23,7 +23,7 @@ const formatUserDetailsValue = (k: string, v: any): string => {
   return v;
 };
 
-const keysToHide = ["id", "jwtToken", "userRole"];
+const keysToHide = ["id", "jwtToken", "userRole", "vaccination"];
 
 export const MyAccount: React.FC = (): JSX.Element => {
   const { currentUser } = useAuth();
@@ -38,8 +38,8 @@ export const MyAccount: React.FC = (): JSX.Element => {
         <Tbody>
           {Object.entries(currentUser)
             .filter(([k, _]) => !keysToHide.includes(k))
-            .map(([k, v]) => (
-              <Tr>
+            .map(([k, v], i) => (
+              <Tr key={i.toString()}>
                 <Td>{formatUserDetailsKey[k as keyof UserDetailsKeys]}</Td>
                 <Td>{formatUserDetailsValue(k, v)}</Td>
               </Tr>

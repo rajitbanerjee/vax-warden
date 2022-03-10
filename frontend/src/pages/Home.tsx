@@ -3,6 +3,7 @@ import * as statistics from "client/statistics";
 import { Stats } from "client/types";
 import { formatDate } from "client/util";
 import useAuth from "hooks/useAuth";
+import { AdminHome } from "pages/AdminHome";
 import { formatUserDetailsKey } from "pages/MyAccount";
 import { useEffect, useState } from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
@@ -52,7 +53,7 @@ const isEmpty = (obj: { [key: string]: any } | undefined) => (obj ? Object.keys(
 
 export const Home: React.FC = (): JSX.Element => {
   const navigate = useNavigate();
-  const { currentUser, jwtToken, loading } = useAuth();
+  const { currentUser, jwtToken, loading, isAdmin } = useAuth();
   const [stats, setStats] = useState<Stats | undefined>(undefined);
   const [isBooked, setBooked] = useState<boolean>(false);
 
@@ -72,7 +73,9 @@ export const Home: React.FC = (): JSX.Element => {
     };
   }, [jwtToken, stats]);
 
-  return (
+  return isAdmin ? (
+    <AdminHome />
+  ) : (
     <VStack spacing={5} pb="200px">
       <Heading size="md" textAlign="center">
         {currentUser.firstName} {currentUser.lastName}
