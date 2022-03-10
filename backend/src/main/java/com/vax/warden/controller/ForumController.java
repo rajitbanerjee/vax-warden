@@ -6,8 +6,8 @@ import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,19 +22,21 @@ public class ForumController {
 
     @PostMapping("/post")
     @ResponseStatus(HttpStatus.CREATED)
-    public Post post(@Valid @RequestBody Post post) {
-        return forumService.save(post);
+    public Post post(@Valid @RequestBody Post post, Authentication authentication) {
+        String email = (String) authentication.getPrincipal();
+        return forumService.createPost(post, email);
+    }
+
+    @PostMapping("/reply")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Post reply(@Valid @RequestBody Post post, Authentication authentication) {
+        String email = (String) authentication.getPrincipal();
+        return forumService.createReply(post, email);
     }
 
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
     public List<Post> list() {
         return forumService.findAll();
-    }
-
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Post getPostById(@PathVariable Long id) {
-        return forumService.getPostById(id);
     }
 }

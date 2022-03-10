@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -18,15 +20,17 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User implements Serializable {
     private static final long serialVersionUID = 1291327L;
+
+    public User() {
+        posts = new HashSet<Post>();
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -105,4 +109,13 @@ public class User implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     private Vaccination vaccination;
+
+    @OneToMany(mappedBy = "poster")
+    @JsonIgnore
+    private Set<Post> posts;
+
+    @JsonIgnore
+    public void addPost(Post post) {
+        posts.add(post);
+    }
 }

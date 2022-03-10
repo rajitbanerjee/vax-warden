@@ -1,5 +1,7 @@
 package com.vax.warden.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,9 +9,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,12 +29,22 @@ public class Post {
 
     @CreationTimestamp private Date timestamp;
 
-    private Long replyId;
+    private Long replyToPostId;
 
-    @NotNull private Long userId;
+    @JsonIgnore @ManyToOne private User poster;
 
     @NotBlank
     @Lob
     @Column(length = 100000)
     private String content;
+
+    @JsonProperty("firstName")
+    public String getFirstName() {
+        return poster.getFirstName();
+    }
+
+    @JsonProperty("lastName")
+    public String getLastName() {
+        return poster.getLastName();
+    }
 }

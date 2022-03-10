@@ -22,8 +22,8 @@ export enum Gender {
 }
 
 export enum UserRole {
-  ROLE_USER,
-  ROLE_ADMIN,
+  ROLE_USER = "ROLE_USER",
+  ROLE_ADMIN = "ROLE_ADMIN",
 }
 
 export interface LoginCredentials {
@@ -80,3 +80,20 @@ export interface Stats {
 }
 
 export type ChartData = { x: string; y: number }[];
+
+// Forum
+export interface Post {
+  id: number;
+  replyToPostId?: number;
+  timestamp: Date;
+  content: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface OrganisedPosts {
+  [postId: number]: {
+    post: Post;
+    replies: Post[];
+  };
+}
