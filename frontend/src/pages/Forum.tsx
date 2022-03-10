@@ -69,7 +69,7 @@ export const Forum: React.FC = (): JSX.Element => {
                 user={currentUser}
                 reply={post.replyId !== null}
               />
-              {currentUser.userRole === UserRole.ROLE_USER && post.replyId !== null && (
+              {currentUser.userRole === UserRole.ROLE_ADMIN && post.replyId !== null && (
                 <HStack spacing={1}>
                   <Textarea
                     placeholder="Enter your reply here!"
@@ -91,7 +91,7 @@ export const Forum: React.FC = (): JSX.Element => {
             </Container>
           </VStack>
         ))}
-        {currentUser.userRole === UserRole.ROLE_ADMIN && (
+        {currentUser.userRole === UserRole.ROLE_USER && (
           <HStack spacing={1}>
             <Textarea placeholder="Enter your question here!" value={message} onChange={textareaHandler} />
             <Button colorScheme="teal" variant="solid" onClick={buttonHandlerUser} rightIcon={<AiOutlineSend />}>
