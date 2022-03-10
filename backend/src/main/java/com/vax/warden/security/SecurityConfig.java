@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**")
                 .hasRole("ADMIN")
                 .antMatchers("/forum/reply")
-                .hasRole("ADMIN")
+                .permitAll()
                 .antMatchers("/**")
                 .hasAnyRole("USER", "ADMIN")
                 .and()

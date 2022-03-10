@@ -21,8 +21,9 @@ const isToday = (someDate: Date): boolean => {
 };
 
 export const ForumPost: React.FC<PostProps> = ({ name, date, content, user, reply }): JSX.Element => {
+  const color = reply ? "lightgray" : "white";
   return (
-    <Box maxW="2xl" borderWidth="1px" borderRadius="lg" overflow="hidden" p={2} mb={2}>
+    <Box maxW="2xl" borderWidth="1px" borderRadius="lg" overflow="hidden" p={2} mb={2} bg={color}>
       <Box ml="3" p={2} borderRadius={5}>
         <Text fontWeight="bold">
           {name}

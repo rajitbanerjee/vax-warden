@@ -16,6 +16,7 @@ export const Forum: React.FC = (): JSX.Element => {
   const { currentUser, jwtToken } = useAuth();
   const [posts, setPosts] = useState<Post | undefined>(undefined);
   let [message, setMessage] = useState<string | undefined>(undefined);
+  let [replyMessage, setReply] = useState<{ [key: number]: string }>({ 0: "" });
 
   const buttonHandlerUser = (event: MouseEvent<HTMLButtonElement>) => {
     if (message) {
@@ -26,9 +27,10 @@ export const Forum: React.FC = (): JSX.Element => {
   };
 
   const buttonHandlerAdmin = (event: MouseEvent<HTMLButtonElement>, replyId: number) => {
-    if (message) {
-      forum.postReply(message, replyId, jwtToken);
-      setMessage("");
+    console.log(replyMessage[replyId]);
+    if (replyMessage && replyMessage[replyId]) {
+      forum.postReply(replyMessage[replyId], replyId, jwtToken);
+      setReply("");
       window.location.reload();
     }
   };
@@ -36,6 +38,14 @@ export const Forum: React.FC = (): JSX.Element => {
   const textareaHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
     let inputValue = event.target.value;
     setMessage(inputValue);
+  };
+
+  const textareaHandlerAdmin = (event: ChangeEvent<HTMLTextAreaElement>, replyId: number) => {
+    let inputValue = event.target.value;
+    setReply((prevState) => ({
+      ...prevState,
+      [replyId]: inputValue,
+    }));
   };
 
   const fetchData = (token: string) => {
@@ -57,11 +67,15 @@ export const Forum: React.FC = (): JSX.Element => {
                 date={new Date(post.timestamp)}
                 content={post.content}
                 user={currentUser}
-                reply={post.reply !== null}
+                reply={post.replyId !== null}
               />
-              {currentUser.userRole === UserRole.ROLE_ADMIN && (
+              {currentUser.userRole === UserRole.ROLE_USER && post.replyId !== null && (
                 <HStack spacing={1}>
-                  <Textarea placeholder="Enter your reply here!" value={message} onChange={textareaHandler} />
+                  <Textarea
+                    placeholder="Enter your reply here!"
+                    value={replyMessage[post.id]}
+                    onChange={(event) => textareaHandlerAdmin(event, post.id)}
+                  />
                   <Button
                     colorScheme="teal"
                     variant="solid"
@@ -77,7 +91,7 @@ export const Forum: React.FC = (): JSX.Element => {
             </Container>
           </VStack>
         ))}
-        {currentUser.userRole === UserRole.ROLE_USER && (
+        {currentUser.userRole === UserRole.ROLE_ADMIN && (
           <HStack spacing={1}>
             <Textarea placeholder="Enter your question here!" value={message} onChange={textareaHandler} />
             <Button colorScheme="teal" variant="solid" onClick={buttonHandlerUser} rightIcon={<AiOutlineSend />}>
