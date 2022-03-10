@@ -22,3 +22,5 @@ COVID-19 vaccine registration system using Java, Spring Boot and React.js, devel
 - [Chee Guan Tee](https://www.jasontcg.com)
 - [Conor Knowles](https://conorknowles.com)
 - [Rajit Banerjee](https://rajitbanerjee.com)
+
+See [CONTRIBUTIONS.md](./CONTRIBUTIONS.md) for more.
