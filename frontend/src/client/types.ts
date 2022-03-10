@@ -42,6 +42,7 @@ export interface UserDetailsKeys {
   nationality: string;
   gender: string;
   password: string;
+  ageGroup: string;
 }
 
 // Vaccination
