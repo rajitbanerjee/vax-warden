@@ -149,10 +149,10 @@ const mapUserDetailsErrors = (error?: Response<any>): { [key: string]: string } 
   return errorMap;
 };
 
-const getUserDetailsErrorMessage = (errorMap: { [key: string]: string }, userDetialsKey: string) => {
+const getUserDetailsErrorMessage = (errorMap: { [key: string]: string }, userDetailsKey: string) => {
   return (
-    errorMap[formatUserDetailsKey[userDetialsKey as keyof UserDetailsKeys]] && (
-      <FormErrorMessage>{errorMap[formatUserDetailsKey[userDetialsKey as keyof UserDetailsKeys]]}</FormErrorMessage>
+    errorMap[formatUserDetailsKey[userDetailsKey as keyof UserDetailsKeys]] && (
+      <FormErrorMessage>{errorMap[formatUserDetailsKey[userDetailsKey as keyof UserDetailsKeys]]}</FormErrorMessage>
     )
   );
 };
