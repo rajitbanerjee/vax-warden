@@ -8,6 +8,7 @@ interface PostProps {
   date: Date;
   content: string;
   user: User;
+  reply: boolean;
 }
 
 const isToday = (someDate: Date): boolean => {
@@ -19,7 +20,7 @@ const isToday = (someDate: Date): boolean => {
   );
 };
 
-export const ForumPost: React.FC<PostProps> = ({ name, date, content, user }): JSX.Element => {
+export const ForumPost: React.FC<PostProps> = ({ name, date, content, user, reply }): JSX.Element => {
   return (
     <Box maxW="2xl" borderWidth="1px" borderRadius="lg" overflow="hidden" p={2} mb={2}>
       <Box ml="3" p={2} borderRadius={5}>

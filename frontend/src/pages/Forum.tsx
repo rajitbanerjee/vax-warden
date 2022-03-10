@@ -17,9 +17,17 @@ export const Forum: React.FC = (): JSX.Element => {
   const [posts, setPosts] = useState<Post | undefined>(undefined);
   let [message, setMessage] = useState<string | undefined>(undefined);
 
-  const buttonHandler = (event: MouseEvent<HTMLButtonElement>) => {
+  const buttonHandlerUser = (event: MouseEvent<HTMLButtonElement>) => {
     if (message) {
       forum.postMessage(message, jwtToken);
+      setMessage("");
+      window.location.reload();
+    }
+  };
+
+  const buttonHandlerAdmin = (event: MouseEvent<HTMLButtonElement>, replyId: number) => {
+    if (message) {
+      forum.postReply(message, replyId, jwtToken);
       setMessage("");
       window.location.reload();
     }
@@ -49,11 +57,17 @@ export const Forum: React.FC = (): JSX.Element => {
                 date={new Date(post.timestamp)}
                 content={post.content}
                 user={currentUser}
+                reply={post.reply !== null}
               />
               {currentUser.userRole === UserRole.ROLE_ADMIN && (
                 <HStack spacing={1}>
                   <Textarea placeholder="Enter your reply here!" value={message} onChange={textareaHandler} />
-                  <Button colorScheme="teal" variant="solid" onClick={buttonHandler} rightIcon={<FaReply />}>
+                  <Button
+                    colorScheme="teal"
+                    variant="solid"
+                    onClick={(event) => buttonHandlerAdmin(event, post.id)}
+                    rightIcon={<FaReply />}
+                  >
                     Reply
                   </Button>
                 </HStack>
@@ -66,7 +80,7 @@ export const Forum: React.FC = (): JSX.Element => {
         {currentUser.userRole === UserRole.ROLE_USER && (
           <HStack spacing={1}>
             <Textarea placeholder="Enter your question here!" value={message} onChange={textareaHandler} />
-            <Button colorScheme="teal" variant="solid" onClick={buttonHandler} rightIcon={<AiOutlineSend />}>
+            <Button colorScheme="teal" variant="solid" onClick={buttonHandlerUser} rightIcon={<AiOutlineSend />}>
               Submit
             </Button>
           </HStack>

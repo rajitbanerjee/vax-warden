@@ -21,3 +21,17 @@ export const postMessage = async (content: string, jwtToken: string): Promise<Po
   );
   return response.data;
 };
+
+export const postReply = async (content: string, replyId: number, jwtToken: string): Promise<Post> => {
+  const response = await redaxios.post(
+    `${FORUM_ENDPOINT}/reply`,
+    {
+      content: content,
+      replyId: replyId,
+    },
+    {
+      headers: { "Content-Type": `application/json`, Authorization: `Bearer ${jwtToken}` },
+    }
+  );
+  return response.data;
+};

@@ -27,6 +27,13 @@ public class ForumController {
         return forumService.save(post, email);
     }
 
+    @PostMapping("/reply")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Post reply(@Valid @RequestBody Post post, Authentication authentication) {
+        String email = (String) authentication.getPrincipal();
+        return forumService.save(post, email);
+    }
+
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
     public List<Post> list() {
