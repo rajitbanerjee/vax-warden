@@ -5,6 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vax.warden.validation.ValidAge;
 import com.vax.warden.validation.ValidEmail;
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -44,6 +48,27 @@ public class User implements Serializable {
     @ValidAge(message = "Date of Birth: User must be over 18!")
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
+
+    public static int getAgeInYears(Date date) {
+        LocalDate now = LocalDate.now();
+        LocalDate birthdayDate =
+                Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+        Period period = Period.between(birthdayDate, now);
+        return period.getYears();
+    }
+
+    public String getAgeGroup() {
+        int age = getAgeInYears(dateOfBirth);
+        if (age < 12) return "< 12";
+        if (age < 20) return "12-19";
+        if (age < 30) return "20-29";
+        if (age < 40) return "30-39";
+        if (age < 50) return "40-49";
+        if (age < 60) return "50-59";
+        if (age < 70) return "60-69";
+        if (age < 80) return "70-79";
+        return "80+";
+    }
 
     @NotBlank
     @Pattern(

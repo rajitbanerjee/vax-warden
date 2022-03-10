@@ -15,16 +15,33 @@ public class Statistics {
     private Map<Integer, Integer> dosesReceived;
     private Map<String, Integer> nationality;
     private Map<Gender, Integer> gender;
+    private Map<String, Integer> ageGroup;
 
     public Statistics() {
-        this.centre = new HashMap<String, Integer>();
-        this.firstAppointment = new HashMap<Date, Integer>();
-        this.secondAppointment = new HashMap<Date, Integer>();
-        this.firstVaccineType = new HashMap<VaccineType, Integer>();
-        this.secondVaccineType = new HashMap<VaccineType, Integer>();
-        this.dosesReceived = new HashMap<Integer, Integer>();
-        this.nationality = new HashMap<String, Integer>();
-        this.gender = new HashMap<Gender, Integer>();
+        this.centre = new HashMap<>();
+        this.firstAppointment = new HashMap<>();
+        this.secondAppointment = new HashMap<>();
+        this.firstVaccineType = new HashMap<>();
+        this.secondVaccineType = new HashMap<>();
+        this.dosesReceived = new HashMap<>();
+        this.nationality = new HashMap<>();
+        this.gender = new HashMap<>();
+        this.ageGroup = new HashMap<>();
+    }
+
+    public Statistics tallyVaccination(Vaccination vaccination, User user) {
+        incrementCentre(vaccination.getCentre());
+        incrementFirstAppointment(vaccination.getFirstAppointment());
+        incrementSecondAppointment(vaccination.getSecondAppointment());
+        incrementFirstVaccineType(vaccination.getFirstVaccineType());
+        incrementSecondVaccineType(vaccination.getSecondVaccineType());
+        incrementDosesReceived(vaccination.getDosesReceived());
+        if (this.dosesReceived.containsKey(1) || this.dosesReceived.containsKey(2)) {
+            incrementNationality(user.getNationality());
+            incrementGender(user.getGender());
+            incrementAgeGroup(user.getAgeGroup());
+        }
+        return this;
     }
 
     private void incrementCentre(String centre) {
@@ -83,15 +100,8 @@ public class Statistics {
         this.gender.put(gender, this.gender.get(gender) + 1);
     }
 
-    public Statistics tallyVaccination(Vaccination vaccination, User user) {
-        incrementCentre(vaccination.getCentre());
-        incrementFirstAppointment(vaccination.getFirstAppointment());
-        incrementSecondAppointment(vaccination.getSecondAppointment());
-        incrementFirstVaccineType(vaccination.getFirstVaccineType());
-        incrementSecondVaccineType(vaccination.getSecondVaccineType());
-        incrementDosesReceived(vaccination.getDosesReceived());
-        incrementNationality(user.getNationality());
-        incrementGender(user.getGender());
-        return this;
+    private void incrementAgeGroup(String ageGroup) {
+        this.ageGroup.putIfAbsent(ageGroup, 0);
+        this.ageGroup.put(ageGroup, this.ageGroup.get(ageGroup) + 1);
     }
 }
