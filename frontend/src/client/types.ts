@@ -72,12 +72,21 @@ export interface Stats {
   ageGroup: { [key: string]: number };
 }
 
+export type ChartData = { x: string; y: number }[];
+
+// Forum
 export interface Post {
   id: number;
-  replyId?: number;
-  userId: number;
+  replyToPostId?: number;
   timestamp: Date;
   content: string;
+  firstName: string;
+  lastName: string;
 }
 
-export type ChartData = { x: string; y: number }[];
+export interface OrganisedPosts {
+  [postId: number]: {
+    post: Post;
+    replies: Post[];
+  };
+}

@@ -33,8 +33,6 @@ public class Post {
 
     @JsonIgnore @ManyToOne private User poster;
 
-    @JsonIgnore private String lastName;
-
     @NotBlank
     @Lob
     @Column(length = 100000)

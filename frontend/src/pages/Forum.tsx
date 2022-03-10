@@ -1,103 +1,142 @@
-import { VStack, Divider, Textarea, HStack, Button, Container } from "@chakra-ui/react";
+import { Button, Divider, Heading, HStack, Textarea, VStack } from "@chakra-ui/react";
 import * as forum from "client/forum";
-import { Post, UserRole } from "client/types";
+import { OrganisedPosts, Post } from "client/types";
 import { ForumPost } from "components";
-import { useEffect, useState, MouseEvent, ChangeEvent } from "react";
 import useAuth from "hooks/useAuth";
-import { FaReply } from "react-icons/fa";
+import useWindowDimensions from "hooks/useWindowDimensions";
+import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import { AiOutlineSend } from "react-icons/ai";
+import { FaReply } from "react-icons/fa";
 
-const postEntries = (post: Post | undefined): [string, any][] => {
-  if (!post) return [];
-  return Object.entries(post);
+const getOrganisedPosts = (posts: Post[]): { post: Post; replies: Post[] }[] => {
+  const organised: OrganisedPosts = {};
+  const originalPosts = posts.filter((post) => !post.replyToPostId);
+  const replies = posts.filter((post) => post.replyToPostId);
+
+  originalPosts.forEach((post) => {
+    organised[post.id] = {
+      post,
+      replies: [],
+    };
+  });
+  replies.forEach((post) => organised[post.replyToPostId!].replies.push(post));
+  return Object.values(organised);
 };
+
 export const Forum: React.FC = (): JSX.Element => {
-  const { currentUser, jwtToken } = useAuth();
-  const [posts, setPosts] = useState<Post | undefined>(undefined);
-  let [message, setMessage] = useState<string | undefined>(undefined);
-  let [replyMessage, setReply] = useState<{ [key: number]: string }>({ 0: "" });
+  const { jwtToken, isAdmin } = useAuth();
+  const { width } = useWindowDimensions();
+  const [posts, setPosts] = useState<Post[] | undefined>(undefined);
+  const [postMessage, setPostMessage] = useState<string>("");
+  const [replyMessages, setReplyMessages] = useState<{ [key: number]: string } | null>();
+  const [countPosts, setCountPosts] = useState<number>(0);
 
   const buttonHandlerUser = (event: MouseEvent<HTMLButtonElement>) => {
-    if (message) {
-      forum.postMessage(message, jwtToken);
-      setMessage("");
-      window.location.reload();
+    event.preventDefault();
+    if (postMessage) {
+      forum.createPost(postMessage, jwtToken).then(() => setCountPosts(countPosts + 1));
+      setPostMessage("");
     }
   };
 
-  const buttonHandlerAdmin = (event: MouseEvent<HTMLButtonElement>, replyId: number) => {
-    console.log(replyMessage[replyId]);
-    if (replyMessage && replyMessage[replyId]) {
-      forum.postReply(replyMessage[replyId], replyId, jwtToken);
-      setReply("");
-      window.location.reload();
+  const buttonHandlerAdmin = (event: MouseEvent<HTMLButtonElement>, replyToPostId: number) => {
+    event.preventDefault();
+    if (replyMessages && replyMessages[replyToPostId]) {
+      forum
+        .createReply(replyMessages[replyToPostId], replyToPostId, jwtToken)
+        .then(() => setCountPosts(countPosts + 1));
+      setReplyMessages(null);
     }
   };
 
-  const textareaHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    let inputValue = event.target.value;
-    setMessage(inputValue);
+  const postMessageHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    const messageInput = event.target.value;
+    setPostMessage(messageInput);
   };
 
-  const textareaHandlerAdmin = (event: ChangeEvent<HTMLTextAreaElement>, replyId: number) => {
-    let inputValue = event.target.value;
-    setReply((prevState) => ({
+  const replyMessagesHandler = (event: ChangeEvent<HTMLTextAreaElement>, replyToPostId: number) => {
+    const replyMessageInput = event.target.value;
+    setReplyMessages((prevState) => ({
       ...prevState,
-      [replyId]: inputValue,
+      [replyToPostId]: replyMessageInput,
     }));
   };
 
   const fetchData = (token: string) => {
-    forum.getPosts(token).then((newPosts) => setPosts(newPosts));
+    forum.listPosts(token).then((newPosts) => {
+      setPosts(newPosts);
+      newPosts.forEach((p) =>
+        setReplyMessages((prevState) => ({
+          ...prevState,
+          [p.id]: "",
+        }))
+      );
+    });
   };
 
   useEffect(() => {
     fetchData(jwtToken);
-  }, [jwtToken]);
+  }, [jwtToken, countPosts]);
 
   return (
-    <VStack spacing={5} pb="200px">
-      <Container>
-        {postEntries(posts).map(([_, post]) => (
+    <VStack spacing={10} pb="200px">
+      <Heading size="md" textAlign="center">
+        Forum
+      </Heading>
+      {posts &&
+        getOrganisedPosts(posts).map(({ post, replies }) => (
           <VStack spacing={2} mb={2}>
-            <Container>
+            <ForumPost
+              name={`${post.firstName} ${post.lastName}`}
+              date={new Date(post.timestamp)}
+              content={post.content}
+              isReply={false}
+              width={width / 3}
+            />
+            {replies.map((reply) => (
               <ForumPost
-                name={`${post.firstName} ${post.lastName}`}
-                date={new Date(post.timestamp)}
-                content={post.content}
-                reply={post.replyId !== null}
+                name={`${reply.firstName} ${reply.lastName}`}
+                date={new Date(reply.timestamp)}
+                content={reply.content}
+                isReply={true}
+                width={width / 3}
               />
-              {currentUser.userRole === UserRole.ROLE_ADMIN && post.replyId !== null && (
-                <HStack spacing={1}>
-                  <Textarea
-                    placeholder="Enter your reply here!"
-                    value={replyMessage[post.id]}
-                    onChange={(event) => textareaHandlerAdmin(event, post.id)}
-                  />
-                  <Button
-                    colorScheme="teal"
-                    variant="solid"
-                    onClick={(event) => buttonHandlerAdmin(event, post.id)}
-                    rightIcon={<FaReply />}
-                  >
-                    Reply
-                  </Button>
-                </HStack>
-              )}
-
-              <Divider variant="dashed" />
-            </Container>
+            ))}
+            {isAdmin && (
+              <HStack spacing={1} width={width / 3}>
+                <Textarea
+                  placeholder="Enter your reply here!"
+                  value={replyMessages ? replyMessages[post.id] : ""}
+                  onChange={(event) => replyMessagesHandler(event, post.id)}
+                />
+                <Button
+                  colorScheme="teal"
+                  variant="solid"
+                  onClick={(event) => buttonHandlerAdmin(event, post.id)}
+                  rightIcon={<FaReply />}
+                  disabled={replyMessages ? !replyMessages[post.id] : true}
+                >
+                  Reply
+                </Button>
+              </HStack>
+            )}
+            <Divider />
           </VStack>
         ))}
-        {currentUser.userRole === UserRole.ROLE_USER && (
-          <HStack spacing={1}>
-            <Textarea placeholder="Enter your question here!" value={message} onChange={textareaHandler} />
-            <Button colorScheme="teal" variant="solid" onClick={buttonHandlerUser} rightIcon={<AiOutlineSend />}>
-              Submit
-            </Button>
-          </HStack>
-        )}
-      </Container>
+      {!isAdmin && (
+        <HStack spacing={1} width={width / 3}>
+          <Textarea placeholder="Enter your question here!" value={postMessage} onChange={postMessageHandler} />
+          <Button
+            colorScheme="teal"
+            variant="solid"
+            onClick={buttonHandlerUser}
+            disabled={!postMessage}
+            rightIcon={<AiOutlineSend />}
+          >
+            Submit
+          </Button>
+        </HStack>
+      )}
     </VStack>
   );
 };

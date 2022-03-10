@@ -1,11 +1,12 @@
-import { Box, Text, Badge } from "@chakra-ui/react";
+import { VStack, Text, Badge } from "@chakra-ui/react";
 import { formatDate } from "client/util";
 
-interface PostProps {
+interface ForumPostProps {
   name: string;
   date: Date;
   content: string;
-  reply: boolean;
+  isReply: boolean;
+  width: number;
 }
 
 const isToday = (someDate: Date): boolean => {
@@ -17,22 +18,30 @@ const isToday = (someDate: Date): boolean => {
   );
 };
 
-export const ForumPost: React.FC<PostProps> = ({ name, date, content, reply }): JSX.Element => {
-  const color = reply ? "lightgray" : "white";
+export const ForumPost: React.FC<ForumPostProps> = ({ name, date, content, isReply, width }): JSX.Element => {
+  const color = isReply ? "lightgray" : "white";
   return (
-    <Box maxW="2xl" borderWidth="1px" borderRadius="lg" overflow="hidden" p={2} mb={2} bg={color}>
-      <Box ml="3" p={2} borderRadius={5}>
-        <Text fontWeight="bold">
-          {name}
-          {isToday(date) && (
-            <Badge ml="1" colorScheme="green">
-              New
-            </Badge>
-          )}
-        </Text>
-        <Text fontSize="sm">{formatDate(date)}</Text>
-      </Box>
-      <Text>{content}</Text>
-    </Box>
+    <VStack
+      borderWidth="1px"
+      borderRadius="lg"
+      p={3}
+      bg={color}
+      width={width}
+      align="left"
+      maxH={width / 2}
+      overflow="scroll"
+      spacing={1}
+    >
+      <Text fontWeight="bold">
+        {name}
+        {isToday(date) && (
+          <Badge ml="1" colorScheme="green">
+            New
+          </Badge>
+        )}
+      </Text>
+      <Text fontSize="sm">{formatDate(date)}</Text>
+      <Text pt={2}>{content}</Text>
+    </VStack>
   );
 };
