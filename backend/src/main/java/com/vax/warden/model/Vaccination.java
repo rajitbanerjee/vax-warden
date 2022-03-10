@@ -4,16 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Entity
 @Table(name = "vaccinations")
 public class Vaccination implements Serializable {
@@ -27,14 +22,10 @@ public class Vaccination implements Serializable {
     @JsonIgnore
     private User user;
 
-    @NotBlank @NonNull private String centre;
+    private String centre;
 
-    @NotNull
-    @NonNull
     @Temporal(TemporalType.TIMESTAMP)
     private Date firstAppointment;
-
-    /* properties set/updated by admin/automatically later */
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date secondAppointment;

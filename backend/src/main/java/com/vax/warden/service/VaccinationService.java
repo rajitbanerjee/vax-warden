@@ -4,6 +4,7 @@ import com.vax.warden.exception.ResourceNotFoundException;
 import com.vax.warden.model.User;
 import com.vax.warden.model.Vaccination;
 import com.vax.warden.repository.VaccinationRepository;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,36 +22,67 @@ public class VaccinationService {
         if (user.getVaccination() != null) {
             throw new IllegalArgumentException("User already has a vaccination record!");
         }
+        if (vaccination.getFirstAppointment() == null) {
+            throw new IllegalArgumentException("First appointment date needs to be provided!");
+        }
+        if (vaccination.getCentre() == null) {
+            throw new IllegalArgumentException("Vaccination centre needs to be provided!");
+        }
         return save(vaccination, user);
     }
 
     @Transactional(readOnly = true)
     public Vaccination getUserVaccination(String email) {
         User user = userService.findByEmail(email);
-        if (user.getVaccination() == null) {
-            throw new ResourceNotFoundException("User does not have a vaccination record!");
+        return getVaccination(user);
+    }
+
+    @Transactional(readOnly = true)
+    public Vaccination getUserVaccination(Long id) {
+        User user = userService.findByID(id);
+        return getVaccination(user);
+    }
+
+    @Transactional
+    public Vaccination updateVaccination(Long id, Vaccination modified) {
+        User user = userService.findByID(id);
+        Vaccination current = getVaccination(user);
+        if (current.getFirstVaccineType() == null) {
+            if (modified.getFirstVaccineType() == null) {
+                throw new IllegalArgumentException("First vaccine type needs to be provided!");
+            }
+            current.setFirstVaccineType(modified.getFirstVaccineType());
+            // book second appointment
+            Date secondAppointment =
+                    Date.from(current.getFirstAppointment().toInstant().plus(21, ChronoUnit.DAYS));
+            current.setSecondAppointment(secondAppointment);
+            current.setDosesReceived(1);
+        } else if (current.getSecondVaccineType() == null) {
+            if (modified.getSecondVaccineType() == null) {
+                throw new IllegalArgumentException("Second vaccine type needs to be provided!");
+            }
+            current.setSecondVaccineType(modified.getSecondVaccineType());
+            current.setDosesReceived(2);
         }
-        return user.getVaccination();
-    }
-
-    public Vaccination updateFirstBooking(Vaccination vaccination, Date date) {
-        vaccination.setFirstAppointment(date);
-        return save(vaccination);
-    }
-
-    public Vaccination updateSecondBooking(Vaccination vaccination, Date date) {
-        vaccination.setSecondAppointment(date);
-        return save(vaccination);
+        return save(current);
     }
 
     @Transactional
     public void cancelBooking(String email) {
         Vaccination vaccination = getUserVaccination(email);
         if (vaccination.getSecondAppointment() != null) {
-            updateSecondBooking(vaccination, null);
+            vaccination.setSecondAppointment(null);
+            save(vaccination);
         } else {
             delete(vaccination);
         }
+    }
+
+    private Vaccination getVaccination(User user) {
+        if (user.getVaccination() == null) {
+            throw new ResourceNotFoundException("User does not have a vaccination record!");
+        }
+        return user.getVaccination();
     }
 
     private Vaccination save(Vaccination vaccination) {
