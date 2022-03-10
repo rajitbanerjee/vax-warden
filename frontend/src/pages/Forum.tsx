@@ -1,6 +1,5 @@
-import { Text, VStack, Divider, Textarea, HStack, Button, Container } from "@chakra-ui/react";
+import { VStack, Divider, Textarea, HStack, Button, Container } from "@chakra-ui/react";
 import * as forum from "client/forum";
-import { formatDate } from "client/util";
 import { Post, UserRole } from "client/types";
 import { ForumPost } from "components";
 import { useEffect, useState, MouseEvent, ChangeEvent } from "react";
@@ -66,7 +65,6 @@ export const Forum: React.FC = (): JSX.Element => {
                 name={`${post.firstName} ${post.lastName}`}
                 date={new Date(post.timestamp)}
                 content={post.content}
-                user={currentUser}
                 reply={post.replyId !== null}
               />
               {currentUser.userRole === UserRole.ROLE_ADMIN && post.replyId !== null && (
