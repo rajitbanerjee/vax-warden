@@ -24,14 +24,14 @@ public class ForumController {
     @ResponseStatus(HttpStatus.CREATED)
     public Post post(@Valid @RequestBody Post post, Authentication authentication) {
         String email = (String) authentication.getPrincipal();
-        return forumService.save(post, email);
+        return forumService.createPost(post, email);
     }
 
     @PostMapping("/reply")
     @ResponseStatus(HttpStatus.CREATED)
     public Post reply(@Valid @RequestBody Post post, Authentication authentication) {
         String email = (String) authentication.getPrincipal();
-        return forumService.save(post, email);
+        return forumService.createReply(post, email);
     }
 
     @GetMapping("/list")

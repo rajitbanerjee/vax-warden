@@ -1,0 +1,7 @@
+POST http://localhost:8080/forum/reply
+Content-Type: application/json
+
+{
+  "content": "Reply 1 to Post 1",
+  "replyToPostId": 1
+}

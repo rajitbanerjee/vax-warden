@@ -29,7 +29,7 @@ public class Post {
 
     @CreationTimestamp private Date timestamp;
 
-    private Long replyId;
+    private Long replyToPostId;
 
     @JsonIgnore @ManyToOne private User poster;
 
