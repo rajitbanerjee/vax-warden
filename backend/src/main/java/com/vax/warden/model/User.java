@@ -13,11 +13,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -27,10 +23,6 @@ import lombok.Data;
 @Table(name = "users")
 public class User implements Serializable {
     private static final long serialVersionUID = 1291327L;
-
-    public User() {
-        posts = new HashSet<Post>();
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,27 +40,6 @@ public class User implements Serializable {
     @ValidAge(message = "Date of Birth: User must be over 18!")
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
-
-    public static int getAgeInYears(Date date) {
-        LocalDate now = LocalDate.now();
-        LocalDate birthdayDate =
-                Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-        Period period = Period.between(birthdayDate, now);
-        return period.getYears();
-    }
-
-    public String getAgeGroup() {
-        int age = getAgeInYears(dateOfBirth);
-        if (age < 12) return "< 12";
-        if (age < 20) return "12-19";
-        if (age < 30) return "20-29";
-        if (age < 40) return "30-39";
-        if (age < 50) return "40-49";
-        if (age < 60) return "50-59";
-        if (age < 70) return "60-69";
-        if (age < 80) return "70-79";
-        return "80+";
-    }
 
     @NotBlank
     @Pattern(
@@ -107,12 +78,36 @@ public class User implements Serializable {
     private UserRole userRole = UserRole.ROLE_USER;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JsonIgnore
     private Vaccination vaccination;
 
     @OneToMany(mappedBy = "poster")
     @JsonIgnore
     private Set<Post> posts;
+
+    public User() {
+        posts = new HashSet<>();
+    }
+
+    public static int getAgeInYears(Date date) {
+        LocalDate now = LocalDate.now();
+        LocalDate birthdayDate =
+                Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+        Period period = Period.between(birthdayDate, now);
+        return period.getYears();
+    }
+
+    public String getAgeGroup() {
+        int age = getAgeInYears(dateOfBirth);
+        if (age < 12) return "< 12";
+        if (age < 20) return "12-19";
+        if (age < 30) return "20-29";
+        if (age < 40) return "30-39";
+        if (age < 50) return "40-49";
+        if (age < 60) return "50-59";
+        if (age < 70) return "60-69";
+        if (age < 80) return "70-79";
+        return "80+";
+    }
 
     @JsonIgnore
     public void addPost(Post post) {

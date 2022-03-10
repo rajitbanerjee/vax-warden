@@ -1,24 +1,48 @@
 package com.vax.warden.controller;
 
 import com.vax.warden.model.User;
+import com.vax.warden.model.Vaccination;
 import com.vax.warden.service.UserService;
+import com.vax.warden.service.VaccinationService;
 import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")
 public class AdminController {
     private final UserService userService;
+    private final VaccinationService vaccinationService;
 
     @GetMapping("/user/list")
     @ResponseStatus(HttpStatus.OK)
     public List<User> list() {
-        return userService.findAll();
+        return userService.findAllUsers();
+    }
+
+    @GetMapping("/user/vaccination/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Vaccination vaccinationStatus(@PathVariable("id") String userID) {
+        try {
+            Long id = Long.parseLong(userID);
+            return vaccinationService.getUserVaccination(id);
+        } catch (NumberFormatException ex) {
+            throw new IllegalArgumentException("User ID must be a number");
+        }
+    }
+
+    @PostMapping("/user/vaccination/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Vaccination updateVaccination(
+            @PathVariable("id") String userID, @Valid @RequestBody Vaccination vaccination) {
+        try {
+            Long id = Long.parseLong(userID);
+            return vaccinationService.updateVaccination(id, vaccination);
+        } catch (NumberFormatException ex) {
+            throw new IllegalArgumentException("User ID must be a number");
+        }
     }
 }

@@ -13,6 +13,7 @@ export interface User {
   password?: string;
   jwtToken?: string;
   userRole?: UserRole;
+  vaccination?: Vaccination;
 }
 
 export enum Gender {
