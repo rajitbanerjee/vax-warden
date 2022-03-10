@@ -60,6 +60,11 @@ export interface Vaccination {
   dosesRecieved?: number;
 }
 
+export interface BookingDetailsKeys {
+  centre: string;
+  firstAppointment: string;
+}
+
 // Statistics
 export interface Stats {
   centre: { [key: string]: number };

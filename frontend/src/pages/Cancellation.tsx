@@ -1,23 +1,30 @@
 import { Text } from "@chakra-ui/react";
 import * as vaccination from "client/vaccination";
 import useAuth from "hooks/useAuth";
-import { useEffect } from "react";
+import { delay } from "pages/Booking";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+import type { Response } from "redaxios";
 
 export const Cancellation: React.FC = (): JSX.Element => {
   const { jwtToken } = useAuth();
   const navigate = useNavigate();
+  const [error, setError] = useState<Response<any> | undefined>(undefined);
 
   useEffect(() => {
     vaccination
       .cancel(jwtToken)
-      .then(() => delay(3000))
+      .then(() => delay(1000))
       .then(() => navigate("/home"))
-      .catch((e) => console.log(e.data));
+      .catch((e) => setError(e.data.messages));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <Text>Appointment cancelled. Returning home...</Text>;
+  return error ? (
+    <Text align="center" color="red">
+      {error}
+    </Text>
+  ) : (
+    <Text color="green">Appointment cancelled. Returning home...</Text>
+  );
 };

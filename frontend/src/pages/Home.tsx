@@ -52,7 +52,7 @@ const isEmpty = (obj: { [key: string]: any } | undefined) => (obj ? Object.keys(
 
 export const Home: React.FC = (): JSX.Element => {
   const navigate = useNavigate();
-  const { currentUser, jwtToken } = useAuth();
+  const { currentUser, jwtToken, loading } = useAuth();
   const [stats, setStats] = useState<Stats | undefined>(undefined);
   const [isBooked, setBooked] = useState<boolean>(false);
 
@@ -79,9 +79,13 @@ export const Home: React.FC = (): JSX.Element => {
       <Text style={{ fontWeight: "bold" }}>{doseString(stats)}</Text>
 
       {!isBooked ? (
-        <Button onClick={() => navigate("/booking")}>Book first dose</Button>
+        <Button onClick={() => navigate("/booking")} disabled={loading}>
+          Book first dose
+        </Button>
       ) : (
-        <Button onClick={() => navigate("/cancellation")}>Cancel appointment</Button>
+        <Button onClick={() => navigate("/cancellation")} disabled={loading}>
+          Cancel appointment
+        </Button>
       )}
 
       <List>
