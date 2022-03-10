@@ -2,6 +2,6 @@ POST http://localhost:8080/vaccination/book
 Content-Type: application/json
 
 {
-  "centre": "UCD",
+  "centre": "RDS",
   "firstAppointment": "2022-03-03T09:30Z"
 }

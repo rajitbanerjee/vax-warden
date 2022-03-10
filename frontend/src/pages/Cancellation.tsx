@@ -1,7 +1,7 @@
 import { Text } from "@chakra-ui/react";
+import { delay } from "client/util";
 import * as vaccination from "client/vaccination";
 import useAuth from "hooks/useAuth";
-import { delay } from "pages/Booking";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Response } from "redaxios";

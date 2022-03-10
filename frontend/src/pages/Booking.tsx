@@ -1,12 +1,11 @@
 import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Select, Text, VStack } from "@chakra-ui/react";
 import { BookingDetailsKeys, Vaccination } from "client/types";
+import { delay, formatDate } from "client/util";
 import { bookFirstDose } from "client/vaccination";
 import useAuth from "hooks/useAuth";
 import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Response } from "redaxios";
-
-export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 const formatBookingDetailsKey: BookingDetailsKeys = {
   centre: "Vaccination Centre",
@@ -41,7 +40,7 @@ export const Booking: React.FC = (): JSX.Element => {
         <VStack textAlign="center" spacing={5}>
           <Heading size="md">Vaccination First Dose Appointment Booking</Heading>
           <Text>
-            {currentUser.firstName} {currentUser.lastName} (D.O.B: {currentUser.dateOfBirth})
+            {currentUser.firstName} {currentUser.lastName} (D.O.B: {formatDate(currentUser.dateOfBirth)})
           </Text>
         </VStack>
 
