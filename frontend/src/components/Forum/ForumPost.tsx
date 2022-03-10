@@ -1,6 +1,7 @@
-import { Heading, Flex, Box, Text, Badge } from "@chakra-ui/react";
+import { Heading, Box, Text, Badge, VStack, Button, Textarea, HStack, Container } from "@chakra-ui/react";
 import { formatDate } from "client/util";
-import { User } from "client/types";
+import { User, UserRole } from "client/types";
+import { FaReply } from "react-icons/fa";
 
 interface PostProps {
   name: string;
@@ -18,21 +19,38 @@ const isToday = (someDate: Date): boolean => {
   );
 };
 
+const buttonHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
+  event.preventDefault();
+
+  const button: HTMLButtonElement = event.currentTarget;
+  console.log("here");
+};
+
 export const ForumPost: React.FC<PostProps> = ({ name, date, content, user }): JSX.Element => {
   return (
-    <Box maxW="2xl" borderWidth="1px" borderRadius="lg" overflow="hidden" p={2}>
-      <Box ml="3" p={2} borderRadius={5}>
-        <Text fontWeight="bold">
-          {name}
-          {isToday(date) && (
-            <Badge ml="1" colorScheme="green">
-              New
-            </Badge>
-          )}
-        </Text>
-        <Text fontSize="sm">{formatDate(date)}</Text>
+    <Container>
+      <Box maxW="2xl" borderWidth="1px" borderRadius="lg" overflow="hidden" p={2} mb={2}>
+        <Box ml="3" p={2} borderRadius={5}>
+          <Text fontWeight="bold">
+            {name}
+            {isToday(date) && (
+              <Badge ml="1" colorScheme="green">
+                New
+              </Badge>
+            )}
+          </Text>
+          <Text fontSize="sm">{formatDate(date)}</Text>
+        </Box>
+        <Text>{content}</Text>
       </Box>
-      <Text>{content}</Text>
-    </Box>
+      {user.userRole === UserRole.ROLE_USER && (
+        <HStack spacing={1}>
+          <Textarea placeholder="Enter your reply here" />
+          <Button colorScheme="teal" variant="solid" onClick={buttonHandler}>
+            Reply
+          </Button>
+        </HStack>
+      )}
+    </Container>
   );
 };

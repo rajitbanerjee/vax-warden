@@ -1,4 +1,4 @@
-import { Text, VStack } from "@chakra-ui/react";
+import { Text, VStack, Divider } from "@chakra-ui/react";
 import * as forum from "client/forum";
 import { formatDate } from "client/util";
 import { Post } from "client/types";
@@ -25,12 +25,16 @@ export const Forum: React.FC = (): JSX.Element => {
   return (
     <VStack spacing={5} pb="200px">
       {postEntries(posts).map(([_, post]) => (
-        <ForumPost
-          name={`${post.firstName} ${post.lastName}`}
-          date={new Date(post.timestamp)}
-          content={post.content}
-          user={currentUser}
-        />
+        <VStack spacing={2}>
+          <ForumPost
+            name={`${post.firstName} ${post.lastName}`}
+            date={new Date(post.timestamp)}
+            content={post.content}
+            user={currentUser}
+          />
+
+          <Divider variant="dashed" />
+        </VStack>
       ))}
     </VStack>
   );
