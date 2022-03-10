@@ -56,17 +56,21 @@ export const Home: React.FC = (): JSX.Element => {
   const [stats, setStats] = useState<Stats | undefined>(undefined);
   const [isBooked, setBooked] = useState<boolean>(false);
 
-  const fetchData = (token: string) => {
-    statistics
-      .getForUser(token)
-      .then((newStats) => setStats(newStats))
-      .catch((e) => console.log(e.data));
-  };
-
   useEffect(() => {
-    fetchData(jwtToken);
-    setBooked(isEmpty(stats?.firstAppointment) || isEmpty(stats?.secondAppointment));
-  }, [jwtToken, stats?.firstAppointment, stats?.secondAppointment]);
+    let isMounted = true;
+    statistics
+      .getForUser(jwtToken)
+      .then((stats) => {
+        if (isMounted) {
+          setStats(stats);
+          setBooked(isEmpty(stats?.firstAppointment) || isEmpty(stats?.secondAppointment));
+        }
+      })
+      .catch((e) => console.log(e.data));
+    return () => {
+      isMounted = false;
+    };
+  }, [jwtToken, stats]);
 
   return (
     <VStack spacing={5} pb="200px">
