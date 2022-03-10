@@ -21,7 +21,7 @@ public class Vaccination implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @OneToOne(mappedBy = "vaccination")
     @JsonIgnore

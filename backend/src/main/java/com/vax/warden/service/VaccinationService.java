@@ -19,7 +19,7 @@ public class VaccinationService {
     public Vaccination bookFirstDose(Vaccination vaccination, String email) {
         User user = userService.findByEmail(email);
         if (user.getVaccination() != null) {
-            throw new IllegalArgumentException("User already has a vaccination record");
+            throw new IllegalArgumentException("User already has a vaccination record!");
         }
         return save(vaccination, user);
     }
@@ -28,7 +28,7 @@ public class VaccinationService {
     public Vaccination getUserVaccination(String email) {
         User user = userService.findByEmail(email);
         if (user.getVaccination() == null) {
-            throw new ResourceNotFoundException("User does not have a vaccination record");
+            throw new ResourceNotFoundException("User does not have a vaccination record!");
         }
         return user.getVaccination();
     }

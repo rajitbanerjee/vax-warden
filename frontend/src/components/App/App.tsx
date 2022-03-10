@@ -1,7 +1,7 @@
 import { VStack } from "@chakra-ui/react";
 import { Footer, NavBar } from "components";
 import useAuth, { AuthProvider } from "hooks/useAuth";
-import { Forum, Home, Login, Logout, MyAccount, Registration, Statistics } from "pages";
+import { Booking, Cancellation, Forum, Home, Login, Logout, MyAccount, Registration, Statistics } from "pages";
 import { ErrorBoundary } from "react-error-boundary";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 
@@ -22,6 +22,22 @@ export const App: React.FC = (): JSX.Element => {
                 element={
                   <RequireAuth>
                     <Home />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/booking"
+                element={
+                  <RequireAuth>
+                    <Booking />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/cancellation"
+                element={
+                  <RequireAuth>
+                    <Cancellation />
                   </RequireAuth>
                 }
               />
