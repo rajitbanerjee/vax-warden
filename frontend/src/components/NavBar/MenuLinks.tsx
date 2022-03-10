@@ -12,7 +12,7 @@ export const MenuLinks: React.FC = (): JSX.Element => {
   return (
     <HStack spacing={8}>
       {isAuthenticated && <MenuItem to="/home">{isAdmin ? "Admin" : "Home"}</MenuItem>}
-      {isAuthenticated && <MenuItem to="/statistics">Statistics</MenuItem>}
+      <MenuItem to="/statistics">Statistics</MenuItem>
       {isAuthenticated && <MenuItem to="/forum">Forum</MenuItem>}
       {isAuthenticated && !isAdmin && <MenuItem to="/myaccount">My Account</MenuItem>}
       {!isAuthenticated && !isRegistrationPage && !isAdmin && <MenuItem to="/">Registration</MenuItem>}
