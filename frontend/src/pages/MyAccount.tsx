@@ -14,6 +14,7 @@ export const formatUserDetailsKey: UserDetailsKeys = {
   nationality: "Nationality",
   gender: "Gender",
   password: "Password", // Not used in MyAccount, but instead in Login
+  ageGroup: "Age Group",
 };
 
 const formatUserDetailsValue = (k: string, v: any): string => {
