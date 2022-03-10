@@ -10,3 +10,14 @@ export const getPosts = async (jwtToken: string): Promise<Post> => {
   });
   return response.data;
 };
+
+export const postMessage = async (content: string, jwtToken: string): Promise<Post> => {
+  const response = await redaxios.post(
+    `${FORUM_ENDPOINT}/post`,
+    { content: content },
+    {
+      headers: { "Content-Type": `application/json`, Authorization: `Bearer ${jwtToken}` },
+    }
+  );
+  return response.data;
+};
