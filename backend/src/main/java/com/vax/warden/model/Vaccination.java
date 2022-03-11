@@ -30,7 +30,11 @@ public class Vaccination implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date secondAppointment;
 
+    @Enumerated(EnumType.STRING)
     private VaccineType firstVaccineType;
+
+    @Enumerated(EnumType.STRING)
     private VaccineType secondVaccineType;
+
     private Integer dosesReceived = 0;
 }
