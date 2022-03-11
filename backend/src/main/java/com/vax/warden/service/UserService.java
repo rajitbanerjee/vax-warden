@@ -28,7 +28,7 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException(errorMessage));
     }
 
-    public User findByID(Long id) {
+    public User findById(Long id) {
         String errorMessage = "No user found with id = " + id;
         return userRepository
                 .findById(id)

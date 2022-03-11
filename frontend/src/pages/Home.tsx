@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { MdCheckCircle } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { formatStatsValues } from "./Statistics";
 
 const doseString = (stats: Stats | undefined): string => {
   let doses = 0;
@@ -35,7 +36,8 @@ const keysToHide = ["dosesReceived", "nationality", "gender", "ageGroup"];
 
 const formatUserStatsEntry = (k: string, v: any): string => {
   const formatUserStatsValue = (k: string, v: any): string => {
-    if (k.includes("Appointment") && v !== noBookingIndicator) return formatDate(v).split(":00")[0];
+    if (k.includes("Appointment") && v !== noBookingIndicator) return formatDate(v, true);
+    if (v in formatStatsValues) return formatStatsValues[v];
     return v;
   };
 

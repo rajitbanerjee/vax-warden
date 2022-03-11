@@ -48,23 +48,28 @@ export interface UserDetailsKeys {
 
 // Vaccination
 export enum VaccineType {
-  PFIZER_BIONTECH,
-  MODERNA,
+  PFIZER_BIONTECH = "PFIZER_BIONTECH",
+  MODERNA = "MODERNA",
 }
 
 export interface Vaccination {
   id?: number;
   centre: string;
-  firstAppointment: Date;
-  secondAppointment?: Date;
+  firstAppointment: string | Date;
+  secondAppointment?: string | Date;
   firstVaccineType?: VaccineType;
   secondVaccineType?: VaccineType;
-  dosesRecieved?: number;
+  dosesReceived?: number;
 }
 
 export interface BookingDetailsKeys {
   centre: string;
   firstAppointment: string;
+}
+
+export interface VaccinationUpdate {
+  firstVaccineType?: VaccineType;
+  secondVaccineType?: VaccineType;
 }
 
 // Statistics
