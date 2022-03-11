@@ -1,22 +1,10 @@
-import {
-  Button,
-  FormControl,
-  Heading,
-  Select,
-  Table,
-  TableCaption,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  VStack,
-} from "@chakra-ui/react";
+import { Button, FormControl, Heading, Select, Table, Tbody, Td, Text, Th, Thead, Tr, VStack } from "@chakra-ui/react";
 import * as admin from "client/admin";
 import { User, Vaccination, VaccinationUpdate, VaccineType } from "client/types";
+import { formatDate } from "client/util";
 import useAuth from "hooks/useAuth";
-import { useEffect, useState, MouseEvent, ChangeEvent } from "react";
+import { formatStatsValues } from "pages/Statistics";
+import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 
 export const AdminHome: React.FC = (): JSX.Element => {
   const { jwtToken } = useAuth();
@@ -85,6 +73,19 @@ export const AdminHome: React.FC = (): JSX.Element => {
     }
   };
 
+  const getAppointments = (vax: Vaccination | undefined): JSX.Element => {
+    const dates = [
+      formatDate(vax?.firstAppointment as Date, false, true),
+      formatDate(vax?.secondAppointment as Date, false, true),
+    ];
+    return (
+      <VStack>
+        {vax?.firstAppointment ? <Text size="sm">{dates[0]}</Text> : <></>}
+        {vax?.secondAppointment ? <Text size="sm">{dates[1]}</Text> : <></>}
+      </VStack>
+    );
+  };
+
   const listUsers = (): JSX.Element | JSX.Element[] => {
     if (!users)
       return (
@@ -103,6 +104,7 @@ export const AdminHome: React.FC = (): JSX.Element => {
           <Td>{`${user.firstName} ${user.lastName}`}</Td>
           <Td>{vax?.dosesReceived ?? 0}</Td>
           <Td>{getStatus(vax)}</Td>
+          <Td>{getAppointments(vax)}</Td>
           <Td>
             {displaySelector && (
               <FormControl>
@@ -113,7 +115,7 @@ export const AdminHome: React.FC = (): JSX.Element => {
                 >
                   {(Object.keys(VaccineType) as Array<keyof typeof VaccineType>).map((key) => (
                     <option value={key} key={key}>
-                      {key}
+                      {formatStatsValues[key]}
                     </option>
                   ))}
                 </Select>
@@ -125,6 +127,7 @@ export const AdminHome: React.FC = (): JSX.Element => {
               <Button
                 colorScheme="teal"
                 type="submit"
+                disabled={!vaccineTypes || !user.id || !vaccineTypes[user.id]}
                 onClick={(event) => handleSubmit(event, user.id, vax?.dosesReceived ?? 0)}
               >
                 Submit
@@ -138,20 +141,18 @@ export const AdminHome: React.FC = (): JSX.Element => {
 
   return (
     <VStack spacing={10} pb="200px">
+      <Heading size="md" textAlign="center">
+        Users
+      </Heading>
       <Table variant="simple" size={"md"}>
-        <TableCaption placement="top">
-          <Heading size="md" textAlign="center">
-            Users
-          </Heading>
-        </TableCaption>
         <Thead>
           <Tr>
             <Th>Email</Th>
             <Th>Name</Th>
-            <Th isNumeric>Doses Received</Th>
+            <Th isNumeric>Doses</Th>
             <Th>Status</Th>
-            <Th />
-            <Th />
+            <Th>Appointments</Th>
+            <Th>Administer Dose</Th>
           </Tr>
         </Thead>
         <Tbody>{listUsers()}</Tbody>

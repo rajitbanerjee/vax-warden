@@ -18,7 +18,7 @@ export const formatUserDetailsKey: UserDetailsKeys = {
 };
 
 const formatUserDetailsValue = (k: string, v: any): string => {
-  if (k.includes("date")) return formatDate(v);
+  if (k.includes("date")) return formatDate(v, true);
   if (k === "gender") return v[0].toUpperCase() + v.substring(1).toLowerCase();
   return v;
 };

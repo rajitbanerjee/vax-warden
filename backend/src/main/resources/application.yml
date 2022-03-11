@@ -25,7 +25,7 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
     username: root
     password: spring
-    url: jdbc:mariadb://db:3306/hse?createDatabaseIfNotExist=true
+    url: jdbc:mariadb://vax-warden-db:3306/hse?createDatabaseIfNotExist=true
   sql:
     init:
       data-locations:
