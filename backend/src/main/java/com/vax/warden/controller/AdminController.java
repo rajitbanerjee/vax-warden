@@ -23,17 +23,6 @@ public class AdminController {
         return userService.findAllUsers();
     }
 
-    @GetMapping("/user/vaccination/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Vaccination vaccinationStatus(@PathVariable("id") String userId) {
-        try {
-            Long id = Long.parseLong(userId);
-            return vaccinationService.getUserVaccination(id);
-        } catch (NumberFormatException ex) {
-            throw new IllegalArgumentException("User ID must be a number");
-        }
-    }
-
     @PostMapping("/user/vaccination/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Vaccination updateVaccination(

@@ -6,7 +6,7 @@ const VACCINATION_ENDPOINT = `${constants.BASE_URL}/vaccination`;
 
 export const bookFirstDose = async (vaccination: Vaccination, jwtToken: string): Promise<Vaccination> => {
   const response = await redaxios.post(`${VACCINATION_ENDPOINT}/book`, vaccination, {
-    headers: { Authorization: `Bearer ${jwtToken}` },
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${jwtToken}` },
   });
   return response.data;
 };
