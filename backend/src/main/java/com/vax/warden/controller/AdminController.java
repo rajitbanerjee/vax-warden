@@ -25,9 +25,9 @@ public class AdminController {
 
     @GetMapping("/user/vaccination/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Vaccination vaccinationStatus(@PathVariable("id") String userID) {
+    public Vaccination vaccinationStatus(@PathVariable("id") String userId) {
         try {
-            Long id = Long.parseLong(userID);
+            Long id = Long.parseLong(userId);
             return vaccinationService.getUserVaccination(id);
         } catch (NumberFormatException ex) {
             throw new IllegalArgumentException("User ID must be a number");
@@ -37,9 +37,9 @@ public class AdminController {
     @PostMapping("/user/vaccination/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Vaccination updateVaccination(
-            @PathVariable("id") String userID, @Valid @RequestBody Vaccination vaccination) {
+            @PathVariable("id") String userId, @Valid @RequestBody Vaccination vaccination) {
         try {
-            Long id = Long.parseLong(userID);
+            Long id = Long.parseLong(userId);
             return vaccinationService.updateVaccination(id, vaccination);
         } catch (NumberFormatException ex) {
             throw new IllegalArgumentException("User ID must be a number");

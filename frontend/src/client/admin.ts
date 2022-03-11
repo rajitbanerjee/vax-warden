@@ -11,9 +11,9 @@ export const listUsers = async (jwtToken: string): Promise<User[]> => {
   return response.data;
 };
 
-export const updateVaccination = async (content: string, userID: number, jwtToken: string): Promise<Vaccination> => {
+export const updateVaccination = async (content: string, userId: number, jwtToken: string): Promise<Vaccination> => {
   const response = await redaxios.post(
-    `${ADMIN_ENDPOINT}/vaccination/${userID}`,
+    `${ADMIN_ENDPOINT}/vaccination/${userId}`,
     { content },
     {
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${jwtToken}` },
