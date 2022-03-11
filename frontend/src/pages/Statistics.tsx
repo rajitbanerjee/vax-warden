@@ -1,4 +1,4 @@
-import { Flex, Text } from "@chakra-ui/react";
+import { Flex, Spinner, Text } from "@chakra-ui/react";
 import * as statistics from "client/statistics";
 import { ChartData, Stats } from "client/types";
 import { BarChart } from "components";
@@ -14,22 +14,39 @@ const statsKeys: { [key in keyof Stats]: string } = {
   dosesReceived: "Users by Doses Received",
 };
 
+const formatStatsValues: { [key: string]: string } = {
+  // Gender
+  MALE: "Male",
+  FEMALE: "Female",
+  OTHER: "Other",
+
+  // VaccineType
+  PFIZER_BIONTECH: "Pfizer-BioNTech",
+  MODERNA: "Moderna",
+};
+
 const createPointsFromStats = (key: keyof Stats, stats?: Stats): ChartData => {
   if (!stats || !stats[key]) return [];
   const statsValue = stats[key];
   if (!statsValue) return [];
-  return Object.entries(statsValue).map(([k, v]) => ({ x: k, y: v }));
+  return Object.entries(statsValue).map(([k, v]) => {
+    const formattedX = k in formatStatsValues ? formatStatsValues[k] : k;
+    return { x: v, y: formattedX };
+  });
 };
 
-const makeBarCharts = (stats?: Stats): JSX.Element[] | JSX.Element => {
+const makeBarCharts = (loading: boolean, stats?: Stats): JSX.Element[] | JSX.Element => {
+  if (loading) return <Spinner />;
   const colors = ["teal", "green"];
   let isEmpty = true;
-  const charts = Object.entries(statsKeys).map(([k, v], i) => {
+  let i = 0;
+  const charts = Object.entries(statsKeys).map(([k, v]) => {
     const data = createPointsFromStats(k as keyof Stats, stats);
     // Only make chart if data exists
     if (data.length > 0) {
+      i++;
       isEmpty = false;
-      return <BarChart key={i.toString()} heading={v} data={data} color={colors[i % 2]} />;
+      return <BarChart key={i.toString()} heading={v} data={data} colorRange={colors} />;
     }
     return <React.Fragment key={i}></React.Fragment>;
   });
@@ -39,9 +56,14 @@ const makeBarCharts = (stats?: Stats): JSX.Element[] | JSX.Element => {
 
 export const Statistics: React.FC = (): JSX.Element => {
   const [stats, setStats] = useState<Stats | undefined>(undefined);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchData = () => {
-    statistics.getAll().then((newStats) => setStats(newStats));
+    setLoading(true);
+    statistics
+      .getAll()
+      .then((newStats) => setStats(newStats))
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -58,7 +80,7 @@ export const Statistics: React.FC = (): JSX.Element => {
       paddingRight="10rem"
       paddingBottom="5rem"
     >
-      {makeBarCharts(stats)}
+      {makeBarCharts(loading, stats)}
     </Flex>
   );
 };

@@ -80,7 +80,7 @@ export interface Stats {
   ageGroup: { [key: string]: number };
 }
 
-export type ChartData = { x: string; y: number }[];
+export type ChartData = { x: number; y: string }[];
 
 // Forum
 export interface Post {
