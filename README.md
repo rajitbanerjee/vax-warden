@@ -13,12 +13,40 @@ COVID-19 vaccine registration system using Java, Spring Boot and React.js, devel
 - Running with `docker-compose`. The `--clean` flag is optional (for a `mvn clean install`).
 
   ```bash
-  ./run-services.sh [--clean]
+  ./run-services.sh --clean
   ```
 
 - Navigate to [localhost](http://localhost) in a browser to view the frontend after the Spring Boot application is running (check `docker-compose` logs).
 
 - For local testing of the backend API, run HTTP requests under `src/main/resources/http/`. Note: An `Authorization: Bearer <token>` must be added using the JWT token obtained after logging in as a user.
+
+## User Interface
+
+#### Registration, Login, Logout
+
+![Registration](./assets/images/registration.png)
+![Login](./assets/images/login.png)
+![Logout](./assets/images/logout.png)
+
+#### Home, Vaccination Booking, My Account
+
+![Home](./assets/images/home.png)
+![Booking](./assets/images/booking.png)
+![Booked Home](./assets/images/booked-home.png)
+![My Account](./assets/images/myaccount.png)
+
+#### Admin
+
+TODO
+
+#### Statistics
+
+TODO
+
+#### Forum
+
+![Forum User](./assets/images/forum-user.png)
+![Forum Admin](./assets/images/forum-admin.png)
 
 ## Authors
 
