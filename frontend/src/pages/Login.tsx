@@ -53,7 +53,7 @@ export const Login: React.FC = (): JSX.Element => {
                 <Input name="password" type={showPassword ? "text" : "password"} placeholder="*******" size="md" />
                 <InputRightElement width="4.5rem">
                   <Button h="1.75rem" size="sm" onClick={handlePasswordShow} variant="ghost">
-                    {showPassword ? <AiFillEye /> : <AiFillEyeInvisible />}
+                    {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
                   </Button>
                 </InputRightElement>
               </InputGroup>
