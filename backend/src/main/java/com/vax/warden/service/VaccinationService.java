@@ -39,13 +39,13 @@ public class VaccinationService {
 
     @Transactional(readOnly = true)
     public Vaccination getUserVaccination(Long id) {
-        User user = userService.findByID(id);
+        User user = userService.findById(id);
         return getVaccination(user);
     }
 
     @Transactional
     public Vaccination updateVaccination(Long id, Vaccination modified) {
-        User user = userService.findByID(id);
+        User user = userService.findById(id);
         Vaccination current = getVaccination(user);
         if (current.getFirstVaccineType() == null) {
             if (modified.getFirstVaccineType() == null) {

@@ -14,7 +14,7 @@ const statsKeys: { [key in keyof Stats]: string } = {
   dosesReceived: "Users by Doses Received",
 };
 
-const formatStatsValues: { [key: string]: string } = {
+export const formatStatsValues: { [key: string]: string } = {
   // Gender
   MALE: "Male",
   FEMALE: "Female",

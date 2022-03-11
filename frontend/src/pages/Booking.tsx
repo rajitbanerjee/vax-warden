@@ -40,7 +40,7 @@ export const Booking: React.FC = (): JSX.Element => {
         <VStack textAlign="center" spacing={5}>
           <Heading size="md">Vaccination First Dose Appointment Booking</Heading>
           <Text>
-            {currentUser.firstName} {currentUser.lastName} (D.O.B: {formatDate(currentUser.dateOfBirth)})
+            {currentUser.firstName} {currentUser.lastName} (D.O.B: {formatDate(currentUser.dateOfBirth, true)})
           </Text>
         </VStack>
 

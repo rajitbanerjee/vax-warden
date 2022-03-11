@@ -6,7 +6,6 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,14 +24,6 @@ public class VaccinationController {
             @Valid @RequestBody Vaccination vaccination, Authentication authentication) {
         String email = (String) authentication.getPrincipal();
         return vaccinationService.bookFirstDose(vaccination, email);
-    }
-
-    // TODO required at all?
-    @GetMapping("/user")
-    @ResponseStatus(HttpStatus.OK)
-    public Vaccination getUserVaccination(Authentication authentication) {
-        String email = (String) authentication.getPrincipal();
-        return vaccinationService.getUserVaccination(email);
     }
 
     @PostMapping("/cancel")
