@@ -1,5 +1,5 @@
 # build environment
-FROM node:alpine
+FROM node:14.17.3-slim
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 # Build args
