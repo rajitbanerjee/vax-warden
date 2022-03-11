@@ -4,6 +4,10 @@ server:
     include-binding-errors: always
 
 spring:
+  flyway:
+    locations: classpath:/db/migration
+    enabled: false
+    baselineOnMigrate: true
   application:
     name: backend
   jpa:
@@ -16,10 +20,15 @@ spring:
         persistence:
           validation:
             mode: none
+    defer-datasource-initialization: false
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     username: root
     password: spring
     url: jdbc:mariadb://db:3306/hse?createDatabaseIfNotExist=true
+  sql:
+    init:
+      data-locations:
+      mode: always
 
 jwt_secret: NgHSMb5QkM+JPkZd7AiowzM0f5v5r3pYlqL3ltymWHawdxcun7ATNbgmu4BVMh8XOM/VTxYwU//WpA5V2PSogtGKakG+ynziCZ8JRfQYE9dTRaHgMr6Sk83X7Bwd1L3m6Y8mxzkke/MFJlgUViDwZa3pg9xhdBOei1dXrXxaBjJ0vGKBM5sv1qX4kJoQ2y4lo6kTlC9Y8nv9OzBW2iEOa1Dwmkzr5xlULjbykDX/cLIvzc+V7hPvWu/zutV14NPgv2lZ4MJ69Oi/GsirniFOPQuAXcCN66r2fOzeWqmE6v1KrHBFuTwL2ZQzVvTzcayJCqgKy7TVXpVnnLsA/wNCcQ==
