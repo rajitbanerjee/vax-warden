@@ -5,7 +5,7 @@ import { formatDate } from "client/util";
 import useAuth from "hooks/useAuth";
 import { AdminHome } from "pages/AdminHome";
 import { formatUserDetailsKey } from "pages/MyAccount";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { MdCheckCircle } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
@@ -31,7 +31,7 @@ const formatUserStatsKey: { [k: string]: any } = {
 };
 
 const noBookingIndicator = "TBD";
-const keysToHide = ["dosesReceived", "nationality", "gender"];
+const keysToHide = ["dosesReceived", "nationality", "gender", "ageGroup"];
 
 const formatUserStatsEntry = (k: string, v: any): string => {
   const formatUserStatsValue = (k: string, v: any): string => {
@@ -49,29 +49,58 @@ const userStatsEntries = (stats: Stats | undefined): [string, any][] => {
   return Object.entries(stats);
 };
 
-const isEmpty = (obj: { [key: string]: any } | undefined) => (obj ? Object.keys(obj).length === 0 : false);
+const isEmpty = (obj: { [key: string]: any } | undefined) => (obj ? Object.keys(obj).length === 0 : true);
 
 export const Home: React.FC = (): JSX.Element => {
   const navigate = useNavigate();
   const { currentUser, jwtToken, loading, isAdmin } = useAuth();
   const [stats, setStats] = useState<Stats | undefined>(undefined);
-  const [isBooked, setBooked] = useState<boolean>(false);
+  const [isFirstAppointmentBooked, setFirstAppointmentBooked] = useState<boolean>(false);
+  const [isSecondAppointmentBooked, setSecondAppointmentBooked] = useState<boolean>(false);
+  const [isFirstVaccineReceived, setFirstVaccineReceived] = useState<boolean>(false);
+  const [isSecondVaccineReceived, setSecondVaccineReceived] = useState<boolean>(false);
 
-  useEffect(() => {
-    let isMounted = true;
+  const fetchData = (token: string) => {
     statistics
-      .getForUser(jwtToken)
+      .getForUser(token)
       .then((stats) => {
-        if (isMounted) {
-          setStats(stats);
-          setBooked(isEmpty(stats?.firstAppointment) || isEmpty(stats?.secondAppointment));
-        }
+        setStats(stats);
+        setFirstAppointmentBooked(!isEmpty(stats.firstAppointment));
+        setSecondAppointmentBooked(!isEmpty(stats.secondAppointment));
+        setFirstVaccineReceived(!isEmpty(stats.firstVaccineType));
+        setSecondVaccineReceived(!isEmpty(stats.secondVaccineType));
       })
       .catch((e) => console.log(e.data));
-    return () => {
-      isMounted = false;
-    };
-  }, [jwtToken, stats]);
+  };
+
+  const makeButton = (): JSX.Element => {
+    if (!isFirstAppointmentBooked && !isSecondAppointmentBooked) {
+      return (
+        <Button onClick={() => navigate("/booking")} disabled={loading}>
+          Book first dose
+        </Button>
+      );
+    } else if (isFirstVaccineReceived && !isSecondAppointmentBooked) {
+      return (
+        <Text align="center">
+          Second appointment cancelled by user!
+          <br /> Please call the COVID-19 helpline on 1800 700 700.
+        </Text>
+      );
+    } else if (isFirstVaccineReceived && isSecondVaccineReceived) {
+      return <Text align="center">Fully vaccinated!</Text>;
+    } else {
+      return (
+        <Button onClick={() => navigate("/cancellation")} disabled={loading}>
+          Cancel appointment
+        </Button>
+      );
+    }
+  };
+
+  useEffect(() => {
+    fetchData(jwtToken);
+  }, [jwtToken]);
 
   return isAdmin ? (
     <AdminHome />
@@ -85,15 +114,7 @@ export const Home: React.FC = (): JSX.Element => {
       </Text>
       <Text style={{ fontWeight: "bold" }}>{doseString(stats)}</Text>
 
-      {!isBooked ? (
-        <Button onClick={() => navigate("/booking")} disabled={loading}>
-          Book first dose
-        </Button>
-      ) : (
-        <Button onClick={() => navigate("/cancellation")} disabled={loading}>
-          Cancel appointment
-        </Button>
-      )}
+      {makeButton()}
 
       <List>
         {userStatsEntries(stats)
