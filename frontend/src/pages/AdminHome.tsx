@@ -74,7 +74,10 @@ export const AdminHome: React.FC = (): JSX.Element => {
   };
 
   const getAppointments = (vax: Vaccination | undefined): JSX.Element => {
-    const dates = [formatDate(vax?.firstAppointment as Date, true), formatDate(vax?.secondAppointment as Date, true)];
+    const dates = [
+      formatDate(vax?.firstAppointment as Date, false, true),
+      formatDate(vax?.secondAppointment as Date, false, true),
+    ];
     return (
       <VStack>
         {vax?.firstAppointment ? <Text size="sm">{dates[0]}</Text> : <></>}
