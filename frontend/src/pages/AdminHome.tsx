@@ -1,18 +1,30 @@
-import { Box, Heading, Text, VStack } from "@chakra-ui/react";
+import {
+  Button,
+  FormControl,
+  Heading,
+  Select,
+  Table,
+  TableCaption,
+  Tbody,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tr,
+  VStack,
+} from "@chakra-ui/react";
 import * as admin from "client/admin";
-import { User, VaccinationUpdate, VaccineType } from "client/types";
+import { User, Vaccination, VaccinationUpdate, VaccineType } from "client/types";
 import useAuth from "hooks/useAuth";
-import useWindowDimensions from "hooks/useWindowDimensions";
-import { useEffect, useState } from "react";
+import { useEffect, useState, MouseEvent, ChangeEvent } from "react";
 
 export const AdminHome: React.FC = (): JSX.Element => {
-  const { jwtToken, currentUser } = useAuth();
+  const { jwtToken } = useAuth();
   const [users, setUsers] = useState<User[] | undefined>(undefined);
-  const { width } = useWindowDimensions();
+  const [vaccineTypes, setVaccineTypes] = useState<{ [key: number]: VaccineType }>();
 
-  const makeVaccinationUpdate = (vaccineType: VaccineType): VaccinationUpdate => {
-    if (!currentUser.vaccination) return {};
-    switch (currentUser.vaccination.dosesReceived) {
+  const makeVaccinationUpdate = (vaccineType: VaccineType, dosesReceived: number): VaccinationUpdate => {
+    switch (dosesReceived) {
       case 0:
         return {
           firstVaccineType: vaccineType,
@@ -26,19 +38,32 @@ export const AdminHome: React.FC = (): JSX.Element => {
     }
   };
 
-  const updateVaccination = (userId: number, vaccineType: VaccineType, token: string) => {
-    const vaccinationUpdate = makeVaccinationUpdate(vaccineType);
-    admin
-      .updateVaccination(userId, vaccinationUpdate, token)
-      .then(() => {
-        // TODO update list of users (easy) or just single user in table (need to think)
-      })
-      .catch((e) => console.log(e));
+  const handleSubmit = async (
+    _event: MouseEvent<HTMLButtonElement>,
+    userId: number | undefined,
+    dosesReceived: number
+  ) => {
+    if (userId && vaccineTypes) {
+      const vaccinationUpdate = makeVaccinationUpdate(vaccineTypes[userId], dosesReceived);
+      await admin.updateVaccination(userId, vaccinationUpdate, jwtToken);
+      fetchData(jwtToken);
+    }
+  };
+
+  const vaccineTypeHandler = (event: ChangeEvent<HTMLSelectElement>, userId: number | undefined) => {
+    if (userId) {
+      const vaccineType = event.target.value;
+      setVaccineTypes({
+        ...vaccineTypes,
+        [userId]: vaccineType as VaccineType,
+      });
+    }
   };
 
   const fetchData = (token: string) => {
     admin.listUsers(token).then((users) => {
       setUsers(users);
+      setVaccineTypes({});
     });
   };
 
@@ -46,39 +71,91 @@ export const AdminHome: React.FC = (): JSX.Element => {
     fetchData(jwtToken);
   }, [jwtToken]);
 
-  // TODO change VStack to table, with a single button (in a column maybe) to update vaccination. makeVaccinationUpdate() will determine which dose it is.
-  // TODO vaccineType should be a Select (in another column) with set VaccineType options, so no chance of invalid input (see Registration form for Gender)
-  // TODO Essentially the entire vaccination update process may be a single table of users, with Buttons/Select in cells
+  const getStatus = (vax: Vaccination | undefined): string => {
+    if (vax === null) {
+      return "No Appointments";
+    }
+    switch (vax?.dosesReceived) {
+      case 0:
+        return "Awaiting First Dose";
+      case 1:
+        return "Awaiting Second Dose";
+      default:
+        return "Fully Vaccinated";
+    }
+  };
+
   const listUsers = (): JSX.Element | JSX.Element[] => {
-    if (!users) return <Text>No users registered for vaccination!</Text>;
-    return users.map((user) => {
-      const vax = user.vaccination;
+    if (!users)
       return (
-        <VStack alignItems={"flex-start"} width={width / 3}>
-          <Text>Name: {`${user.firstName} ${user.lastName}`}</Text>
-          <Text>Email: {user.email}</Text>
-          {vax && (
-            <Box py={2}>
-              <Text>Doses Received: {vax.dosesReceived}</Text>
-              <Text>First Appointment: {new Date(vax.firstAppointment as string).toLocaleDateString()}</Text>
-              {vax.firstVaccineType && <Text>First Vaccine Type: {vax.firstVaccineType}</Text>}
-              {vax.secondAppointment && (
-                <Text>Second Appointment: {new Date(vax.secondAppointment as string).toLocaleDateString()}</Text>
-              )}
-              {vax.secondVaccineType && <Text>Second Vaccine Type: {vax.secondVaccineType}</Text>}
-            </Box>
-          )}
-        </VStack>
+        <Tr>
+          <Td colSpan={6}>
+            <Text>No users registered for vaccination!</Text>
+          </Td>
+        </Tr>
+      );
+    return users.map((user) => {
+      let vax = user.vaccination;
+      const displaySelector = vax && vax.dosesReceived !== 2;
+      return (
+        <Tr key={user.email}>
+          <Td>{user.email}</Td>
+          <Td>{`${user.firstName} ${user.lastName}`}</Td>
+          <Td>{vax?.dosesReceived ?? 0}</Td>
+          <Td>{getStatus(vax)}</Td>
+          <Td>
+            {displaySelector && (
+              <FormControl>
+                <Select
+                  placeholder="Vaccine Type"
+                  name={`select-${user.id}`}
+                  onChange={(event) => vaccineTypeHandler(event, user.id)}
+                >
+                  {(Object.keys(VaccineType) as Array<keyof typeof VaccineType>).map((key) => (
+                    <option value={key} key={key}>
+                      {key}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          </Td>
+          <Td>
+            {displaySelector && (
+              <Button
+                colorScheme="teal"
+                type="submit"
+                onClick={(event) => handleSubmit(event, user.id, vax?.dosesReceived ?? 0)}
+              >
+                Submit
+              </Button>
+            )}
+          </Td>
+        </Tr>
       );
     });
   };
 
   return (
     <VStack spacing={10} pb="200px">
-      <Heading size="md" textAlign="center">
-        Users
-      </Heading>
-      {listUsers()})
+      <Table variant="simple" size={"md"}>
+        <TableCaption placement="top">
+          <Heading size="md" textAlign="center">
+            Users
+          </Heading>
+        </TableCaption>
+        <Thead>
+          <Tr>
+            <Th>Email</Th>
+            <Th>Name</Th>
+            <Th isNumeric>Doses Received</Th>
+            <Th>Status</Th>
+            <Th />
+            <Th />
+          </Tr>
+        </Thead>
+        <Tbody>{listUsers()}</Tbody>
+      </Table>
     </VStack>
   );
 };
