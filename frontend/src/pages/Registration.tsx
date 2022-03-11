@@ -7,6 +7,8 @@ import {
   FormLabel,
   Heading,
   Input,
+  InputGroup,
+  InputRightElement,
   Select,
   Text,
 } from "@chakra-ui/react";
@@ -14,6 +16,7 @@ import { Gender, User, UserDetailsKeys } from "client/types";
 import useAuth from "hooks/useAuth";
 import { formatUserDetailsKey } from "pages/MyAccount";
 import { FormEvent, useEffect, useState } from "react";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import type { Response } from "redaxios";
 
@@ -21,6 +24,7 @@ export const Registration: React.FC = (): JSX.Element => {
   const { register, loading, error, logout } = useAuth();
   const [errorMap, setErrorMap] = useState<{ [key: string]: string }>({});
   const [isLoggedOut, setLoggedOut] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,6 +36,10 @@ export const Registration: React.FC = (): JSX.Element => {
     setErrorMap(mapUserDetailsErrors(error));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
+
+  const handlePasswordShow = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -118,7 +126,14 @@ export const Registration: React.FC = (): JSX.Element => {
 
             <FormControl isRequired marginTop={6}>
               <FormLabel>{formatUserDetailsKey.password}</FormLabel>
-              <Input name="password" type="password" placeholder="*******" size="md" />
+              <InputGroup>
+                <Input name="password" type={showPassword ? "text" : "password"} placeholder="*******" size="md" />
+                <InputRightElement width="4.5rem">
+                  <Button h="1.75rem" size="sm" onClick={handlePasswordShow} variant="ghost">
+                    {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
             </FormControl>
 
             <Button colorScheme="teal" type="submit" width="full" mt={4} disabled={loading}>

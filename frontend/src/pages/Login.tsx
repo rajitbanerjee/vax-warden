@@ -1,11 +1,28 @@
-import { Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Heading, Input } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Heading,
+  Input,
+  InputGroup,
+  InputRightElement,
+} from "@chakra-ui/react";
 import { LoginCredentials } from "client/types";
 import useAuth from "hooks/useAuth";
-import { FormEvent } from "react";
 import { formatUserDetailsKey } from "pages/MyAccount";
+import { FormEvent, useState } from "react";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 export const Login: React.FC = (): JSX.Element => {
   const { login, loading, error } = useAuth();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const handlePasswordShow = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -32,7 +49,14 @@ export const Login: React.FC = (): JSX.Element => {
 
             <FormControl isRequired marginTop={6} isInvalid={error !== null}>
               <FormLabel>{formatUserDetailsKey.password}</FormLabel>
-              <Input name="password" type="password" placeholder="*******" size="md" />
+              <InputGroup>
+                <Input name="password" type={showPassword ? "text" : "password"} placeholder="*******" size="md" />
+                <InputRightElement width="4.5rem">
+                  <Button h="1.75rem" size="sm" onClick={handlePasswordShow} variant="ghost">
+                    {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
               {error && <FormErrorMessage>Incorrect email or password.</FormErrorMessage>}
             </FormControl>
 
