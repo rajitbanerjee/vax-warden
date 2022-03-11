@@ -30,8 +30,8 @@ const createPointsFromStats = (key: keyof Stats, stats?: Stats): ChartData => {
   const statsValue = stats[key];
   if (!statsValue) return [];
   return Object.entries(statsValue).map(([k, v]) => {
-    const formattedX = k in formatStatsValues ? formatStatsValues[k] : k;
-    return { x: v, y: formattedX };
+    const formattedY = k in formatStatsValues ? formatStatsValues[k] : k;
+    return { x: v, y: formattedY };
   });
 };
 
