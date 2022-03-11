@@ -58,7 +58,6 @@ export const Home: React.FC = (): JSX.Element => {
   const { currentUser, jwtToken, loading, isAdmin } = useAuth();
   const [stats, setStats] = useState<Stats | undefined>(undefined);
   const [isFirstAppointmentBooked, setFirstAppointmentBooked] = useState<boolean>(false);
-  const [isSecondAppointmentBooked, setSecondAppointmentBooked] = useState<boolean>(false);
   const [isFirstVaccineReceived, setFirstVaccineReceived] = useState<boolean>(false);
   const [isSecondVaccineReceived, setSecondVaccineReceived] = useState<boolean>(false);
 
@@ -68,7 +67,6 @@ export const Home: React.FC = (): JSX.Element => {
       .then((stats) => {
         setStats(stats);
         setFirstAppointmentBooked(!isEmpty(stats.firstAppointment));
-        setSecondAppointmentBooked(!isEmpty(stats.secondAppointment));
         setFirstVaccineReceived(!isEmpty(stats.firstVaccineType));
         setSecondVaccineReceived(!isEmpty(stats.secondVaccineType));
       })
@@ -76,27 +74,22 @@ export const Home: React.FC = (): JSX.Element => {
   };
 
   const makeButton = (): JSX.Element => {
-    if (!isFirstAppointmentBooked && !isSecondAppointmentBooked) {
-      return (
-        <Button onClick={() => navigate("/booking")} disabled={loading}>
-          Book first dose
-        </Button>
-      );
-    } else if (isFirstVaccineReceived && !isSecondAppointmentBooked) {
-      return (
-        <Text align="center">
-          Second appointment cancelled by user!
-          <br /> Please call the COVID-19 helpline on 1800 700 700.
-        </Text>
-      );
-    } else if (isFirstVaccineReceived && isSecondVaccineReceived) {
-      return <Text align="center">Fully vaccinated!</Text>;
-    } else {
+    if (isFirstAppointmentBooked && !isFirstVaccineReceived) {
       return (
         <Button onClick={() => navigate("/cancellation")} disabled={loading}>
           Cancel appointment
         </Button>
       );
+    } else if (isFirstVaccineReceived && isSecondVaccineReceived) {
+      return <Text align="center">Fully vaccinated!</Text>;
+    } else if (!isFirstAppointmentBooked) {
+      return (
+        <Button onClick={() => navigate("/booking")} disabled={loading}>
+          Book first dose
+        </Button>
+      );
+    } else {
+      return <></>;
     }
   };
 
