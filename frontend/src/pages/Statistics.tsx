@@ -39,12 +39,10 @@ const makeBarCharts = (loading: boolean, stats?: Stats): JSX.Element[] | JSX.Ele
   if (loading) return <Spinner />;
   const colors = ["teal", "green"];
   let isEmpty = true;
-  let i = 0;
-  const charts = Object.entries(statsKeys).map(([k, v]) => {
+  const charts = Object.entries(statsKeys).map(([k, v], i) => {
     const data = createPointsFromStats(k as keyof Stats, stats);
     // Only make chart if data exists
     if (data.length > 0) {
-      i++;
       isEmpty = false;
       return <BarChart key={i.toString()} heading={v} data={data} colorRange={colors} />;
     }
