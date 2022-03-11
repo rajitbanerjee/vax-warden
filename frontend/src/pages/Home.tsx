@@ -36,7 +36,7 @@ const keysToHide = ["dosesReceived", "nationality", "gender", "ageGroup"];
 
 const formatUserStatsEntry = (k: string, v: any): string => {
   const formatUserStatsValue = (k: string, v: any): string => {
-    if (k.includes("Appointment") && v !== noBookingIndicator) return formatDate(v, true);
+    if (k.includes("Appointment") && v !== noBookingIndicator) return formatDate(v);
     if (v in formatStatsValues) return formatStatsValues[v];
     return v;
   };
@@ -112,7 +112,7 @@ export const Home: React.FC = (): JSX.Element => {
         {currentUser.firstName} {currentUser.lastName}
       </Heading>
       <Text>
-        {formatUserDetailsKey.dateOfBirth}: {formatDate(currentUser.dateOfBirth)}
+        {formatUserDetailsKey.dateOfBirth}: {formatDate(currentUser.dateOfBirth, true)}
       </Text>
       <Text style={{ fontWeight: "bold" }}>{doseString(stats)}</Text>
 
