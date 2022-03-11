@@ -89,7 +89,7 @@ export const AdminHome: React.FC = (): JSX.Element => {
     if (!users)
       return (
         <Tr>
-          <Td colSpan={6}>
+          <Td colSpan={6} textAlign={"center"}>
             <Text>No users registered for vaccination!</Text>
           </Td>
         </Tr>
