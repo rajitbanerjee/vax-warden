@@ -16,9 +16,13 @@ COVID-19 vaccine registration system using Java, Spring Boot and React.js, devel
   ./run-services.sh --clean
   ```
 
-- Navigate to [localhost](http://localhost) in a browser to view the frontend after the Spring Boot application is running (check `docker-compose` logs).
+- Navigate to [localhost](http://localhost) in a browser to view the frontend after the Spring Boot application is running (check `docker-compose` logs). _Note_: If unable to access localhost, find the container IP address as shown below and navigate to `http://<IP>` instead.
 
-- For local testing of the backend API, run HTTP requests under `src/main/resources/http/`. Note: An `Authorization: Bearer <token>` must be added using the JWT token obtained after logging in as a user.
+  ```bash
+  docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' vax-warden-frontend
+  ```
+
+- For local testing of the backend API, run HTTP requests under `src/main/resources/http/`. _Note_: An `Authorization: Bearer <token>` must be added using the JWT token obtained after logging in as a user.
 
 ## User Interface
 
