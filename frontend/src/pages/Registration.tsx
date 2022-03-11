@@ -139,7 +139,7 @@ export const Registration: React.FC = (): JSX.Element => {
 };
 
 const mapUserDetailsErrors = (error?: Response<any>): { [key: string]: string } => {
-  if (!error) return {};
+  if (!error || !error.data) return {};
   const errorMessages: string[] = error.data.messages;
   const errorMap: { [key: string]: string } = {};
   errorMessages.forEach((e) => {
