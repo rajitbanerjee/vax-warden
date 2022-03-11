@@ -1,4 +1,4 @@
-import { Button, Divider, Heading, HStack, Textarea, VStack } from "@chakra-ui/react";
+import { Button, Divider, Heading, HStack, Text, Textarea, VStack } from "@chakra-ui/react";
 import * as forum from "client/forum";
 import { OrganisedPosts, Post } from "client/types";
 import { ForumPost } from "components";
@@ -83,7 +83,7 @@ export const Forum: React.FC = (): JSX.Element => {
       <Heading size="md" textAlign="center">
         Forum
       </Heading>
-      {posts &&
+      {posts && posts.length > 0 ? (
         getOrganisedPosts(posts).map(({ post, replies }, i) => (
           <VStack spacing={2} mb={2} key={i.toString()}>
             <ForumPost
@@ -123,7 +123,12 @@ export const Forum: React.FC = (): JSX.Element => {
             )}
             <Divider />
           </VStack>
-        ))}
+        ))
+      ) : isAdmin ? (
+        <Text>No posts yet!</Text>
+      ) : (
+        <></>
+      )}
       {!isAdmin && (
         <HStack spacing={1} width={width / 3}>
           <Textarea placeholder="Enter your question here!" value={postMessage} onChange={postMessageHandler} />

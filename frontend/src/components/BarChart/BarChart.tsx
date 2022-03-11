@@ -1,20 +1,24 @@
 import { Heading, VStack } from "@chakra-ui/react";
 import { ChartData } from "client/types";
 import useWindowDimensions from "hooks/useWindowDimensions";
-import { VerticalBarSeries, XAxis, XYPlot, YAxis } from "react-vis";
+import { useState } from "react";
+import { HorizontalBarSeries, HorizontalGridLines, VerticalGridLines, XAxis, XYPlot, YAxis } from "react-vis";
+import "react-vis/dist/style.css";
 
 interface BarChartProps {
   heading: string;
   data: ChartData;
-  color: string;
+  colorRange: string[];
 }
 
-export const BarChart: React.FC<BarChartProps> = ({ heading, data, color }): JSX.Element => {
+export const BarChart: React.FC<BarChartProps> = ({ heading, data, colorRange }): JSX.Element => {
+  const [index, setIndex] = useState<number | null>(null);
   const { height, width } = useWindowDimensions();
   const chartWidth = width / 5;
-  const chartHeight = height / 3;
-  const maxHeight = Math.max(...data.map((p) => p.y))!;
-  const chartDomain = [0, maxHeight + 3];
+  const chartHeight = height / 5;
+  const maxWidth = Math.max(...data.map((p) => p.x));
+  const chartDomain = [0, maxWidth < 4 ? maxWidth + 3 : Math.floor(maxWidth * 1.3)];
+  const interactiveData = data.map((d, i) => ({ ...d, color: i === index ? 1 : 0 }));
 
   return (
     <VStack spacing={10} pb="2rem">
@@ -24,14 +28,18 @@ export const BarChart: React.FC<BarChartProps> = ({ heading, data, color }): JSX
       <XYPlot
         width={chartWidth}
         height={chartHeight}
-        margin={{ bottom: chartHeight / 2 }}
-        yDomain={chartDomain}
-        xType="ordinal"
-        color={color}
+        margin={{ left: chartWidth / 2 }}
+        xDomain={chartDomain}
+        yType="ordinal"
+        colorDomain={[0, 1]}
+        colorRange={colorRange}
+        onMouseLeave={() => setIndex(null)}
       >
-        <XAxis tickLabelAngle={-45} />
+        <HorizontalGridLines />
+        <VerticalGridLines />
+        <XAxis />
         <YAxis />
-        <VerticalBarSeries data={data} barWidth={0.75} />
+        <HorizontalBarSeries data={interactiveData} barWidth={0.5} onNearestXY={(_, { index }) => setIndex(index)} />
       </XYPlot>
     </VStack>
   );
