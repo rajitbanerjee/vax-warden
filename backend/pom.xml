@@ -48,6 +48,12 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
     </dependency>
+    <!-- Password Validation -->
+    <dependency>
+      <groupId>org.passay</groupId>
+      <artifactId>passay</artifactId>
+      <version>1.6.1</version>
+    </dependency>
     <!-- MySQL (MariaDB) -->
     <dependency>
       <groupId>org.mariadb.jdbc</groupId>

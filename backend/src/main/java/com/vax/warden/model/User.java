@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vax.warden.validation.ValidAge;
 import com.vax.warden.validation.ValidEmail;
+import com.vax.warden.validation.ValidPassword;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -69,6 +70,7 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @ValidPassword
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
