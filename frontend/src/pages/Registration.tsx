@@ -126,7 +126,7 @@ export const Registration: React.FC = (): JSX.Element => {
               {getUserDetailsErrorMessage(errorMap, "email")}
             </FormControl>
 
-            <FormControl isRequired marginTop={6}>
+            <FormControl isRequired marginTop={6} isInvalid={formatUserDetailsKey.password in errorMap}>
               <FormLabel>{formatUserDetailsKey.password}</FormLabel>
               <InputGroup>
                 <Input
