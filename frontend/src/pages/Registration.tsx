@@ -15,16 +15,18 @@ import {
 import { Gender, User, UserDetailsKeys } from "client/types";
 import useAuth from "hooks/useAuth";
 import { formatUserDetailsKey } from "pages/MyAccount";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState, ChangeEvent } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import type { Response } from "redaxios";
+import PasswordChecklist from "react-password-checklist";
 
 export const Registration: React.FC = (): JSX.Element => {
   const { register, loading, error, logout } = useAuth();
   const [errorMap, setErrorMap] = useState<{ [key: string]: string }>({});
   const [isLoggedOut, setLoggedOut] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -127,13 +129,25 @@ export const Registration: React.FC = (): JSX.Element => {
             <FormControl isRequired marginTop={6}>
               <FormLabel>{formatUserDetailsKey.password}</FormLabel>
               <InputGroup>
-                <Input name="password" type={showPassword ? "text" : "password"} placeholder="*******" size="md" />
+                <Input
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="*******"
+                  size="md"
+                  onChange={(event) => setPassword(event.target.value)}
+                />
                 <InputRightElement width="4.5rem">
                   <Button h="1.75rem" size="sm" onClick={handlePasswordShow} variant="ghost">
                     {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
                   </Button>
                 </InputRightElement>
               </InputGroup>
+              <PasswordChecklist
+                rules={["minLength", "specialChar", "number", "capital"]}
+                minLength={8}
+                value={password}
+                onChange={(isValid) => {}}
+              />
             </FormControl>
 
             <Button colorScheme="teal" type="submit" width="full" mt={4} disabled={loading}>
