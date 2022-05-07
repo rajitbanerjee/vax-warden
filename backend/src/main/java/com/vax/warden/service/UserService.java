@@ -42,4 +42,8 @@ public class UserService {
     public boolean isEmailInUse(String email) {
         return userRepository.findByEmail(email).isPresent();
     }
+
+    public boolean isPPSNInUse(String ppsn) {
+        return userRepository.findByPpsn(ppsn).isPresent();
+    }
 }
