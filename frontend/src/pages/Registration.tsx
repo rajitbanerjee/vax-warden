@@ -15,7 +15,7 @@ import {
 import { Gender, User, UserDetailsKeys } from "client/types";
 import useAuth from "hooks/useAuth";
 import { formatUserDetailsKey } from "pages/MyAccount";
-import { FormEvent, useEffect, useState, ChangeEvent } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import type { Response } from "redaxios";
