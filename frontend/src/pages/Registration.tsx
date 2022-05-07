@@ -142,6 +142,7 @@ export const Registration: React.FC = (): JSX.Element => {
                   </Button>
                 </InputRightElement>
               </InputGroup>
+              {getUserDetailsErrorMessage(errorMap, "password")}
               <PasswordChecklist
                 rules={["minLength", "specialChar", "number", "capital"]}
                 minLength={8}
