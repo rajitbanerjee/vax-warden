@@ -70,7 +70,7 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @ValidPassword
+    @ValidPassword(message = "Password: Invalid password")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 

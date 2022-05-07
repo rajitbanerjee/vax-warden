@@ -13,7 +13,7 @@ import javax.validation.Payload;
 @Target({ElementType.TYPE, ElementType.FIELD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidPassword {
-    String message() default "Password: Invalid Password";
+    String message() default "Invalid Password";
 
     Class<?>[] groups() default {};
 
