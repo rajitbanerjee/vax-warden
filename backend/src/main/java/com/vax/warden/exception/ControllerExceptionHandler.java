@@ -34,9 +34,6 @@ public class ControllerExceptionHandler {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorMessage error400Validation(MethodArgumentNotValidException ex, WebRequest request) {
         List<ObjectError> errors = ex.getAllErrors();
-        for (ObjectError error : errors) {
-            System.out.println(error);
-        }
         List<String> messages =
                 errors.stream()
                         .map(DefaultMessageSourceResolvable::getDefaultMessage)
