@@ -28,6 +28,7 @@ export const Registration: React.FC = (): JSX.Element => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
   const [passwordAgain, setPasswordAgain] = useState<string>("");
+  const [validPassword, setValidPassword] = useState<boolean>(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,6 +45,10 @@ export const Registration: React.FC = (): JSX.Element => {
     setShowPassword(!showPassword);
   };
 
+  const handleValidPassword = (validPassword: boolean) => {
+    setValidPassword(validPassword);
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -58,7 +63,6 @@ export const Registration: React.FC = (): JSX.Element => {
       nationality: formData.get("nationality") as string,
       gender: formData.get("gender") as unknown as Gender,
       password: formData.get("password") as string,
-      matchingPassword: formData.get("matchingPassword") === formData.get("password"),
     };
     register(user);
   };
@@ -167,11 +171,11 @@ export const Registration: React.FC = (): JSX.Element => {
                 minLength={8}
                 value={password}
                 valueAgain={passwordAgain}
-                onChange={(isValid) => {}}
+                onChange={(isValid) => handleValidPassword(isValid)}
               />
             </FormControl>
 
-            <Button colorScheme="teal" type="submit" width="full" mt={4} disabled={loading}>
+            <Button colorScheme="teal" type="submit" width="full" mt={4} disabled={loading || !validPassword}>
               Submit
             </Button>
 
