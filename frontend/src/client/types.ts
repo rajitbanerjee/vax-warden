@@ -43,6 +43,7 @@ export interface UserDetailsKeys {
   nationality: string;
   gender: string;
   password: string;
+  matchingPassword: string;
   ageGroup: string;
 }
 

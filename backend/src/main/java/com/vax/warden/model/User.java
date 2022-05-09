@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vax.warden.validation.ValidAge;
 import com.vax.warden.validation.ValidEmail;
 import com.vax.warden.validation.ValidPPSN;
+import com.vax.warden.validation.ValidPassword;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -67,6 +68,7 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @ValidPassword(message = "Password: Password is not strong enough!")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 

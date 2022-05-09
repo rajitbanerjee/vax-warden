@@ -21,12 +21,16 @@ import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import type { Response } from "redaxios";
+import PasswordChecklist from "react-password-checklist";
 
 export const Registration: React.FC = (): JSX.Element => {
   const { register, loading, error, logout } = useAuth();
   const [errorMap, setErrorMap] = useState<{ [key: string]: string }>({});
   const [isLoggedOut, setLoggedOut] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [password, setPassword] = useState<string>("");
+  const [passwordAgain, setPasswordAgain] = useState<string>("");
+  const [validPassword, setValidPassword] = useState<boolean>(false);
   const [verified, setVerified] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -44,6 +48,10 @@ export const Registration: React.FC = (): JSX.Element => {
     setShowPassword(!showPassword);
   };
 
+  const handleValidPassword = (validPassword: boolean) => {
+    setValidPassword(validPassword);
+  };
+  
   const handleVerification = () => {
     setVerified(true);
   };
@@ -131,10 +139,16 @@ export const Registration: React.FC = (): JSX.Element => {
               {getUserDetailsErrorMessage(errorMap, "email")}
             </FormControl>
 
-            <FormControl isRequired marginTop={6}>
+            <FormControl isRequired marginTop={6} isInvalid={formatUserDetailsKey.password in errorMap}>
               <FormLabel>{formatUserDetailsKey.password}</FormLabel>
               <InputGroup>
-                <Input name="password" type={showPassword ? "text" : "password"} placeholder="*******" size="md" />
+                <Input
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="*******"
+                  size="md"
+                  onChange={(event) => setPassword(event.target.value)}
+                />
                 <InputRightElement width="4.5rem">
                   <Button h="1.75rem" size="sm" onClick={handlePasswordShow} variant="ghost">
                     {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
@@ -142,8 +156,33 @@ export const Registration: React.FC = (): JSX.Element => {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
+            <FormControl isRequired marginTop={6} isInvalid={formatUserDetailsKey.matchingPassword in errorMap}>
+              <FormLabel>{formatUserDetailsKey.matchingPassword}</FormLabel>
+              <InputGroup>
+                <Input
+                  name="matchingPassword"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="*******"
+                  size="md"
+                  onChange={(event) => setPasswordAgain(event.target.value)}
+                />
+                <InputRightElement width="4.5rem">
+                  <Button h="1.75rem" size="sm" onClick={handlePasswordShow} variant="ghost">
+                    {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+              {getUserDetailsErrorMessage(errorMap, "password")}
+              <PasswordChecklist
+                rules={["minLength", "specialChar", "number", "capital", "match"]}
+                minLength={8}
+                value={password}
+                valueAgain={passwordAgain}
+                onChange={(isValid) => handleValidPassword(isValid)}
+              />
+            </FormControl>
 
-            <Button colorScheme="teal" type="submit" width="full" mt={4} disabled={loading || !verified}>
+            <Button colorScheme="teal" type="submit" width="full" mt={4} disabled={loading || !validPassword || !verified}>
               Submit
             </Button>
             <Center pt="50px">
