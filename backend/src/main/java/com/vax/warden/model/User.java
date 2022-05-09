@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vax.warden.validation.ValidAge;
 import com.vax.warden.validation.ValidEmail;
 import com.vax.warden.validation.ValidPassword;
+import com.vax.warden.validation.ValidPPSN;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -42,10 +43,7 @@ public class User implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
 
-    @NotBlank
-    @Pattern(
-            regexp = "^(\\d{7})([A-Z]{1,2})$",
-            message = "PPS No.: Must be 7 digits followed by 1-2 letters.")
+    @ValidPPSN(message = "PPS No.: Must be 7 digits followed by 1-2 letters. Must be unique.")
     private String ppsn;
 
     @NotBlank
