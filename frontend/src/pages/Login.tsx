@@ -9,19 +9,26 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Center,
 } from "@chakra-ui/react";
 import { LoginCredentials } from "client/types";
 import useAuth from "hooks/useAuth";
 import { formatUserDetailsKey } from "pages/MyAccount";
 import { FormEvent, useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export const Login: React.FC = (): JSX.Element => {
   const { login, loading, error } = useAuth();
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [verified, setVerified] = useState<boolean>(false);
 
   const handlePasswordShow = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleVerification = () => {
+    setVerified(true);
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -60,9 +67,12 @@ export const Login: React.FC = (): JSX.Element => {
               {error && <FormErrorMessage>Incorrect email or password.</FormErrorMessage>}
             </FormControl>
 
-            <Button colorScheme="teal" type="submit" width="full" mt={4} disabled={loading}>
+            <Button colorScheme="teal" type="submit" width="full" mt={4} disabled={loading || !verified}>
               Submit
             </Button>
+            <Center pt="50px">
+              <ReCAPTCHA sitekey="6LdSRdAfAAAAAE5Qbv-Qg6vmiATbXK8SPJFDu9Ai" onChange={handleVerification} />
+            </Center>
           </form>
         </Box>
       </Box>

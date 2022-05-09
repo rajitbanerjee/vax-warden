@@ -11,6 +11,7 @@ import {
   InputRightElement,
   Select,
   Text,
+  Center,
 } from "@chakra-ui/react";
 import { Gender, User, UserDetailsKeys } from "client/types";
 import useAuth from "hooks/useAuth";
@@ -18,6 +19,7 @@ import { formatUserDetailsKey } from "pages/MyAccount";
 import { FormEvent, useEffect, useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
+import ReCAPTCHA from "react-google-recaptcha";
 import type { Response } from "redaxios";
 import PasswordChecklist from "react-password-checklist";
 
@@ -29,6 +31,7 @@ export const Registration: React.FC = (): JSX.Element => {
   const [password, setPassword] = useState<string>("");
   const [passwordAgain, setPasswordAgain] = useState<string>("");
   const [validPassword, setValidPassword] = useState<boolean>(false);
+  const [verified, setVerified] = useState<boolean>(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,6 +50,10 @@ export const Registration: React.FC = (): JSX.Element => {
 
   const handleValidPassword = (validPassword: boolean) => {
     setValidPassword(validPassword);
+  };
+  
+  const handleVerification = () => {
+    setVerified(true);
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -175,9 +182,12 @@ export const Registration: React.FC = (): JSX.Element => {
               />
             </FormControl>
 
-            <Button colorScheme="teal" type="submit" width="full" mt={4} disabled={loading || !validPassword}>
+            <Button colorScheme="teal" type="submit" width="full" mt={4} disabled={loading || !validPassword || !verified}>
               Submit
             </Button>
+            <Center pt="50px">
+              <ReCAPTCHA sitekey="6LdSRdAfAAAAAE5Qbv-Qg6vmiATbXK8SPJFDu9Ai" onChange={handleVerification} />
+            </Center>
 
             <Text align="center" mt={20}>
               Existing user?
