@@ -1,7 +1,7 @@
 package com.vax.warden.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vax.warden.validation.PasswordMatches;
 import com.vax.warden.validation.ValidAge;
 import com.vax.warden.validation.ValidEmail;
 import com.vax.warden.validation.ValidPPSN;
@@ -69,8 +69,10 @@ public class User implements Serializable {
     private Gender gender;
 
     @ValidPassword(message = "Password: Password is not strong enough!")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
+    @PasswordMatches(message = "Password Confirmation: Passwords don't match!")
+    private String matchingPassword;
 
     @Transient private String jwtToken;
 
