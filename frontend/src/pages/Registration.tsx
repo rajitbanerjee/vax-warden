@@ -27,6 +27,7 @@ export const Registration: React.FC = (): JSX.Element => {
   const [isLoggedOut, setLoggedOut] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
+  const [passwordAgain, setPasswordAgain] = useState<string>("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -142,11 +143,29 @@ export const Registration: React.FC = (): JSX.Element => {
                   </Button>
                 </InputRightElement>
               </InputGroup>
+            </FormControl>
+            <FormControl isRequired marginTop={6} isInvalid={formatUserDetailsKey.password in errorMap}>
+              <FormLabel>{formatUserDetailsKey.passwordAgain}</FormLabel>
+              <InputGroup>
+                <Input
+                  name="passwordAgain"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="*******"
+                  size="md"
+                  onChange={(event) => setPasswordAgain(event.target.value)}
+                />
+                <InputRightElement width="4.5rem">
+                  <Button h="1.75rem" size="sm" onClick={handlePasswordShow} variant="ghost">
+                    {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
               {getUserDetailsErrorMessage(errorMap, "password")}
               <PasswordChecklist
-                rules={["minLength", "specialChar", "number", "capital"]}
+                rules={["minLength", "specialChar", "number", "capital", "match"]}
                 minLength={8}
                 value={password}
+                valueAgain={passwordAgain}
                 onChange={(isValid) => {}}
               />
             </FormControl>
