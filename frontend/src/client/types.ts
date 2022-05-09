@@ -11,6 +11,7 @@ export interface User {
   nationality: string;
   gender: Gender;
   password?: string;
+  matchingPassword?: boolean;
   jwtToken?: string;
   userRole?: UserRole;
   vaccination?: Vaccination;
@@ -43,7 +44,7 @@ export interface UserDetailsKeys {
   nationality: string;
   gender: string;
   password: string;
-  passwordAgain: string;
+  matchingPassword: string;
   ageGroup: string;
 }
 

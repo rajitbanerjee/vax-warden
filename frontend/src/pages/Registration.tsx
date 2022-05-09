@@ -58,6 +58,7 @@ export const Registration: React.FC = (): JSX.Element => {
       nationality: formData.get("nationality") as string,
       gender: formData.get("gender") as unknown as Gender,
       password: formData.get("password") as string,
+      matchingPassword: formData.get("matchingPassword") === formData.get("password"),
     };
     register(user);
   };
@@ -144,11 +145,11 @@ export const Registration: React.FC = (): JSX.Element => {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
-            <FormControl isRequired marginTop={6} isInvalid={formatUserDetailsKey.password in errorMap}>
-              <FormLabel>{formatUserDetailsKey.passwordAgain}</FormLabel>
+            <FormControl isRequired marginTop={6} isInvalid={formatUserDetailsKey.matchingPassword in errorMap}>
+              <FormLabel>{formatUserDetailsKey.matchingPassword}</FormLabel>
               <InputGroup>
                 <Input
-                  name="passwordAgain"
+                  name="matchingPassword"
                   type={showPassword ? "text" : "password"}
                   placeholder="*******"
                   size="md"
