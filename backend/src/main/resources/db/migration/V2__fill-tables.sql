@@ -40,7 +40,7 @@ VALUES ('UCD, Dublin 4, Co. Dublin, Ireland', '1968-10-15', 'cameron.bryant@ucd.
 INSERT INTO users (address, date_of_birth, email, first_name, gender, last_name, nationality, password, phone_no, ppsn, user_role, vaccination_id)
 VALUES ('UCD, Dublin 4, Co. Dublin, Ireland', '1979-09-15', 'willa.johnson@ucd.ie', 'Willa', 'FEMALE', 'Johnson', 'Ireland', '$2a$10$bJivBMGDSjuIoeAza/e9LOMAJN2D8vk.w4CGCtkOxwOhiTF.Tlwkq', '0874795969', '1234575AB', 'ROLE_USER', 7);
 INSERT INTO users (address, date_of_birth, email, first_name, gender, last_name, nationality, password, phone_no, ppsn, user_role, vaccination_id)
-VALUES ('UCD, Dublin 4, Co. Dublin, Ireland', '2001-08-15', 'derrick.evans@ucd.ie', 'Derrick', 'MALE', 'Evans', 'Ireland', '$2a$10$bJivBMGDSjuIoeAza/e9LOMAJN2D8vk.w4CGCtkOxwOhiTF.Tlwkq', '0874795669', '1234576AB', 'ROLE_USER', 9);
+VALUES ('UCD, Dublin 4, Co. Dublin, Ireland', '2001-08-15', 'derrick.evans@ucd.ie', 'Derrick', 'MALE', 'Evans', 'Ireland', '$2a$10$bJivBMGDSjuIoeAza/e9LOMAJN2D8vk.w4CGCtkOxwOhiTF.Tlwkq', '0874795669', '1234576AB', 'ROLE_USER', 8);
 INSERT INTO users (address, date_of_birth, email, first_name, gender, last_name, nationality, password, phone_no, ppsn, user_role, vaccination_id)
 VALUES ('UCD, Dublin 4, Co. Dublin, Ireland', '1999-03-15', 'amanda.smith@ucd.ie', 'Amanda', 'FEMALE', 'Smith', 'Ireland', '$2a$10$bJivBMGDSjuIoeAza/e9LOMAJN2D8vk.w4CGCtkOxwOhiTF.Tlwkq', '0874795569', '1234577AB', 'ROLE_USER', 9);
 INSERT INTO users (address, date_of_birth, email, first_name, gender, last_name, nationality, password, phone_no, ppsn, user_role, vaccination_id)
