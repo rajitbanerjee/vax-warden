@@ -5,11 +5,11 @@ Content-Type: application/json
   "firstName": "Jane",
   "lastName": "Doe",
   "dateOfBirth": "2001-02-15",
-  "ppsn": "1234567AB",
+  "ppsn": "1434527AB",
   "address": "UCD, Dublin 4, Co. Dublin, Ireland",
-  "email": "jane.doe@ucd.ie",
+  "email": "jane.doe1@ucd.ie",
   "phoneNo": "0874795969",
   "nationality": "Ireland",
   "gender": "FEMALE",
-  "password": "password"
+  "password": "Admin!234"
 }
