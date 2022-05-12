@@ -14,14 +14,31 @@ import {
 import { LoginCredentials } from "client/types";
 import useAuth from "hooks/useAuth";
 import { formatUserDetailsKey } from "pages/MyAccount";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import type { Response } from "redaxios";
 
 export const Login: React.FC = (): JSX.Element => {
   const { login, loading, error } = useAuth();
+  const [bruteForceError, setBruteForceError] = useState<string | undefined>(undefined);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [verified, setVerified] = useState<boolean>(false);
+
+  useEffect(() => {
+    checkBruteForceError(error);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
+
+  const checkBruteForceError = (error?: Response<any>) => {
+    if (!error || !error.data) return;
+    const errorMessages: string[] = error.data.messages;
+    errorMessages.forEach((e) => {
+      if (e.includes("BruteForce")) {
+        setBruteForceError(e.split(":")[1]);
+      }
+    });
+  };
 
   const handlePasswordShow = () => {
     setShowPassword(!showPassword);
@@ -64,10 +81,17 @@ export const Login: React.FC = (): JSX.Element => {
                   </Button>
                 </InputRightElement>
               </InputGroup>
-              {error && <FormErrorMessage>Incorrect email or password.</FormErrorMessage>}
+              {error && !bruteForceError && <FormErrorMessage>Incorrect email or password.</FormErrorMessage>}
+              {bruteForceError && <FormErrorMessage>{bruteForceError}</FormErrorMessage>}
             </FormControl>
 
-            <Button colorScheme="teal" type="submit" width="full" mt={4} disabled={loading || !verified}>
+            <Button
+              colorScheme="teal"
+              type="submit"
+              width="full"
+              mt={4}
+              disabled={loading || !verified || !!bruteForceError}
+            >
               Submit
             </Button>
             <Center pt="50px">
