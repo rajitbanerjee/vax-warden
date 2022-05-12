@@ -4,8 +4,7 @@ import com.vax.warden.exception.ResourceNotFoundException;
 import com.vax.warden.model.User;
 import com.vax.warden.model.Vaccination;
 import com.vax.warden.repository.VaccinationRepository;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,8 +52,7 @@ public class VaccinationService {
             }
             current.setFirstVaccineType(modified.getFirstVaccineType());
             // book second appointment
-            Date secondAppointment =
-                    Date.from(current.getFirstAppointment().toInstant().plus(21, ChronoUnit.DAYS));
+            LocalDateTime secondAppointment = current.getFirstAppointment().plusDays(21);
             current.setSecondAppointment(secondAppointment);
             current.setDosesReceived(1);
         } else if (current.getSecondVaccineType() == null) {
