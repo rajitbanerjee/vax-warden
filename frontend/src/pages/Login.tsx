@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Center,
   Flex,
   FormControl,
   FormErrorMessage,
@@ -9,14 +10,13 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  Center,
 } from "@chakra-ui/react";
 import { LoginCredentials } from "client/types";
 import useAuth from "hooks/useAuth";
 import { formatUserDetailsKey } from "pages/MyAccount";
 import { FormEvent, useState } from "react";
-import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import ReCAPTCHA from "react-google-recaptcha";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 export const Login: React.FC = (): JSX.Element => {
   const { login, loading, error } = useAuth();
@@ -60,7 +60,7 @@ export const Login: React.FC = (): JSX.Element => {
                 <Input name="password" type={showPassword ? "text" : "password"} placeholder="*******" size="md" />
                 <InputRightElement width="4.5rem">
                   <Button h="1.75rem" size="sm" onClick={handlePasswordShow} variant="ghost">
-                    {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
+                    {showPassword ? <AiFillEye /> : <AiFillEyeInvisible />}
                   </Button>
                 </InputRightElement>
               </InputGroup>
