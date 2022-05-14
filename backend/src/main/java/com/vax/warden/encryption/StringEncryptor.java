@@ -9,7 +9,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
-@Converter(autoApply = true)
+@Converter
 public class StringEncryptor implements AttributeConverter<String, String> {
 
     private static final String AES = "AES";
