@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Center,
   Flex,
   FormControl,
   FormErrorMessage,
@@ -9,19 +10,35 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  Center,
 } from "@chakra-ui/react";
 import { LoginCredentials } from "client/types";
 import useAuth from "hooks/useAuth";
 import { formatUserDetailsKey } from "pages/MyAccount";
-import { FormEvent, useState } from "react";
-import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { FormEvent, useEffect, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import type { Response } from "redaxios";
 
 export const Login: React.FC = (): JSX.Element => {
   const { login, loading, error } = useAuth();
+  const [bruteForceError, setBruteForceError] = useState<string | undefined>(undefined);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [verified, setVerified] = useState<boolean>(false);
+
+  useEffect(() => {
+    checkBruteForceError(error);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
+
+  const checkBruteForceError = (error?: Response<any>) => {
+    if (!error || !error.data) return;
+    const errorMessages: string[] = error.data.messages;
+    errorMessages.forEach((e) => {
+      if (e.includes("BruteForce")) {
+        setBruteForceError(e.split(":")[1]);
+      }
+    });
+  };
 
   const handlePasswordShow = () => {
     setShowPassword(!showPassword);
@@ -60,14 +77,21 @@ export const Login: React.FC = (): JSX.Element => {
                 <Input name="password" type={showPassword ? "text" : "password"} placeholder="*******" size="md" />
                 <InputRightElement width="4.5rem">
                   <Button h="1.75rem" size="sm" onClick={handlePasswordShow} variant="ghost">
-                    {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
+                    {showPassword ? <AiFillEye /> : <AiFillEyeInvisible />}
                   </Button>
                 </InputRightElement>
               </InputGroup>
-              {error && <FormErrorMessage>Incorrect email or password.</FormErrorMessage>}
+              {error && !bruteForceError && <FormErrorMessage>Incorrect email or password.</FormErrorMessage>}
+              {bruteForceError && <FormErrorMessage>{bruteForceError}</FormErrorMessage>}
             </FormControl>
 
-            <Button colorScheme="teal" type="submit" width="full" mt={4} disabled={loading || !verified}>
+            <Button
+              colorScheme="teal"
+              type="submit"
+              width="full"
+              mt={4}
+              disabled={loading || !verified || !!bruteForceError}
+            >
               Submit
             </Button>
             <Center pt="50px">

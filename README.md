@@ -22,7 +22,7 @@ COVID-19 vaccine registration system using Java, Spring Boot and React.js, devel
   docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' vax-warden-frontend
   ```
 
-- Admin account credentials for testing: `admin@ucd.ie:password`.
+- Admin account credentials for testing: `admin@ucd.ie:Admin!234`.
 
 - For local testing of the backend API, run HTTP requests under `src/main/resources/http/`. _Note_: An `Authorization: Bearer <token>` must be added using the JWT token obtained after logging in as a user.
 
