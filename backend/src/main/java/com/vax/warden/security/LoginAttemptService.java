@@ -29,6 +29,8 @@ public class LoginAttemptService {
 
     public static String getClientIP(HttpServletRequest request) {
         final String xfHeader = request.getHeader("X-Forwarded-For");
+        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For#syntax
+        // X-Forwarded-For: <client>, <proxy1>, <proxy2>
         if (xfHeader != null) {
             return xfHeader.split(",")[0];
         }
