@@ -2,7 +2,7 @@ package com.vax.warden.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 import javax.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,9 +24,11 @@ public class Vaccination implements Serializable {
 
     private String centre;
 
-    private LocalDateTime firstAppointment;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date firstAppointment;
 
-    private LocalDateTime secondAppointment;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date secondAppointment;
 
     @Enumerated(EnumType.STRING)
     private VaccineType firstVaccineType;

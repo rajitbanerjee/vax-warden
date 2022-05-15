@@ -1,6 +1,6 @@
 package com.vax.warden.model;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Data;
@@ -8,8 +8,8 @@ import lombok.Data;
 @Data
 public class Statistics {
     private Map<String, Integer> centre;
-    private Map<LocalDateTime, Integer> firstAppointment;
-    private Map<LocalDateTime, Integer> secondAppointment;
+    private Map<Date, Integer> firstAppointment;
+    private Map<Date, Integer> secondAppointment;
     private Map<VaccineType, Integer> firstVaccineType;
     private Map<VaccineType, Integer> secondVaccineType;
     private Map<Integer, Integer> dosesReceived;
@@ -49,7 +49,7 @@ public class Statistics {
         this.centre.put(centre, this.centre.get(centre) + 1);
     }
 
-    private void incrementFirstAppointment(LocalDateTime firstAppointment) {
+    private void incrementFirstAppointment(Date firstAppointment) {
         if (firstAppointment == null) {
             return;
         }
@@ -58,7 +58,7 @@ public class Statistics {
                 firstAppointment, this.firstAppointment.get(firstAppointment) + 1);
     }
 
-    private void incrementSecondAppointment(LocalDateTime secondAppointment) {
+    private void incrementSecondAppointment(Date secondAppointment) {
         if (secondAppointment == null) {
             return;
         }
