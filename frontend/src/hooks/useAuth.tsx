@@ -19,10 +19,10 @@ export interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export const AuthProvider: React.FC = ({ children }): JSX.Element => {
-  const [currentUser, setCurrentUser] = useState<User | undefined>(getLocalStorage("currentUser", undefined));
-  const [jwtToken, setJwtToken] = useState<string | undefined>(getLocalStorage("jwtToken", undefined));
-  const [isAuthenticated, setIsAutheticated] = useState<boolean>(getLocalStorage("isAuthenticated", false));
-  const [isAdmin, setIsAdmin] = useState<boolean>(getLocalStorage("isAdmin", false));
+  const [currentUser, setCurrentUser] = useState<User | undefined>(getSessionStorage("currentUser", undefined));
+  const [jwtToken, setJwtToken] = useState<string | undefined>(getSessionStorage("jwtToken", undefined));
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(getSessionStorage("isAuthenticated", false));
+  const [isAdmin, setIsAdmin] = useState<boolean>(getSessionStorage("isAdmin", false));
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Response<any> | null>();
@@ -30,24 +30,24 @@ export const AuthProvider: React.FC = ({ children }): JSX.Element => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setLocalStorage("currentUser", currentUser);
-    setLocalStorage("jwtToken", jwtToken);
-    setLocalStorage("isAuthenticated", isAuthenticated);
-    setLocalStorage("isAdmin", isAdmin);
+    setSessionStorage("currentUser", currentUser);
+    setSessionStorage("jwtToken", jwtToken);
+    setSessionStorage("isAuthenticated", isAuthenticated);
+    setSessionStorage("isAdmin", isAdmin);
     setError(null);
   }, [currentUser, jwtToken, isAuthenticated, isAdmin, location.pathname]);
 
-  function setLocalStorage(key: string, value: any) {
+  function setSessionStorage(key: string, value: any) {
     try {
-      window.localStorage.setItem(key, JSON.stringify(value));
+      window.sessionStorage.setItem(key, JSON.stringify(value));
     } catch (e) {
       // https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API
     }
   }
 
-  function getLocalStorage(key: string, initialValue: any) {
+  function getSessionStorage(key: string, initialValue: any) {
     try {
-      const value = window.localStorage.getItem(key);
+      const value = window.sessionStorage.getItem(key);
       return value !== null ? JSON.parse(value) : initialValue;
     } catch (e) {
       return initialValue;
@@ -61,7 +61,7 @@ export const AuthProvider: React.FC = ({ children }): JSX.Element => {
       .then((newUser) => {
         setCurrentUser(newUser);
         setJwtToken(newUser.jwtToken);
-        setIsAutheticated(true);
+        setIsAuthenticated(true);
         setIsAdmin(newUser.userRole === UserRole.ROLE_ADMIN);
         navigate("/home");
       })
@@ -76,7 +76,7 @@ export const AuthProvider: React.FC = ({ children }): JSX.Element => {
       .then((newUser) => {
         setCurrentUser(newUser);
         setJwtToken(newUser.jwtToken);
-        setIsAutheticated(true);
+        setIsAuthenticated(true);
         setIsAdmin(newUser.userRole === UserRole.ROLE_ADMIN);
         navigate("/home");
       })
@@ -87,7 +87,7 @@ export const AuthProvider: React.FC = ({ children }): JSX.Element => {
   const logout = () => {
     setCurrentUser(undefined);
     setJwtToken(undefined);
-    setIsAutheticated(false);
+    setIsAuthenticated(false);
     setIsAdmin(false);
   };
 
