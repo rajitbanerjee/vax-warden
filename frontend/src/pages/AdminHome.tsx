@@ -87,7 +87,7 @@ export const AdminHome: React.FC = (): JSX.Element => {
   };
 
   const listUsers = (): JSX.Element | JSX.Element[] => {
-    if (!users)
+    if (!users || users.length === 0)
       return (
         <Tr>
           <Td colSpan={6} textAlign={"center"}>
