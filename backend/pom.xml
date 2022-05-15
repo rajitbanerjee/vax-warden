@@ -71,11 +71,6 @@
       <artifactId>lombok</artifactId>
       <optional>true</optional>
     </dependency>
-    <dependency>
-      <groupId>org.flywaydb</groupId>
-      <artifactId>flyway-core</artifactId>
-      <version>8.1.0</version>
-    </dependency>
   </dependencies>
   <build>
     <plugins>

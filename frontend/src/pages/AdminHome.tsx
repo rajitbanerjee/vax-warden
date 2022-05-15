@@ -7,7 +7,7 @@ import { formatStatsValues } from "pages/Statistics";
 import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 
 export const AdminHome: React.FC = (): JSX.Element => {
-  const { jwtToken } = useAuth();
+  const { currentUser, jwtToken } = useAuth();
   const [users, setUsers] = useState<User[] | undefined>(undefined);
   const [vaccineTypes, setVaccineTypes] = useState<{ [key: number]: VaccineType }>();
 
@@ -144,6 +144,10 @@ export const AdminHome: React.FC = (): JSX.Element => {
       <Heading size="md" textAlign="center">
         Users
       </Heading>
+      <Heading
+        size="xs"
+        textAlign="center"
+      >{`${currentUser.firstName} ${currentUser.lastName} (${currentUser.email})`}</Heading>
       <Table variant="simple" size={"md"}>
         <Thead>
           <Tr>
