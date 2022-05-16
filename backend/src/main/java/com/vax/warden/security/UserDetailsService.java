@@ -3,6 +3,7 @@ package com.vax.warden.security;
 import com.vax.warden.model.User;
 import com.vax.warden.service.UserService;
 import java.util.Collections;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,9 +15,17 @@ import org.springframework.stereotype.Service;
 public class UserDetailsService
         implements org.springframework.security.core.userdetails.UserDetailsService {
     private final UserService userService;
+    private final HttpServletRequest request;
+    private final LoginAttemptService loginAttemptService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        String ip = LoginAttemptService.getClientIP(request);
+        if (loginAttemptService.isBlocked(ip)) {
+            throw new RuntimeException(
+                    "BruteForce: Too many failed attempts, please try again later!");
+        }
+
         User user = userService.findByEmail(email);
         return new org.springframework.security.core.userdetails.User(
                 email,

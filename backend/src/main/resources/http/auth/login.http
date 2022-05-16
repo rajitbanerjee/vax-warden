@@ -3,5 +3,5 @@ Content-Type: application/json
 
 {
   "email": "jane.doe@ucd.ie", 
-  "password": "password"
+  "password": "Admin!234"
 }
