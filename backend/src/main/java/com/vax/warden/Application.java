@@ -26,6 +26,10 @@ public class Application {
     }
 
     private static void initDatabase(ConfigurableApplicationContext context) {
-        context.getBean(DatabaseInitService.class).init();
+        try {
+            context.getBean(DatabaseInitService.class).init();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -2,12 +2,15 @@ package com.vax.warden.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.vax.warden.encryption.LocalDateEncryptor;
+import com.vax.warden.encryption.DateEncryptor;
 import com.vax.warden.encryption.StringEncryptor;
 import com.vax.warden.validation.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -38,8 +41,9 @@ public class User implements Serializable {
 
     @NotNull
     @ValidAge(message = "Date of Birth: User must be over 18!")
-    @Convert(converter = LocalDateEncryptor.class)
-    private LocalDate dateOfBirth;
+    @Temporal(TemporalType.DATE)
+    @Convert(converter = DateEncryptor.class)
+    private Date dateOfBirth;
 
     @ValidPPSN(message = "PPS No.: Must be 7 digits followed by 1-2 letters. Must be unique.")
     @Convert(converter = StringEncryptor.class)
@@ -91,8 +95,10 @@ public class User implements Serializable {
         posts = new HashSet<>();
     }
 
-    public static int getAgeInYears(LocalDate birthdayDate) {
+    public static int getAgeInYears(Date date) {
         LocalDate now = LocalDate.now();
+        LocalDate birthdayDate =
+                Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
         Period period = Period.between(birthdayDate, now);
         return period.getYears();
     }

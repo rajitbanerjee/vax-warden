@@ -1,10 +1,10 @@
 package com.vax.warden.encryption;
 
-import static java.time.format.DateTimeFormatter.ISO_DATE;
-
 import java.security.Key;
-import java.time.LocalDate;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Date;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -13,16 +13,17 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 @Converter
-public class LocalDateEncryptor implements AttributeConverter<LocalDate, String> {
+public class DateEncryptor implements AttributeConverter<Date, String> {
 
     private static final String AES = "AES";
     private static final String BITS_128 = "5FA2B642FC82CE05B3540AEED61FAC7E";
     private static final byte[] ENCRYPTION_KEY = BITS_128.getBytes();
+    public static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
     private final Cipher encryptCipher;
     private final Cipher decryptCipher;
 
-    public LocalDateEncryptor() throws Exception {
+    public DateEncryptor() throws Exception {
         Key key = new SecretKeySpec(ENCRYPTION_KEY, AES);
         encryptCipher = Cipher.getInstance(AES);
         encryptCipher.init(Cipher.ENCRYPT_MODE, key);
@@ -31,22 +32,21 @@ public class LocalDateEncryptor implements AttributeConverter<LocalDate, String>
     }
 
     @Override
-    public String convertToDatabaseColumn(LocalDate attribute) {
+    public String convertToDatabaseColumn(Date attribute) {
         try {
             return Base64.getEncoder()
-                    .encodeToString(encryptCipher.doFinal(attribute.format(ISO_DATE).getBytes()));
+                    .encodeToString(encryptCipher.doFinal(formatter.format(attribute).getBytes()));
         } catch (IllegalBlockSizeException | BadPaddingException e) {
             throw new IllegalArgumentException(e);
         }
     }
 
     @Override
-    public LocalDate convertToEntityAttribute(String dbData) {
+    public Date convertToEntityAttribute(String dbData) {
         try {
-            return LocalDate.parse(
-                    new String(decryptCipher.doFinal(Base64.getDecoder().decode(dbData))),
-                    ISO_DATE);
-        } catch (IllegalBlockSizeException | BadPaddingException e) {
+            return formatter.parse(
+                    new String(decryptCipher.doFinal(Base64.getDecoder().decode(dbData))));
+        } catch (IllegalBlockSizeException | BadPaddingException | ParseException e) {
             throw new IllegalArgumentException(e);
         }
     }
