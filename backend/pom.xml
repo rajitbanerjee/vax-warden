@@ -76,11 +76,6 @@
       <artifactId>hibernate-core</artifactId>
       <version>5.6.5.Final</version>
     </dependency>
-    <dependency>
-      <groupId>org.flywaydb</groupId>
-      <artifactId>flyway-core</artifactId>
-      <version>7.7.0</version>
-    </dependency>
 
     <!-- Lombok -->
     <dependency>
