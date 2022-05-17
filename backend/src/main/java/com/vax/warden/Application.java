@@ -2,8 +2,10 @@ package com.vax.warden;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import com.vax.warden.service.DatabaseInitService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.context.request.RequestContextListener;
@@ -17,7 +19,8 @@ public class Application extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         logger.info("Starting Application");
-        SpringApplication.run(Application.class, args);
+        ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
+        initDatabase(context);
     }
 
     @Bean
@@ -28,6 +31,14 @@ public class Application extends SpringBootServletInitializer {
                 registry.addMapping("/**").allowedOrigins("*");
             }
         };
+    }
+
+    private static void initDatabase(ConfigurableApplicationContext context) {
+        try {
+            context.getBean(DatabaseInitService.class).init();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Bean

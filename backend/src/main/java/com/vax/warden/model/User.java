@@ -2,10 +2,9 @@ package com.vax.warden.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.vax.warden.validation.ValidAge;
-import com.vax.warden.validation.ValidEmail;
-import com.vax.warden.validation.ValidPPSN;
-import com.vax.warden.validation.ValidPassword;
+import com.vax.warden.encryption.DateEncryptor;
+import com.vax.warden.encryption.StringEncryptor;
+import com.vax.warden.validation.*;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -32,36 +31,44 @@ public class User implements Serializable {
 
     @NotBlank
     @Size(min = 2, max = 64, message = "First Name: Must be between 2 and 64 characters!")
+    @Convert(converter = StringEncryptor.class)
     private String firstName;
 
     @NotBlank
     @Size(min = 2, max = 64, message = "Last Name: Must be between 2 and 64 characters!")
+    @Convert(converter = StringEncryptor.class)
     private String lastName;
 
     @NotNull
     @ValidAge(message = "Date of Birth: User must be over 18!")
     @Temporal(TemporalType.DATE)
+    @Convert(converter = DateEncryptor.class)
     private Date dateOfBirth;
 
     @ValidPPSN(message = "PPS No.: Must be 7 digits followed by 1-2 letters. Must be unique.")
+    @Convert(converter = StringEncryptor.class)
     private String ppsn;
 
     @NotBlank
     @Size(min = 2, max = 256, message = "Address: Must be between 2 and 256 characters!")
+    @Convert(converter = StringEncryptor.class)
     private String address;
 
     @Email
     @ValidEmail(message = "Email: User already exists!")
+    @Convert(converter = StringEncryptor.class)
     private String email;
 
     @NotBlank
     @Pattern(
             regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$",
             message = "Phone No.: Must be 10 digits long.")
+    @Convert(converter = StringEncryptor.class)
     private String phoneNo;
 
     @NotBlank
     @Size(min = 2, max = 32, message = "Nationality: Must be between 2 and 32 characters!")
+    @Convert(converter = StringEncryptor.class)
     private String nationality;
 
     @NotNull
