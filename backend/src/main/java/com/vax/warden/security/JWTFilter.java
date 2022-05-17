@@ -1,12 +1,12 @@
 package com.vax.warden.security;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import java.io.IOException;
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -28,15 +28,17 @@ public class JWTFilter extends OncePerRequestFilter {
     @Qualifier("handlerExceptionResolver")
     private HandlerExceptionResolver resolver;
 
+    private static final Logger logger = LogManager.getLogger(JWTFilter.class);
+
     @Override
     protected void doFilterInternal(
-            HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+            HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
         String authHeader = request.getHeader("Authorization");
         try {
             if (authHeader != null && !authHeader.isBlank() && authHeader.startsWith("Bearer ")) {
                 String jwt = authHeader.substring(7);
                 String email = jwtUtil.validateTokenAndRetrieveEmail(jwt);
+                logger.info("Validating JWT token for: " + email);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
@@ -48,9 +50,11 @@ public class JWTFilter extends OncePerRequestFilter {
             }
             filterChain.doFilter(request, response);
         } catch (JWTVerificationException e) {
+            logger.error("Invalid JWT token");
             resolver.resolveException(
                     request, response, null, new SecurityException("Invalid JWT token"));
         } catch (Exception e) {
+            logger.error("Unauthorized user");
             resolver.resolveException(
                     request, response, null, new BadCredentialsException("Unauthorized"));
         }

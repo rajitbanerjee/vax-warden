@@ -7,7 +7,7 @@ spring:
   application:
     name: backend
   jpa:
-    show-sql: true
+    show-sql: false
     generate-ddl: true
     hibernate:
       ddl-auto: update

@@ -6,6 +6,8 @@ import com.vax.warden.security.JWTUtil;
 import com.vax.warden.service.UserService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +22,7 @@ public class AuthController {
     private final JWTUtil jwtUtil;
     private final AuthenticationManager authManager;
     private final PasswordEncoder passwordEncoder;
+    private static final Logger logger = LogManager.getLogger(AuthController.class);
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
@@ -29,6 +32,7 @@ public class AuthController {
         user = userService.save(user);
         String token = jwtUtil.generateToken(user.getEmail());
         user.setJwtToken(token);
+        logger.info("Registered new user: " + user.getEmail());
         return user;
     }
 
@@ -41,6 +45,7 @@ public class AuthController {
         String token = jwtUtil.generateToken(body.getEmail());
         User user = userService.findByEmail(body.getEmail());
         user.setJwtToken(token);
+        logger.info("Login successful: " + user.getEmail());
         return user;
     }
 }

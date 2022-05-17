@@ -1,12 +1,13 @@
 package com.vax.warden.service;
 
-import com.vax.warden.exception.ResourceNotFoundException;
 import com.vax.warden.model.User;
 import com.vax.warden.model.Vaccination;
 import com.vax.warden.repository.VaccinationRepository;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,18 +16,25 @@ import org.springframework.transaction.annotation.Transactional;
 public class VaccinationService {
     private final VaccinationRepository vaccinationRepository;
     private final UserService userService;
+    private static final Logger logger = LogManager.getLogger(VaccinationService.class);
 
     @Transactional
     public Vaccination bookFirstDose(Vaccination vaccination, String email) {
         User user = userService.findByEmail(email);
         if (user.getVaccination() != null) {
-            throw new IllegalArgumentException("User already has a vaccination record!");
+            String errorMessage = email + " already has a vaccination record";
+            logger.error(errorMessage);
+            throw new IllegalArgumentException(errorMessage);
         }
         if (vaccination.getFirstAppointment() == null) {
-            throw new IllegalArgumentException("First appointment date needs to be provided!");
+            String errorMessage = "First appointment date needs to be provided: " + email;
+            logger.error(errorMessage);
+            throw new IllegalArgumentException(errorMessage);
         }
         if (vaccination.getCentre() == null) {
-            throw new IllegalArgumentException("Vaccination centre needs to be provided!");
+            String errorMessage = "Vaccination centre needs to be provided: " + email;
+            logger.error(errorMessage);
+            throw new IllegalArgumentException(errorMessage);
         }
         return save(vaccination, user);
     }
@@ -49,7 +57,9 @@ public class VaccinationService {
         Vaccination current = getVaccination(user);
         if (current.getFirstVaccineType() == null) {
             if (modified.getFirstVaccineType() == null) {
-                throw new IllegalArgumentException("First vaccine type needs to be provided!");
+                String errorMessage = "First vaccine type needs to be provided: " + user.getEmail();
+                logger.error(errorMessage);
+                throw new IllegalArgumentException(errorMessage);
             }
             current.setFirstVaccineType(modified.getFirstVaccineType());
             // book second appointment
@@ -59,7 +69,10 @@ public class VaccinationService {
             current.setDosesReceived(1);
         } else if (current.getSecondVaccineType() == null) {
             if (modified.getSecondVaccineType() == null) {
-                throw new IllegalArgumentException("Second vaccine type needs to be provided!");
+                String errorMessage =
+                        "Second vaccine type needs to be provided: " + user.getEmail();
+                logger.error(errorMessage);
+                throw new IllegalArgumentException(errorMessage);
             }
             current.setSecondVaccineType(modified.getSecondVaccineType());
             current.setDosesReceived(2);
@@ -80,7 +93,9 @@ public class VaccinationService {
 
     private Vaccination getVaccination(User user) {
         if (user.getVaccination() == null) {
-            throw new ResourceNotFoundException("User does not have a vaccination record!");
+            String errorMessage = user.getEmail() + " does not have a vaccination record";
+            logger.error(errorMessage);
+            throw new IllegalArgumentException(errorMessage);
         }
         return user.getVaccination();
     }
