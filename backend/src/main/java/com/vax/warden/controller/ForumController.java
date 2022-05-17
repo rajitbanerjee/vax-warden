@@ -27,8 +27,9 @@ public class ForumController {
     @ResponseStatus(HttpStatus.CREATED)
     public Post post(@Valid @RequestBody Post post, Authentication authentication) {
         String email = (String) authentication.getPrincipal();
-        logger.info("Creating new post: " + post.getId());
-        return forumService.createPost(post, email);
+        Post newPost = forumService.createPost(post, email);
+        logger.info("Creating new post: " + newPost.getId());
+        return newPost;
     }
 
     @PostMapping("/reply")
