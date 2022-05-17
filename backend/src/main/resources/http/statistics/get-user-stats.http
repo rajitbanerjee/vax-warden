@@ -1,1 +1,1 @@
-GET http://localhost:8080/statistics/user
+GET https://localhost:8080/statistics/user
