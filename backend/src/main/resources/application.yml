@@ -2,6 +2,11 @@ server:
   error:
     include-message: always
     include-binding-errors: always
+  ssl:
+    key-store-type: PKCS12
+    key-store: classpath:cert.pfx
+    key-store-password: vax-warden
+    enabled: true
 
 spring:
   application:
