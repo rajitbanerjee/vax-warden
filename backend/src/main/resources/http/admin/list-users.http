@@ -1,1 +1,1 @@
-GET http://localhost:8080/admin/user/list
+GET https://localhost:8080/admin/user/list

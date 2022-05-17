@@ -29,6 +29,6 @@ services:
         - BACKEND_PORT=8080
     container_name: vax-warden-frontend
     ports:
-      - "80:3000"
+      - "443:3000"
     depends_on:
       - backend
