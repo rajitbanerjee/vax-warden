@@ -7,6 +7,8 @@ import com.vax.warden.service.VaccinationService;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,10 +18,12 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
     private final UserService userService;
     private final VaccinationService vaccinationService;
+    private static final Logger logger = LogManager.getLogger(AdminController.class);
 
     @GetMapping("/user/list")
     @ResponseStatus(HttpStatus.OK)
     public List<User> list() {
+        logger.info("Returning list of all users");
         return userService.findAllUsers();
     }
 
@@ -31,7 +35,9 @@ public class AdminController {
             Long id = Long.parseLong(userId);
             return vaccinationService.updateVaccination(id, vaccination);
         } catch (NumberFormatException ex) {
-            throw new IllegalArgumentException("User ID must be a number");
+            String message = "User ID must be a number";
+            logger.error(message);
+            throw new IllegalArgumentException(message);
         }
     }
 }
